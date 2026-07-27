@@ -1,125 +1,300 @@
-# Architecture Decision Records
+# FakeNewsRAGSystem - Architecture Decisions
+
+## Project
+
+FakeNewsRAGSystem
+
+Version:
+
+1.0.0
+
+---
 
 # ADR-001
 
-## Clean Architecture
+## Clean Architecture Adoption
 
-Decision:
+Date:
 
-Use layered architecture:
+2026-01-01
+
+## Decision
+
+The backend architecture will follow Clean Architecture principles.
+
+Layers:
 
 - Domain
 - Application
 - Infrastructure
 - Presentation
 
-Reason:
+## Reason
 
-Maintain separation of concerns and scalability.
+Allows:
 
-Status:
-
-Accepted
+- Separation of business logic.
+- Independent infrastructure.
+- Easier testing.
+- Maintainability.
 
 ---
 
 # ADR-002
 
-## PostgreSQL + pgvector
+## Repository Pattern
 
-Decision:
+## Decision
 
-Use PostgreSQL as transactional and vector database.
+Database access will be abstracted using repository interfaces.
 
-Reason:
+Implementation:
 
-Allows:
+Domain:
 
-- Relational storage.
-- Embedding storage.
-- Similarity search.
+- Interfaces
 
-Status:
+Infrastructure:
 
-Accepted
+- PostgreSQL implementations
+
+## Reason
+
+Avoid coupling business logic with SQLAlchemy.
 
 ---
 
 # ADR-003
 
-## Repository Pattern
+## PostgreSQL + pgvector
 
-Decision:
+## Decision
 
-Abstract database access through repository interfaces.
+PostgreSQL will be used as the main database with pgvector extension.
 
-Reason:
+## Reason
 
-Avoid coupling business logic with persistence.
+Provides:
 
-Status:
-
-Accepted
+- Relational storage.
+- Vector similarity search.
+- Single database architecture.
 
 ---
 
 # ADR-004
 
-## LangGraph RAG Workflow
+## Gemini as AI Provider
 
-Decision:
+## Decision
 
-Implement AI orchestration using LangGraph.
+Google Gemini will provide:
 
-Reason:
+- Text embeddings.
+- Large Language Model analysis.
 
-Provides:
+## Reason
 
-- Stateful execution.
-- Agent coordination.
-- Extendable workflows.
-
-Status:
-
-Accepted
+Provides integrated AI capabilities for RAG.
 
 ---
 
 # ADR-005
 
-## Gemini AI Provider
+## LangGraph Agent Workflow
 
-Decision:
+## Decision
 
-Use Google Gemini for:
+The RAG engine will use LangGraph for orchestration.
 
-- Text generation.
-- Embeddings.
+Workflow:
 
-Reason:
+News Input
 
-Provides unified AI capabilities.
+↓
 
-Status:
+Embedding Agent
 
-Accepted
+↓
+
+Storage Agent
+
+↓
+
+Retriever Agent
+
+↓
+
+Analyzer Agent
+
+↓
+
+Response
+
+## Reason
+
+Allows autonomous multi-step AI workflows.
 
 ---
 
 # ADR-006
 
-## RAG REST API
+## Docker First Development
 
-Decision:
+## Decision
 
-Expose RAG analysis through:
+All main services must run using Docker.
 
-POST /rag/analyze/{news_id}
+Services:
 
-Reason:
+- PostgreSQL
+- pgAdmin
+- Backend
+- Frontend
 
-Separate AI processing from CRUD operations.
+## Reason
 
-Status:
+Guarantees environment consistency.
 
-Accepted
+---
+
+# ADR-007
+
+## JWT Authentication
+
+## Decision
+
+Authentication uses JWT tokens.
+
+Security:
+
+- bcrypt password hashing.
+- Token validation.
+- Protected endpoints.
+
+## Reason
+
+Standard authentication approach for REST APIs.
+
+---
+
+# ADR-008
+
+## React Feature Based Architecture
+
+## Decision
+
+Frontend modules are organized by business feature.
+
+Structure:
+
+features/
+
+auth/
+
+news/
+
+rag/
+
+dashboard/
+
+## Reason
+
+Improves scalability and maintainability.
+
+---
+
+# ADR-009
+
+## Zustand State Management
+
+## Decision
+
+Frontend authentication state uses Zustand.
+
+Managed:
+
+- JWT token.
+- Login state.
+- Logout.
+
+## Reason
+
+Lightweight state management.
+
+---
+
+# ADR-010
+
+## Frontend Docker Container
+
+## Decision
+
+React frontend runs inside Docker Compose.
+
+## Reason
+
+Keeps frontend and backend environments consistent.
+
+---
+
+# ADR-011
+
+## RAG Frontend Integration
+
+## Decision
+
+Frontend consumes RAG analysis through REST API.
+
+Flow:
+
+React
+
+↓
+
+FastAPI
+
+↓
+
+LangGraph
+
+↓
+
+Gemini
+
+↓
+
+Result
+
+## Reason
+
+Separates AI execution from presentation.
+
+---
+
+# Current Architecture
+
+## Backend
+
+- FastAPI
+- Clean Architecture
+- SQLAlchemy
+- PostgreSQL
+- pgvector
+
+## AI Layer
+
+- LangChain
+- LangGraph
+- Gemini
+
+## Frontend
+
+- React
+- TypeScript
+- Axios
+- Zustand
+
+## Infrastructure
+
+- Docker Compose

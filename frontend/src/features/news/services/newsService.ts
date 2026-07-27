@@ -7,7 +7,7 @@ import type {
 
 
 export async function getNews()
-:Promise<News[]>{
+: Promise<News[]> {
 
 
     const response =
@@ -17,5 +17,36 @@ export async function getNews()
 
 
     return response.data;
+
+}
+
+
+
+export async function createNews(
+    data: Partial<News>
+): Promise<News> {
+
+
+    const response =
+        await api.post(
+            "/news",
+            data
+        );
+
+
+    return response.data;
+
+}
+
+
+
+export async function deleteNews(
+    id:string
+):Promise<void>{
+
+
+    await api.delete(
+        `/news/${id}`
+    );
 
 }

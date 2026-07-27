@@ -1,113 +1,158 @@
-# Development Log
 
-# 2026-07-27
+# FakeNewsRAGSystem - Development Log
 
-# FASE 10 Completion - RAG API Layer
+## 2026-07-27
 
-## Objective
+## FASE 11 - Frontend Application Completion
 
-Expose the autonomous RAG engine through FastAPI.
+### Objective
 
----
+Create a complete frontend application connected with the FakeNewsRAGSystem backend.
 
-# Implemented
+### Implemented
 
-## Presentation Layer
+## Frontend Architecture
 
 Created:
 
-- RAG router.
-- RAG schemas.
-- API endpoint.
+* Feature based folder structure.
+* Authentication module.
+* News module.
+* RAG module.
+* Dashboard module.
 
-Endpoint:
-
-POST /rag/analyze/{news_id}
-
----
-
-## Application Integration
-
-Integrated:
-
-- NewsService.
-- Dependency Injection.
-- RAG execution flow.
-
----
-
-## Infrastructure Integration
-
-Connected:
-
-- Gemini Embedding Service.
-- Gemini LLM.
-- LangGraph agents.
-- PostgreSQL pgvector.
-
----
-
-# RAG Workflow
-
-Request
-
-↓
-
-FastAPI Router
-
-↓
-
-News Service
-
-↓
-
-LangGraph State
-
-↓
-
-Embedding Agent
-
-↓
-
-Retriever Agent
-
-↓
-
-Analyzer Agent
-
-↓
-
-Gemini Response
-
----
-
-# Validation
+## Authentication
 
 Completed:
 
-[x] Python compileall
+* Login flow.
+* User registration.
+* JWT persistence.
+* Protected routes.
+* Logout.
 
-[x] Backend Docker build
+## Backend Integration
 
-[x] Backend container startup
+Validated:
 
-[x] Swagger registration
+* Authentication API communication.
+* News API consumption.
+* RAG API consumption.
 
-[x] RAG endpoint visible
+## Docker
+
+Completed:
+
+* Frontend Dockerfile.
+* Frontend container execution.
+* Development environment integration.
+
+## Validation
+
+Verified:
+
+* Backend container running.
+* Frontend container running.
+* PostgreSQL running.
+* API communication working.
+
+## Phase Result
+
+FASE 11 successfully completed.
+
+Next objective:
+
+FASE 12 - Production Readiness.
 
 ---
 
-# Project Decision
+# Architecture Decisions
 
-FASE 10 closed successfully.
+## ADR-011
 
-Next development milestone:
+Title:
 
-FASE 11 - Frontend Application
+Frontend Feature Based Architecture
 
-Objectives:
+Decision:
 
-- React interface.
-- JWT authentication UI.
-- News dashboard.
-- RAG analysis visualization.
+The frontend will use feature based organization instead of grouping only by technical type.
+
+Structure:
+
+features/
+
+* auth
+* news
+* rag
+* dashboard
+
+Reason:
+
+Improves scalability and maintains separation of business modules.
+
+---
+
+## ADR-012
+
+Title:
+
+JWT Authentication in Frontend
+
+Decision:
+
+JWT tokens are stored and managed using Zustand.
+
+Reason:
+
+Provides centralized authentication state management.
+
+---
+
+## ADR-013
+
+Title:
+
+Dockerized Frontend Development
+
+Decision:
+
+Frontend execution is managed through Docker Compose.
+
+Reason:
+
+Guarantees environment consistency between development and deployment.
+
+---
+
+# Roadmap Update
+
+## Completed
+
+[x] Backend Architecture
+
+[x] Database Layer
+
+[x] Authentication
+
+[x] News Module
+
+[x] RAG Engine
+
+[x] RAG API
+
+[x] Frontend Application
+
+## Next
+
+FASE 12 - Production Readiness
+
+Tasks:
+
+* Professional UI.
+* Automated tests.
+* Logging.
+* Monitoring.
+* Security improvements.
+* CI/CD pipeline.
+* Deployment preparation.

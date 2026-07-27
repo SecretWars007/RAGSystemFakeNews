@@ -1,139 +1,210 @@
-# FakeNewsRAGSystem Roadmap
+# FakeNewsRAGSystem - Roadmap
+
+Version:
+
+1.0.0
+
+---
 
 # Completed
 
-## Backend Foundation
+## FASE 1
 
-[x] FastAPI backend
-
-[x] Clean Architecture
-
-[x] SOLID implementation
-
-[x] PostgreSQL integration
-
-[x] Docker environment
-
----
-
-## Authentication
-
-[x] User registration
-
-[x] Login
-
-[x] JWT security
-
-[x] Password hashing
-
----
-
-## News Management
-
-[x] News entity
-
-[x] CRUD operations
-
-[x] REST endpoints
-
----
-
-## Artificial Intelligence Engine
-
-[x] Gemini LLM
-
-[x] Gemini Embeddings
-
-[x] LangChain
-
-[x] LangGraph
-
-[x] Vector retrieval
-
-[x] RAG workflow
-
----
-
-# Completed Phase
-
-## FASE 10 - RAG API Layer
+Initial Project Structure
 
 Status:
 
-COMPLETED
-
-Delivered:
-
-- REST API endpoint.
-- LangGraph execution.
-- AI analysis pipeline.
-- Swagger integration.
+✅ Completed
 
 ---
 
-# Current Phase
+## FASE 2
 
-# FASE 11 - Frontend Application
+Docker Infrastructure
 
-Objective:
+Status:
 
-Create the complete user interface.
+✅ Completed
 
-Features:
+Implemented:
 
-- Authentication.
-- Dashboard.
-- News management.
-- Fake news analysis.
-- RAG visualization.
-
----
-
-# Future Phases
-
-## FASE 12
-
-History and Feedback System
-
-Features:
-
-- Query history.
-- User feedback.
-- Analysis storage.
+- PostgreSQL
+- pgvector
+- pgAdmin
+- Backend container
 
 ---
 
-## FASE 13
+## FASE 3
 
-Automated Pipelines
+FastAPI Backend
 
-Features:
+Status:
 
-- Airflow.
-- Data ingestion.
-- Automatic embeddings.
+✅ Completed
 
 ---
 
-## FASE 14
+## FASE 4
 
-Quality and Testing
+Database Layer
 
-Features:
+Status:
 
-- Integration tests.
-- Performance tests.
-- RAG evaluation.
+✅ Completed
 
 ---
 
-## FASE 15
+## FASE 5
+
+Models and Migrations
+
+Status:
+
+✅ Completed
+
+---
+
+## FASE 6
+
+Domain Layer + Repository Pattern
+
+Status:
+
+✅ Completed
+
+---
+
+## FASE 7
+
+Authentication
+
+Status:
+
+✅ Completed
+
+---
+
+## FASE 8
+
+News Module
+
+Status:
+
+✅ Completed
+
+---
+
+## FASE 9
+
+RAG Core Engine
+
+Status:
+
+✅ Completed
+
+Implemented:
+
+- Gemini
+- LangGraph
+- Embeddings
+- Vector Search
+
+---
+
+## FASE 10
+
+RAG API Integration
+
+Status:
+
+✅ Completed
+
+---
+
+## FASE 11
+
+Frontend Application
+
+Status:
+
+✅ Completed
+
+Implemented:
+
+- React
+- TypeScript
+- Authentication
+- Dashboard
+- News UI
+- RAG UI
+
+---
+
+# Upcoming
+
+# FASE 12
+
+Production Readiness
+
+Status:
+
+🚧 Planned
+
+Objectives:
+
+## UI
+
+- Professional design.
+- Responsive layout.
+- Component library.
+
+## Quality
+
+- Backend tests.
+- Frontend tests.
+- Code quality.
+
+## Security
+
+- Refresh tokens.
+- RBAC.
+- Rate limiting.
+
+## Observability
+
+- Structured logging.
+- Metrics.
+- Monitoring.
+
+## DevOps
+
+- CI/CD.
+- Automated deployment.
+- Production Docker images.
+
+---
+
+# FASE 13
+
+Advanced AI Features
+
+Planned:
+
+- Feedback loop.
+- Model evaluation.
+- AI confidence improvement.
+- Automatic news ingestion.
+
+---
+
+# FASE 14
 
 Production Deployment
 
-Features:
+Planned:
 
 - Cloud deployment.
-- CI/CD.
+- Domain configuration.
+- SSL.
 - Monitoring.
-- Security.
