@@ -1,117 +1,83 @@
 # Changelog
 
-## v0.1.0
+All notable changes of FakeNewsRAGSystem.
 
-### FASE 1
+# Version 0.9.0
 
-Creación inicial del proyecto:
+Date: 2026-07-27
 
-- estructura de carpetas
-- configuración Git
-- documentación base
-- sistema de control del proyecto
+## Added
 
-## v0.1.0
+### RAG Core Engine
 
-## FASE 2 COMPLETADA
+- Added Gemini embedding integration.
+- Added Gemini LLM integration.
+- Added vector similarity search.
+- Added PostgreSQL pgvector retrieval.
+- Added LangGraph orchestration.
+- Added RAG agents workflow.
+- Added fake news analysis pipeline.
+- Added RAG REST endpoint.
 
-Implementada infraestructura Docker:
+### Backend
 
-- PostgreSQL 16
-- pgvector
-- pgcrypto
-- PgAdmin
-- Volumen persistente
-- Red Docker interna
+- Added RAG API module.
+- Added dependency injection for RAG components.
+- Improved Clean Architecture separation.
 
-## FASE 3 COMPLETADA
+### Infrastructure
 
-Implementado:
+- Updated Docker backend deployment.
+- Validated PostgreSQL + pgvector integration.
 
-- Backend FastAPI
-- Dockerfile backend
-- Servicio backend en docker-compose
-- Configuración inicial Clean Architecture
-- Endpoint health check
+---
 
+# Version 0.8.0
 
-## FASE 4 COMPLETA
+## Added
 
-## FASE 5 COMPLETADA
+News management module:
 
-Fecha:
-2026-07-26
+- News entity.
+- News repository.
+- News service.
+- News REST endpoints.
 
-Cambios realizados:
+---
 
-* Integración de Alembic para gestión de migraciones.
-* Configuración de migraciones con PostgreSQL.
-* Integración SQLAlchemy 2.0.
-* Creación de modelos persistentes iniciales.
-* Configuración de pgvector para embeddings.
-* Creación de estructura de almacenamiento para historial de consultas.
-* Creación de estructura para respuestas RAG detalladas.
+# Version 0.7.0
 
-Tablas agregadas:
+## Added
 
-* users
-* news
-* embeddings
-* query_history
-* rag_responses
-* audit_logs
+Authentication:
 
-Correcciones:
+- JWT security.
+- User registration.
+- Login endpoint.
+- BCrypt password hashing.
 
-* Ajuste de Alembic env.py para utilizar DATABASE_URL desde Settings.
-* Corrección de migración Vector PostgreSQL.
-* Configuración correcta del tipo Vector(1536).
+---
 
-Estado:
+# Version 0.6.0
 
-FASE 5 FINALIZADA
+## Added
 
+Clean Architecture:
 
-## FASE 6 - Clean Architecture
+- Domain layer.
+- Application layer.
+- Repository pattern.
+- Dependency injection.
 
-Implementado:
+---
 
-- Separación Domain/Application/Infrastructure.
-- Creación de entidades de dominio.
-- Creación de interfaces Repository.
-- Implementación PostgreSQL Repository.
-- Implementación Dependency Injection.
-- Creación de Use Cases.
-- Agregación de pruebas unitarias.
+# Version 0.5.0
 
-Principios aplicados:
+## Added
 
-- SOLID
-- Repository Pattern
-- Dependency Inversion Principle
+Database layer:
 
-
-
-## FASE 7
-
-- Implementado módulo de autenticación.
-- Registro de usuarios.
-- Login con JWT.
-- Hash de contraseñas con bcrypt.
-- Integración con PostgreSQL.
-- Corrección de compatibilidad passlib/bcrypt.
-
-
-## FASE 8 - News CRUD
-
-Fecha: 2026-07-27
-
-Cambios:
-
-+ Creación del módulo completo de noticias.
-+ Implementación Repository Pattern.
-+ Implementación Service Layer.
-+ Implementación API REST.
-+ Integración con FastAPI Dependency Injection.
-+ Preparación del modelo para futuras capas RAG.
-+ Corrección de dependencias entre módulos.
+- SQLAlchemy ORM.
+- Alembic migrations.
+- PostgreSQL models.
+- pgvector extension.

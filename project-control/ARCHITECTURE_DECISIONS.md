@@ -1,24 +1,130 @@
-## Dependencias Backend
 
-Las dependencias Python se gestionan exclusivamente desde:
+# Architecture Decisions Record
 
-backend/requirements.txt
-
-No se permiten instalaciones manuales dentro de contenedores.
-
-Motivo:
-
-Garantizar builds reproducibles mediante Docker.
-
-
-# ADR-003
+# ADR-001
 
 ## Clean Architecture
 
-Decisión:
+Decision:
 
-Separar reglas de negocio de infraestructura.
+Use Clean Architecture with separation:
 
-Motivo:
+- Domain
+- Application
+- Infrastructure
+- Presentation
 
-Permitir reemplazar PostgreSQL, ORM o framework web sin modificar el dominio.
+Reason:
+
+Maintain scalability and low coupling.
+
+Status:
+
+Accepted
+
+---
+
+# ADR-002
+
+## PostgreSQL + pgvector
+
+Decision:
+
+Use PostgreSQL as relational database and vector storage.
+
+Reason:
+
+Allows:
+
+- Structured data.
+- Semantic search.
+- Single persistence layer.
+
+Status:
+
+Accepted
+
+---
+
+# ADR-003
+
+## Repository Pattern
+
+Decision:
+
+Repositories abstract database access.
+
+Reason:
+
+Avoid infrastructure dependency inside business logic.
+
+Status:
+
+Accepted
+
+---
+
+# ADR-004
+
+## Gemini as AI Provider
+
+Decision:
+
+Use Google Gemini for:
+
+- Embeddings.
+- LLM reasoning.
+
+Reason:
+
+Integration with Google AI ecosystem.
+
+Status:
+
+Accepted
+
+---
+
+# ADR-005
+
+## LangGraph Agent Workflow
+
+Decision:
+
+Use LangGraph for RAG orchestration.
+
+Reason:
+
+Allows:
+
+- Stateful workflows.
+- Multi-agent architecture.
+- Future autonomous behavior.
+
+Status:
+
+Accepted
+
+---
+
+# ADR-006
+
+## Docker First Development
+
+Decision:
+
+All services must run inside Docker.
+
+Services:
+
+- Backend
+- PostgreSQL
+- pgAdmin
+
+Reason:
+
+Environment consistency.
+
+Status:
+
+Accepted

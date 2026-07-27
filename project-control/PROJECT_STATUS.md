@@ -1,125 +1,209 @@
+# FakeNewsRAGSystem - Project Status
 
-## Estado actual
+## Current Status
 
-FASE 5 COMPLETADA
+Version: 0.9.0
 
-## Fase actual
+Current Phase:
 
-FASE 6
+FASE 9 - RAG Core Engine
 
-## Fases completadas
+Status:
 
-**[x]** FASE 1 - Estructura inicial del proyecto
+✅ COMPLETED
 
-**[x]** FASE 2 - Infraestructura Docker PostgreSQL + pgvector
+---
 
-**[x]** FASE 3 - Backend FastAPI inicial
+# Completed Phases
 
-**[x]** FASE 4 - Configuración SQLAlchemy + Database Layer
+## FASE 1 - Initial Project Structure
 
-**[x]** FASE 5 - Alembic + Modelos PostgreSQL + Migraciones
+Status: ✅ COMPLETED
 
-## FASE 5 COMPLETADA
+Implemented:
 
-Implementado:
+- Backend project structure.
+- Clean Architecture foundation.
+- Initial repository organization.
 
-**[x]** Alembic configurado
+---
 
-**[x]** Migraciones PostgreSQL funcionando
+## FASE 2 - Docker Infrastructure
 
-**[x]** SQLAlchemy ORM configurado
+Status: ✅ COMPLETED
 
-**[x]** Modelos iniciales creados:
+Implemented:
 
-* User
-* News
-* Embedding
-* QueryHistory
-* RAGResponse
-* AuditLog
+- Docker Compose environment.
+- PostgreSQL 16.
+- pgvector extension.
+- pgAdmin.
+- Backend containerization.
 
-**[x]** Extensión pgvector integrada
+Services:
 
-**[x]** Tablas creadas correctamente en PostgreSQL
+- fake-news-postgres
+- fake-news-pgadmin
+- fake-news-backend
 
-## Próxima fase
+---
 
-FASE 6:
+## FASE 3 - FastAPI Backend
 
-Domain Layer + Repository Pattern + SOLID
+Status: ✅ COMPLETED
 
+Implemented:
 
-## FASE 6 COMPLETADA
+- FastAPI application.
+- API structure.
+- Dependency injection foundation.
+- Swagger documentation.
 
-Estado:
-COMPLETADA
+---
 
-Implementado:
+## FASE 4 - Database Layer
 
-[x] Domain Layer
+Status: ✅ COMPLETED
 
-[x] Application Layer
+Implemented:
 
-[x] Repository Pattern
+- SQLAlchemy configuration.
+- Database connection.
+- Session management.
+- ORM base configuration.
 
-[x] Dependency Injection
+---
 
-[x] PostgreSQL Repository Implementation
+## FASE 5 - PostgreSQL Models and Migrations
 
-[x] Unit Tests
+Status: ✅ COMPLETED
 
-Arquitectura:
+Implemented:
+
+- Alembic configuration.
+- PostgreSQL migrations.
+- SQLAlchemy models:
+
+  - User
+  - News
+  - Embedding
+  - QueryHistory
+  - RAGResponse
+  - AuditLog
+- pgvector integration.
+
+---
+
+## FASE 6 - Domain Layer + Repository Pattern
+
+Status: ✅ COMPLETED
+
+Implemented:
+
+- Domain entities.
+- Repository interfaces.
+- Application services.
+- Use cases.
+- Infrastructure repositories.
+- Dependency injection.
+- Unit tests.
+
+Architecture:
 
 Clean Architecture + SOLID
 
-Próxima fase:
+---
 
-FASE 7 - API REST FastAPI + JWT + Gestión de usuarios
+## FASE 7 - Authentication
 
+Status: ✅ COMPLETED
 
-FASE 7 - Autenticación
+Implemented:
 
-Estado: ✅ COMPLETADA
+- User registration.
+- User login.
+- JWT authentication.
+- Password hashing bcrypt.
+- User repository.
+- Authentication services.
 
-Implementado:
+---
 
-- Registro de usuarios
-- Login JWT
-- Hash bcrypt
-- PostgreSQL
-- Repository Pattern
-- Dependency Injection
-- Validación Pydantic
+## FASE 8 - News Module
 
+Status: ✅ COMPLETED
 
-FASE 8 - Módulo de Noticias
+Implemented:
 
-Estado: ✅ COMPLETADA
-
-Implementado:
-
-- Entidad News siguiendo Domain Layer.
-- INewsRepository como contrato.
-- NewsModel con SQLAlchemy.
-- Migración Alembic preparada.
-- News schemas con Pydantic.
-- NewsService.
+- News entity.
+- News repository contract.
+- PostgreSQL implementation.
+- News service.
 - CreateNewsUseCase.
-- PostgresNewsRepository.
-- Dependencias FastAPI.
-- API REST de noticias.
+- News REST API.
 
-Endpoints disponibles:
+Endpoints:
 
-POST   /news
-GET    /news
-GET    /news/{news_id}
-PUT    /news/{news_id}
-DELETE /news/{news_id}
+POST /news
 
-Validado:
+GET /news
 
-- Endpoint visible en Swagger.
-- Arquitectura Clean Architecture funcionando.
-- Integración con PostgreSQL.
-- Docker backend operativo.
+GET /news/{id}
+
+PUT /news/{id}
+
+DELETE /news/{id}
+
+---
+
+# FASE 9 - RAG Core Engine
+
+Status:
+
+✅ COMPLETED
+
+Objective:
+
+Implement the intelligent fake news analysis engine.
+
+Implemented:
+
+[x] Gemini Embedding Service
+
+[x] Google Gemini LLM integration
+
+[x] Vector embeddings generation
+
+[x] PostgreSQL pgvector storage
+
+[x] Semantic similarity retrieval
+
+[x] Retriever Repository
+
+[x] LangGraph workflow
+
+[x] RAG Agents
+
+[x] Context retrieval
+
+[x] Fake news analysis agent
+
+[x] RAG API endpoint
+
+[x] Docker backend integration
+
+Architecture:
+
+FastAPI
+
+LangChain
+
+LangGraph
+
+Gemini
+
+PostgreSQL pgvector
+
+---
+
+# Current Architecture
