@@ -24,6 +24,7 @@ bcrypt==4.0.1
 python-jose==3.3.0
 
 pytest==8.3.4
+pytest-asyncio
 httpx==0.28.1
 
 email-validator

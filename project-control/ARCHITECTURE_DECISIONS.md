@@ -298,3 +298,38 @@ Separates AI execution from presentation.
 ## Infrastructure
 
 - Docker Compose
+
+
+## ADR-010
+
+Title
+
+Testing Strategy
+
+Status
+
+Accepted
+
+Decision
+
+The project adopts a layered testing strategy.
+
+Layers
+
+- Unit Tests
+- Integration Tests
+- End-to-End Tests
+- Performance Tests
+
+Rationale
+
+Gemini API calls and vector search should not be executed during the regular pytest suite.
+
+Real RAG execution will be validated through dedicated End-to-End tests before production releases.
+
+Benefits
+
+- Faster CI execution.
+- No unnecessary Gemini token consumption.
+- Stable and deterministic automated tests.
+- Easier maintenance.
