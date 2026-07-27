@@ -23,6 +23,7 @@ services:
       - fake-news-network
 
 
+
   pgadmin:
 
     image: dpage/pgadmin4
@@ -48,6 +49,58 @@ services:
     depends_on:
 
       - postgres
+
+
+    networks:
+
+      - fake-news-network
+
+
+
+  backend:
+
+    build:
+
+      context: ..
+
+      dockerfile: docker/backend/Dockerfile
+
+
+    container_name:
+
+      fake-news-backend
+
+
+    restart: always
+
+
+    ports:
+
+      - "8888:8888"
+
+
+    environment:
+
+      DATABASE_URL:
+        postgresql+psycopg://postgres:postgres@postgres:5432/fake_news_db
+
+
+      APP_NAME:
+        FakeNewsRAGSystem
+
+
+      ENVIRONMENT:
+        development
+
+
+    depends_on:
+
+      - postgres
+
+
+    volumes:
+
+      - ../backend:/app
 
 
     networks:

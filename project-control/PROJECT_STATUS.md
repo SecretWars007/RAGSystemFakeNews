@@ -1,4 +1,3 @@
-
 # FakeNewsRAGSystem
 
 ## Version
@@ -7,36 +6,41 @@
 
 ## Estado
 
-Inicialización del proyecto
+FASE 3 COMPLETADA
 
 ## Fase actual
 
-FASE 1
-
-## Cronómetro
-
-Inicio:
-00:00:00
+FASE 4
 
 ## Completado
 
-[x] Definición arquitectura
+[x] Estructura inicial proyecto
 
-[x] Creación estructura carpetas
+[x] Control del proyecto
+
+[x] Docker Compose
+
+[x] PostgreSQL 16 + pgvector
+
+[x] PgAdmin
+
+[x] Backend FastAPI
+
+[x] Backend ejecutándose en Docker
 
 ## Pendiente
 
-[ ] Infraestructura Docker
+[ ] SQLAlchemy 2
 
-[ ] PostgreSQL + pgvector
+[ ] Alembic
 
-[ ] Backend FastAPI
+[ ] Modelos PostgreSQL
 
-[ ] Frontend React
+[ ] Repositories
 
-[ ] RAG Engine
+[ ] Casos de uso
 
 ## Próximo paso
 
-FASE 2:
-Crear infraestructura Docker
+FASE 4:
+Configuración de persistencia PostgreSQL
