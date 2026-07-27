@@ -1,83 +1,110 @@
 # Changelog
 
-All notable changes of FakeNewsRAGSystem.
-
-# Version 0.9.0
-
-Date: 2026-07-27
-
-## Added
-
-### RAG Core Engine
-
-- Added Gemini embedding integration.
-- Added Gemini LLM integration.
-- Added vector similarity search.
-- Added PostgreSQL pgvector retrieval.
-- Added LangGraph orchestration.
-- Added RAG agents workflow.
-- Added fake news analysis pipeline.
-- Added RAG REST endpoint.
-
-### Backend
-
-- Added RAG API module.
-- Added dependency injection for RAG components.
-- Improved Clean Architecture separation.
-
-### Infrastructure
-
-- Updated Docker backend deployment.
-- Validated PostgreSQL + pgvector integration.
+All notable changes to this project will be documented in this file.
 
 ---
 
-# Version 0.8.0
+# Version 1.0.0
 
-## Added
+Release:
 
-News management module:
+FASE 10 - RAG API Layer Completed
 
-- News entity.
-- News repository.
-- News service.
-- News REST endpoints.
+Date:
 
----
-
-# Version 0.7.0
-
-## Added
-
-Authentication:
-
-- JWT security.
-- User registration.
-- Login endpoint.
-- BCrypt password hashing.
+2026-07-27
 
 ---
 
-# Version 0.6.0
+# Added
 
-## Added
+## RAG API Module
 
-Clean Architecture:
+Implemented REST API layer for the autonomous RAG engine.
 
-- Domain layer.
-- Application layer.
-- Repository pattern.
-- Dependency injection.
+Added:
+
+- rag_schema.py
+- rag.py router
+- RAG endpoint integration
+
+New endpoint:
+
+POST /rag/analyze/{news_id}
 
 ---
 
-# Version 0.5.0
+# RAG Engine Integration
 
-## Added
+Integrated:
 
-Database layer:
+- FastAPI
+- LangGraph workflow
+- Gemini embeddings
+- Gemini LLM
+- PostgreSQL pgvector
 
-- SQLAlchemy ORM.
-- Alembic migrations.
-- PostgreSQL models.
-- pgvector extension.
+Workflow:
+
+NewsService
+
+↓
+
+LangGraph
+
+↓
+
+Embedding Agent
+
+↓
+
+Retriever Agent
+
+↓
+
+Analyzer Agent
+
+↓
+
+Gemini Response
+
+---
+
+# Updated
+
+Backend application:
+
+- Main FastAPI router.
+- API dependency injection.
+- RAG presentation layer.
+
+Infrastructure:
+
+- Docker backend validation.
+- Runtime environment.
+
+---
+
+# Validation
+
+Completed:
+
+[x] Python compilation
+
+[x] FastAPI startup
+
+[x] Swagger endpoint registration
+
+[x] Docker backend execution
+
+[x] API routing validation
+
+---
+
+# Next Release
+
+Version 1.1.0
+
+Target:
+
+FASE 11 - Frontend Application

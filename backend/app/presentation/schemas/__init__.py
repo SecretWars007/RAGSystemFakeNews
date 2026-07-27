@@ -10,3 +10,7 @@ from .user_schema import (
     UserCreateSchema,
     UserResponseSchema,
 )
+from .rag_schema import (
+    RagAnalyzeRequest,
+    RagAnalyzeResponse,
+)

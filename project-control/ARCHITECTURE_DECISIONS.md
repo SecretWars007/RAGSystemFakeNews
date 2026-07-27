@@ -1,5 +1,4 @@
-
-# Architecture Decisions Record
+# Architecture Decision Records
 
 # ADR-001
 
@@ -7,7 +6,7 @@
 
 Decision:
 
-Use Clean Architecture with separation:
+Use layered architecture:
 
 - Domain
 - Application
@@ -16,7 +15,7 @@ Use Clean Architecture with separation:
 
 Reason:
 
-Maintain scalability and low coupling.
+Maintain separation of concerns and scalability.
 
 Status:
 
@@ -30,15 +29,15 @@ Accepted
 
 Decision:
 
-Use PostgreSQL as relational database and vector storage.
+Use PostgreSQL as transactional and vector database.
 
 Reason:
 
 Allows:
 
-- Structured data.
-- Semantic search.
-- Single persistence layer.
+- Relational storage.
+- Embedding storage.
+- Similarity search.
 
 Status:
 
@@ -52,11 +51,11 @@ Accepted
 
 Decision:
 
-Repositories abstract database access.
+Abstract database access through repository interfaces.
 
 Reason:
 
-Avoid infrastructure dependency inside business logic.
+Avoid coupling business logic with persistence.
 
 Status:
 
@@ -66,18 +65,19 @@ Accepted
 
 # ADR-004
 
-## Gemini as AI Provider
+## LangGraph RAG Workflow
 
 Decision:
 
-Use Google Gemini for:
-
-- Embeddings.
-- LLM reasoning.
+Implement AI orchestration using LangGraph.
 
 Reason:
 
-Integration with Google AI ecosystem.
+Provides:
+
+- Stateful execution.
+- Agent coordination.
+- Extendable workflows.
 
 Status:
 
@@ -87,19 +87,18 @@ Accepted
 
 # ADR-005
 
-## LangGraph Agent Workflow
+## Gemini AI Provider
 
 Decision:
 
-Use LangGraph for RAG orchestration.
+Use Google Gemini for:
+
+- Text generation.
+- Embeddings.
 
 Reason:
 
-Allows:
-
-- Stateful workflows.
-- Multi-agent architecture.
-- Future autonomous behavior.
+Provides unified AI capabilities.
 
 Status:
 
@@ -109,21 +108,17 @@ Accepted
 
 # ADR-006
 
-## Docker First Development
+## RAG REST API
 
 Decision:
 
-All services must run inside Docker.
+Expose RAG analysis through:
 
-Services:
-
-- Backend
-- PostgreSQL
-- pgAdmin
+POST /rag/analyze/{news_id}
 
 Reason:
 
-Environment consistency.
+Separate AI processing from CRUD operations.
 
 Status:
 
