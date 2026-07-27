@@ -47,3 +47,31 @@ Implementado:
 FASE 6:
 
 Domain Layer + Repository Pattern + SOLID
+
+
+## FASE 6 COMPLETADA
+
+Estado:
+COMPLETADA
+
+Implementado:
+
+[x] Domain Layer
+
+[x] Application Layer
+
+[x] Repository Pattern
+
+[x] Dependency Injection
+
+[x] PostgreSQL Repository Implementation
+
+[x] Unit Tests
+
+Arquitectura:
+
+Clean Architecture + SOLID
+
+Próxima fase:
+
+FASE 7 - API REST FastAPI + JWT + Gestión de usuarios

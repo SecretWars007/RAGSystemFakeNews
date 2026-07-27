@@ -70,3 +70,22 @@ Correcciones:
 Estado:
 
 FASE 5 FINALIZADA
+
+
+## FASE 6 - Clean Architecture
+
+Implementado:
+
+- Separación Domain/Application/Infrastructure.
+- Creación de entidades de dominio.
+- Creación de interfaces Repository.
+- Implementación PostgreSQL Repository.
+- Implementación Dependency Injection.
+- Creación de Use Cases.
+- Agregación de pruebas unitarias.
+
+Principios aplicados:
+
+- SOLID
+- Repository Pattern
+- Dependency Inversion Principle
