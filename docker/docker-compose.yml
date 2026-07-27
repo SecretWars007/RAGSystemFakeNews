@@ -77,21 +77,10 @@ services:
     ports:
 
       - "8888:8888"
+    
+    env_file:
 
-
-    environment:
-
-      DATABASE_URL:
-        postgresql+psycopg://postgres:postgres@postgres:5432/fake_news_db
-
-
-      APP_NAME:
-        FakeNewsRAGSystem
-
-
-      ENVIRONMENT:
-        development
-
+    - ../.env
 
     depends_on:
 
