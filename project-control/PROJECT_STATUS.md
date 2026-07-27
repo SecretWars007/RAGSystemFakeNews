@@ -1,42 +1,49 @@
 
-# FakeNewsRAGSystem
+## Estado actual
 
-Version:
-0.1.0
+FASE 5 COMPLETADA
 
-Estado:
-FASE 4 COMPLETADA
+## Fase actual
 
-Fase actual:
-FASE 5
+FASE 6
 
-Completado:
+## Fases completadas
 
-[x] Docker Compose
+**[x]** FASE 1 - Estructura inicial del proyecto
 
-[x] PostgreSQL 16
+**[x]** FASE 2 - Infraestructura Docker PostgreSQL + pgvector
 
-[x] pgvector
+**[x]** FASE 3 - Backend FastAPI inicial
 
-[x] Backend FastAPI
+**[x]** FASE 4 - Configuración SQLAlchemy + Database Layer
 
-[x] SQLAlchemy 2
+**[x]** FASE 5 - Alembic + Modelos PostgreSQL + Migraciones
 
-[x] Database Engine
+## FASE 5 COMPLETADA
 
-[x] Session Factory
+Implementado:
 
-[x] Configuración Settings
+**[x]** Alembic configurado
 
-Pendiente:
+**[x]** Migraciones PostgreSQL funcionando
 
-[ ] Alembic
+**[x]** SQLAlchemy ORM configurado
 
-[ ] Modelos dominio
+**[x]** Modelos iniciales creados:
 
-[ ] Migraciones
+* User
+* News
+* Embedding
+* QueryHistory
+* RAGResponse
+* AuditLog
 
-Siguiente paso:
+**[x]** Extensión pgvector integrada
 
-FASE 5:
-Alembic + Modelos PostgreSQL
+**[x]** Tablas creadas correctamente en PostgreSQL
+
+## Próxima fase
+
+FASE 6:
+
+Domain Layer + Repository Pattern + SOLID

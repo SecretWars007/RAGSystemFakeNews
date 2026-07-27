@@ -1,4 +1,3 @@
-
 # Changelog
 
 ## v0.1.0
@@ -34,3 +33,40 @@ Implementado:
 - Servicio backend en docker-compose
 - Configuración inicial Clean Architecture
 - Endpoint health check
+
+
+## FASE 4 COMPLETA
+
+## FASE 5 COMPLETADA
+
+Fecha:
+2026-07-26
+
+Cambios realizados:
+
+* Integración de Alembic para gestión de migraciones.
+* Configuración de migraciones con PostgreSQL.
+* Integración SQLAlchemy 2.0.
+* Creación de modelos persistentes iniciales.
+* Configuración de pgvector para embeddings.
+* Creación de estructura de almacenamiento para historial de consultas.
+* Creación de estructura para respuestas RAG detalladas.
+
+Tablas agregadas:
+
+* users
+* news
+* embeddings
+* query_history
+* rag_responses
+* audit_logs
+
+Correcciones:
+
+* Ajuste de Alembic env.py para utilizar DATABASE_URL desde Settings.
+* Corrección de migración Vector PostgreSQL.
+* Configuración correcta del tipo Vector(1536).
+
+Estado:
+
+FASE 5 FINALIZADA
