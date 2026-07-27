@@ -89,3 +89,14 @@ Principios aplicados:
 - SOLID
 - Repository Pattern
 - Dependency Inversion Principle
+
+
+
+## FASE 7
+
+- Implementado módulo de autenticación.
+- Registro de usuarios.
+- Login con JWT.
+- Hash de contraseñas con bcrypt.
+- Integración con PostgreSQL.
+- Corrección de compatibilidad passlib/bcrypt.

@@ -1,11 +1,14 @@
 from app.infrastructure.database.connection import engine
 from sqlalchemy.orm import sessionmaker
 
-SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
+SessionLocal = sessionmaker(
+    bind=engine,
+    autoflush=False,
+    autocommit=False,
+)
 
 
-def get_database():
-
+def get_db():
     db = SessionLocal()
 
     try:
@@ -13,3 +16,7 @@ def get_database():
 
     finally:
         db.close()
+
+
+# Alias temporal para mantener compatibilidad
+get_database = get_db
