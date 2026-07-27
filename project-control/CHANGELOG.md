@@ -100,3 +100,18 @@ Principios aplicados:
 - Hash de contraseñas con bcrypt.
 - Integración con PostgreSQL.
 - Corrección de compatibilidad passlib/bcrypt.
+
+
+## FASE 8 - News CRUD
+
+Fecha: 2026-07-27
+
+Cambios:
+
++ Creación del módulo completo de noticias.
++ Implementación Repository Pattern.
++ Implementación Service Layer.
++ Implementación API REST.
++ Integración con FastAPI Dependency Injection.
++ Preparación del modelo para futuras capas RAG.
++ Corrección de dependencias entre módulos.

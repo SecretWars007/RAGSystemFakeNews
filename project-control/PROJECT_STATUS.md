@@ -90,3 +90,36 @@ Implementado:
 - Repository Pattern
 - Dependency Injection
 - Validación Pydantic
+
+
+FASE 8 - Módulo de Noticias
+
+Estado: ✅ COMPLETADA
+
+Implementado:
+
+- Entidad News siguiendo Domain Layer.
+- INewsRepository como contrato.
+- NewsModel con SQLAlchemy.
+- Migración Alembic preparada.
+- News schemas con Pydantic.
+- NewsService.
+- CreateNewsUseCase.
+- PostgresNewsRepository.
+- Dependencias FastAPI.
+- API REST de noticias.
+
+Endpoints disponibles:
+
+POST   /news
+GET    /news
+GET    /news/{news_id}
+PUT    /news/{news_id}
+DELETE /news/{news_id}
+
+Validado:
+
+- Endpoint visible en Swagger.
+- Arquitectura Clean Architecture funcionando.
+- Integración con PostgreSQL.
+- Docker backend operativo.
