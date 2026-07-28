@@ -4,6 +4,23 @@ import {
 
 
 import {
+    useNavigate,
+} from "react-router-dom";
+
+
+import Card from "../../../components/common/Card";
+
+
+import Input from "../../../components/common/Input";
+
+
+import TextArea from "../../../components/common/TextArea";
+
+
+import Button from "../../../components/common/Button";
+
+
+import {
     createNews,
 } from "../services/newsService";
 
@@ -12,104 +29,311 @@ import {
 export default function CreateNews(){
 
 
-    const [
-        title,
-        setTitle
-    ] = useState("");
+
+    const navigate =
+        useNavigate();
 
 
 
-    const [
-        content,
-        setContent
-    ] = useState("");
+    const [title,setTitle] =
+        useState("");
+
+
+
+    const [source,setSource] =
+        useState("");
+
+
+
+    const [content,setContent] =
+        useState("");
+
+
+
+    const [loading,setLoading] =
+        useState(false);
+
+
+
+    const [error,setError] =
+        useState("");
+
+
 
 
 
     async function handleSubmit(
-        e:React.FormEvent
+        event: React.FormEvent
     ){
 
 
-        e.preventDefault();
+        event.preventDefault();
 
 
-        await createNews({
+        setLoading(true);
 
-            title,
 
-            content,
-
-            source:
-            "Frontend",
-
-        });
+        setError("");
 
 
 
-        alert(
-            "Noticia creada"
-        );
+        try {
+
+
+
+            await createNews({
+
+                title,
+
+                source,
+
+                content,
+
+            });
+
+
+
+            navigate("/news");
+
+
+
+        }
+
+        catch{
+
+
+            setError(
+                "No se pudo crear la noticia"
+            );
+
+
+        }
+
+        finally{
+
+
+            setLoading(false);
+
+
+        }
 
 
     }
 
 
 
+
     return (
 
-        <form
-            onSubmit={
-                handleSubmit
-            }
+
+        <div
+
+            className="
+            max-w-4xl
+            mx-auto
+            "
+
         >
 
 
-            <h1>
-                Crear noticia
-            </h1>
+
+            <Card>
 
 
-            <input
+                <h1
 
-                placeholder="Título"
+                    className="
+                    text-2xl
+                    font-bold
+                    text-[#1B4332]
+                    mb-6
+                    "
 
-                value={title}
+                >
 
-                onChange={
-                    e=>
-                    setTitle(
-                        e.target.value
-                    )
-                }
-
-            />
+                    Crear noticia
 
 
-            <textarea
-
-                placeholder="Contenido"
-
-                value={content}
-
-                onChange={
-                    e=>
-                    setContent(
-                        e.target.value
-                    )
-                }
-
-            />
+                </h1>
 
 
-            <button>
 
-                Guardar
+                <form
 
-            </button>
+                    onSubmit={
+                        handleSubmit
+                    }
+
+                    className="
+                    space-y-6
+                    "
+
+                >
 
 
-        </form>
+
+                    <Input
+
+                        label="Título"
+
+                        placeholder="
+                        Título de la noticia
+                        "
+
+                        value={title}
+
+                        onChange={
+                            e =>
+                            setTitle(
+                                e.target.value
+                            )
+                        }
+
+                    />
+
+
+
+
+                    <Input
+
+                        label="Fuente"
+
+                        placeholder="
+                        Fuente de información
+                        "
+
+                        value={source}
+
+                        onChange={
+                            e =>
+                            setSource(
+                                e.target.value
+                            )
+                        }
+
+                    />
+
+
+
+
+
+                    <TextArea
+
+                        label="Contenido"
+
+                        placeholder="
+                        Escriba el contenido completo
+                        "
+
+                        rows={8}
+
+                        value={content}
+
+                        onChange={
+                            e =>
+                            setContent(
+                                e.target.value
+                            )
+                        }
+
+                    />
+
+
+
+
+
+                    {
+                        error && (
+
+                            <p
+
+                                className="
+                                text-red-600
+                                "
+
+                            >
+
+                                {error}
+
+                            </p>
+
+                        )
+                    }
+
+
+
+
+
+                    <div
+
+                        className="
+                        flex
+                        justify-end
+                        gap-4
+                        "
+
+                    >
+
+
+
+                        <Button
+
+                            type="button"
+
+                            variant="outline"
+
+                            onClick={
+                                () =>
+                                navigate("/news")
+                            }
+
+                        >
+
+                            Cancelar
+
+
+                        </Button>
+
+
+
+
+
+                        <Button
+
+                            type="submit"
+
+                            disabled={
+                                loading
+                            }
+
+                        >
+
+                            {
+                                loading
+                                ?
+                                "Guardando..."
+                                :
+                                "Guardar"
+                            }
+
+
+                        </Button>
+
+
+
+                    </div>
+
+
+
+                </form>
+
+
+            </Card>
+
+
+
+        </div>
+
 
     );
 

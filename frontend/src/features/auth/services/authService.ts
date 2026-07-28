@@ -1,43 +1,105 @@
 import api from "../../../api/axios";
 
-import type {
-    LoginRequest,
-    RegisterRequest,
-    AuthResponse,
-} from "../../../types/auth";
 
 
-
-export async function login(
-    data: LoginRequest,
-): Promise<AuthResponse>{
+export interface LoginRequest {
 
 
-    const response =
-        await api.post(
-            "/users/login",
-            data,
-        );
+    email: string;
 
 
-    return response.data;
+    password: string;
+
 
 }
 
 
 
-export async function register(
-    data:RegisterRequest,
-){
+export interface LoginResponse {
 
 
-    const response =
-        await api.post(
-            "/users/register",
-            data,
-        );
+    access_token: string;
+
+
+    token_type: string;
+
+
+}
+
+
+
+export interface RegisterRequest {
+
+
+    email: string;
+
+
+    password: string;
+
+
+}
+
+
+
+
+
+export async function loginUser(
+
+    data: LoginRequest
+
+):
+
+Promise<LoginResponse> {
+
+
+    const response = await api.post(
+
+        "/users/login",
+
+        data
+
+    );
 
 
     return response.data;
 
+
 }
+
+
+
+
+
+
+export async function registerUser(
+
+    data: RegisterRequest
+
+):
+
+Promise<void> {
+
+
+
+    await api.post(
+
+        "/users/register",
+
+        data
+
+    );
+
+
+}
+
+
+
+
+
+/*
+    Alias de compatibilidad.
+    Mantiene funcionando Register.tsx
+    mientras migramos nombres internos.
+*/
+
+export const register = registerUser;

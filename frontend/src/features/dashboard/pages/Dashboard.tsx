@@ -1,60 +1,156 @@
-import StatCard from "../components/StatCard";
+import {
+    Newspaper,
+    BrainCircuit,
+    ShieldCheck,
+    Users,
+} from "lucide-react";
+
+
+import WelcomeCard from "../components/WelcomeCard";
+
+
+import SystemStatus from "../components/SystemStatus";
+
 
 import QuickActions from "../components/QuickActions";
+
+
+import StatCard from "../components/StatCard";
+
 
 
 export default function Dashboard(){
 
 
+
     return (
 
-        <main>
+        <div
+
+            className="
+            space-y-8
+            "
+
+        >
 
 
-            <h1>
-                Dashboard
-            </h1>
+
+            <WelcomeCard />
 
 
 
-            <section>
+
+
+            <div
+
+                className="
+                grid
+                grid-cols-1
+                md:grid-cols-2
+                xl:grid-cols-4
+                gap-6
+                "
+
+            >
+
 
 
                 <StatCard
 
-                    title="Sistema"
+                    title="Noticias"
 
-                    value="FakeNewsRAGSystem"
+                    value="1,250"
+
+                    description="Registradas"
+
+                    icon={
+                        <Newspaper />
+                    }
 
                 />
+
+
 
 
                 <StatCard
 
-                    title="Motor IA"
+                    title="Análisis RAG"
 
-                    value="Gemini + LangGraph"
+                    value="870"
+
+                    description="Procesados"
+
+                    icon={
+                        <BrainCircuit />
+                    }
 
                 />
+
+
 
 
                 <StatCard
 
-                    title="Vector DB"
+                    title="Noticias falsas"
 
-                    value="PostgreSQL pgvector"
+                    value="340"
+
+                    description="Detectadas"
+
+                    icon={
+                        <ShieldCheck />
+                    }
 
                 />
 
 
-            </section>
+
+
+                <StatCard
+
+                    title="Usuarios"
+
+                    value="25"
+
+                    description="Activos"
+
+                    icon={
+                        <Users />
+                    }
+
+                />
 
 
 
-            <QuickActions/>
+            </div>
 
 
-        </main>
+
+
+
+            <div
+
+                className="
+                grid
+                grid-cols-1
+                lg:grid-cols-2
+                gap-6
+                "
+
+            >
+
+
+                <QuickActions />
+
+
+                <SystemStatus />
+
+
+            </div>
+
+
+
+        </div>
 
     );
 

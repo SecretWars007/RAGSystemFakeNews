@@ -1,9 +1,7 @@
 import {
+    Navigate,
     createBrowserRouter,
 } from "react-router-dom";
-
-
-import App from "../App";
 
 
 import Login from "../features/auth/pages/Login";
@@ -22,99 +20,198 @@ import CreateNews from "../features/news/pages/CreateNews";
 import RagAnalyzer from "../features/rag/pages/RagAnalyzer";
 
 
+import MainLayout from "../shared/layouts/MainLayout";
+
+
 import ProtectedRoute from "../core/security/ProtectedRoute";
 
 
+import NotFound from "../shared/pages/NotFound";
 
-export const router =
-createBrowserRouter([
+
+export const router = createBrowserRouter([
+
+
+
+
+    /*
+    ===========================
+    PUBLIC ROUTES
+    ===========================
+    */
+
 
 
     {
 
-        path:"/",
 
-        element:<App/>,
+        path: "/login",
+
+
+        element: <Login />,
+
 
     },
 
 
+
+
+
     {
 
-        path:"/login",
 
-        element:<Login/>,
+        path: "/register",
+
+
+        element: <Register />,
+
 
     },
 
 
+
+
+
+
+
+    /*
+    ===========================
+    PRIVATE ROUTES
+    ===========================
+    */
+
+
+
     {
 
-        path:"/register",
-
-        element:<Register/>,
-
-    },
-
-
-    {
-
-        path:"/dashboard",
 
         element:
 
         <ProtectedRoute>
 
-            <Dashboard/>
 
-        </ProtectedRoute>
+            <MainLayout />
+
+
+        </ProtectedRoute>,
+
+
+
+        children: [
+
+
+
+
+            {
+
+
+                path: "/",
+
+
+                element:
+
+                <Navigate
+
+                    to="/dashboard"
+
+                    replace
+
+                />,
+
+
+            },
+
+
+
+
+
+
+            {
+
+
+                path: "/dashboard",
+
+
+                element: <Dashboard />,
+
+
+            },
+
+
+
+
+
+
+
+            {
+
+
+                path: "/news",
+
+
+                element: <NewsList />,
+
+
+            },
+
+
+
+
+
+
+
+            {
+
+
+                path: "/news/create",
+
+
+                element: <CreateNews />,
+
+
+            },
+
+
+
+
+
+
+
+            {
+
+
+                path: "/rag",
+
+
+                element: <RagAnalyzer />,
+
+
+            },
+
+
+
+
+
+        ],
+
+
 
     },
+
+
+
+
+    /*
+    Ruta fallback
+    */
 
 
     {
-
-        path:"/news",
-
-        element:
-
-        <ProtectedRoute>
-
-            <NewsList/>
-
-        </ProtectedRoute>
-
+        path: "*",
+        element: <NotFound />,
     },
 
 
-    {
-
-        path:"/news/create",
-
-        element:
-
-        <ProtectedRoute>
-
-            <CreateNews/>
-
-        </ProtectedRoute>
-
-    },
-
-
-    {
-
-        path:"/rag",
-
-        element:
-
-        <ProtectedRoute>
-
-            <RagAnalyzer/>
-
-        </ProtectedRoute>
-
-    },
 
 
 ]);
