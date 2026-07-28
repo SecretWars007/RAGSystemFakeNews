@@ -418,11 +418,43 @@ El proyecto puede servir como base para:
 - desarrollo de prototipos para plataformas de verificación informativa,
 - y exploración de arquitecturas híbridas entre bases de datos relacionales y modelos generativos.
 
-## 16. Estado actual del proyecto
+## 16. Ejemplos de preguntas que el agente puede responder
+
+El agente puede responder preguntas orientadas a la evaluación de una noticia, por ejemplo:
+
+- ¿Esta noticia es falsa o real?
+- ¿Qué evidencia respalda esta clasificación?
+- ¿Qué señales de manipulación o sesgo se observan?
+- ¿Qué noticias similares fueron usadas como contexto?
+- ¿Cuál es el nivel de confianza del análisis?
+- ¿Por qué esta noticia parece estar relacionada con otras publicaciones sospechosas?
+
+## 17. Ejemplos de respuestas generadas por el agente
+
+A continuación se muestran ejemplos representativos del tipo de salida que el sistema puede producir:
+
+```text
+Pregunta: ¿Esta noticia es falsa o real?
+Respuesta: FAKE
+Score: 0.93
+Razón: La noticia presenta inconsistencias con fuentes verificables y coincide con patrones de contenido manipulador detectados en noticias similares.
+```
+
+```text
+Pregunta: ¿Qué evidencia respalda esta clasificación?
+Respuesta: Se encontraron coincidencias semánticas con artículos previos que compartían frases clave, contexto engañoso y ausencia de respaldo documental sólido.
+```
+
+```text
+Pregunta: ¿Cuál es el nivel de confianza del análisis?
+Respuesta: Alto, con un puntaje de 0.91, porque el sistema comparó la noticia con múltiples fuentes contextuales similares.
+```
+
+## 19. Estado actual del proyecto
 
 El proyecto se encuentra en una fase de desarrollo funcional con un MVP orientado a demostrar la viabilidad de un sistema RAG para análisis de noticias falsas. Se puede usar como base para investigación, extensión académica y desarrollo posterior.
 
-## 17. Posibles mejoras futuras
+## 20. Posibles mejoras futuras
 
 - agregar modelos adicionales de embeddings,
 - incorporar evaluación de explicabilidad,
@@ -431,6 +463,6 @@ El proyecto se encuentra en una fase de desarrollo funcional con un MVP orientad
 - implementar dashboards de analítica y métricas,
 - y extender la autenticación con roles y permisos más robustos.
 
-## 18. Conclusión
+## 21. Conclusión
 
 FakeNewsRAGSystem representa una propuesta integral para combinar recuperación de información, embeddings vectoriales y modelos generativos en un sistema orientado a la verificación de contenido noticioso. Su valor no solo está en la implementación técnica, sino también en la posibilidad de servir como base para proyectos de investigación, desarrollo e innovación en el área de inteligencia artificial aplicada a la desinformación.
