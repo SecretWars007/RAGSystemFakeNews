@@ -257,7 +257,22 @@ Antes de levantar el proyecto, asegúrate de tener instalado:
 - Git
 - Una clave de API válida de Google Gemini
 
-### 10.2 Preparación del entorno
+### 10.2 Clonar el proyecto
+
+Ejecuta los siguientes comandos desde una terminal:
+
+```bash
+git clone <url-del-repositorio>
+cd RAGSystemFakeNews
+```
+
+Si ya tienes el repositorio descargado, entra a la carpeta principal:
+
+```bash
+cd RAGSystemFakeNews
+```
+
+### 10.3 Preparación del entorno
 
 Crea un archivo .env en la raíz del proyecto con contenido similar a:
 
@@ -268,33 +283,62 @@ DATABASE_URL=postgresql+psycopg://postgres:postgres@postgres:5432/fake_news_db
 
 > Si vas a ejecutar el backend fuera de Docker, ajusta el host de la base de datos según tu entorno local.
 
-### 10.3 Levantar el proyecto desde cero
+### 10.4 Levantar el proyecto desde cero con Docker
 
-#### Opción A: con Docker Compose (recomendada)
+#### Paso 1: construir y levantar los servicios
 
 ```bash
 docker compose -f docker/docker-compose.yml up --build
 ```
 
-Esto levantará:
+Este comando realizará lo siguiente:
 
-- PostgreSQL en el puerto 4588
-- pgAdmin en el puerto 5050
-- Backend en el puerto 8888
-- Frontend en el puerto 3000
+- descargará las imágenes necesarias,
+- construirá la imagen del backend y del frontend,
+- creará la red interna del proyecto,
+- levantará PostgreSQL, pgAdmin, la API y la interfaz web.
 
-#### Servicios disponibles
+#### Paso 2: verificar que los contenedores estén activos
+
+```bash
+docker compose -f docker/docker-compose.yml ps
+```
+
+Deberías ver los servicios activos de:
+
+- postgres
+- pgadmin
+- backend
+- frontend
+
+#### Paso 3: acceder a la aplicación
+
+Una vez que los contenedores estén corriendo, puedes abrir:
 
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:8888
 - pgAdmin: http://localhost:5050
 - Base de datos PostgreSQL: localhost:4588
 
-### 10.4 Inicialización de la base de datos
+### 10.5 Inicialización de la base de datos
 
 El archivo de inicialización en la carpeta database crea la extensión vector y pgcrypto. Si la base de datos se levanta correctamente, el sistema quedará listo para almacenar embeddings y noticias.
 
-### 10.5 Ejecutar el backend manualmente (opcional)
+### 10.6 Detener y limpiar los servicios
+
+Para detener los contenedores:
+
+```bash
+docker compose -f docker/docker-compose.yml down
+```
+
+Si además deseas eliminar los volúmenes de datos:
+
+```bash
+docker compose -f docker/docker-compose.yml down -v
+```
+
+### 10.7 Ejecutar el backend manualmente (opcional)
 
 ```bash
 cd backend
