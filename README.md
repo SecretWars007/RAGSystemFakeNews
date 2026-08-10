@@ -1,3 +1,4 @@
+
 # FakeNewsRAGSystem
 
 Sistema completo para la detección y verificación de noticias falsas mediante IA, recuperación semántica, embeddings vectoriales y modelos de aprendizaje supervisado. El proyecto integra una API REST con FastAPI, una base de datos PostgreSQL con pgvector, una capa de agentes y RAG basada en LangGraph, un frontend moderno en React y una automatización de ingesta con Airflow.
@@ -24,23 +25,7 @@ FakeNewsRAGSystem fue concebido para analizar noticias de forma contextual, no s
 
 ## Arquitectura del sistema
 
-`mermaid
-flowchart LR
-    U[Usuario] --> F[Frontend React + Vite]
-    F --> API[FastAPI API]
-    API --> APP[Servicios de aplicación]
-    APP --> DB[(PostgreSQL + pgvector)]
-    APP --> RAG[LangGraph / RAG Engine]
-    RAG --> EMB[Gemini Embeddings]
-    RAG --> LLM[Gemini LLM]
-    DB --> DOCS[Noticias, embeddings, fuentes, feedback]
-    APP --> ML[Modelo de clasificación + MLflow]
-    ML --> TRAIN[Dataset configurado]
-    APP --> DAG[Airflow DAG de ingesta]
-    DAG --> S[Fuentes confiables]
-    LLM --> RES[Resultado con score, label, evidencia y similar_news]
-    RES --> F
-`
+`mermaid flowchart LR     U[Usuario] --> F[Frontend React + Vite]     F --> API[FastAPI API]     API --> APP[Servicios de aplicación]     APP --> DB[(PostgreSQL + pgvector)]     APP --> RAG[LangGraph / RAG Engine]     RAG --> EMB[Gemini Embeddings]     RAG --> LLM[Gemini LLM]     DB --> DOCS[Noticias, embeddings, fuentes, feedback]     APP --> ML[Modelo de clasificación + MLflow]     ML --> TRAIN[Dataset configurado]     APP --> DAG[Airflow DAG de ingesta]     DAG --> S[Fuentes confiables]     LLM --> RES[Resultado con score, label, evidencia y similar_news]     RES --> F `
 
 ### Capas principales
 
@@ -57,9 +42,12 @@ El backend se organiza por módulos funcionales:
 
 - users para autenticación y perfil del usuario.
 - 
+
 ews para CRUD de noticias.
-- 
+--------------------------
+
 ag para análisis semántico y recuperación contextual.
+
 - sources para gestión de fuentes confiables.
 - knowledge para monitoreo del estado del índice documental.
 - eedback para registro de comentarios y valoración del usuario.
@@ -89,8 +77,8 @@ El flujo incluye:
 - búsqueda de noticias similares,
 - recuperación vectorial usando PostgreSQL + pgvector,
 - evaluación con lenguaje generativo,
-- respuesta estructurada con status, score, label, 
-eason, evidence, decision_source y similar_news.
+- respuesta estructurada con status, score, label,
+  eason, evidence, decision_source y similar_news.
 
 Si la respuesta se marca como UNVERIFIED, el sistema encola una solicitud de refresco del conocimiento para mejorar el índice.
 
@@ -171,10 +159,7 @@ La base de datos se prepara para un entorno de analítica y recuperación vector
 
 ### Extensiones y soporte vectorial
 
-`sql
-CREATE EXTENSION IF NOT EXISTS vector;
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
-`
+`sql CREATE EXTENSION IF NOT EXISTS vector; CREATE EXTENSION IF NOT EXISTS pgcrypto; `
 
 Esto habilita:
 
@@ -225,8 +210,8 @@ El servicio ModelTrainingService entrena un modelo supervisado con:
 
 Se soportan columnas obligatorias como:
 
-- 	itle
-- 	ext
+- itle
+- ext
 - label
 
 y opcionalmente:
@@ -245,16 +230,11 @@ y opcionalmente:
 
 ### Arranque local
 
-`ash
-docker compose -f docker/docker-compose.yml up --build
-`
+`ash docker compose -f docker/docker-compose.yml up --build `
 
 ### Backend y pruebas
 
-`ash
-cd backend
-pytest
-`
+`ash cd backend pytest `
 
 ### Airflow
 
