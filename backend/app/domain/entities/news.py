@@ -17,3 +17,4 @@ class News:
     is_fake: bool | None = None
     created_at: datetime | None = None
     updated_at: datetime | None = None
+    similarity: float | None = None

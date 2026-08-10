@@ -60,7 +60,19 @@ export default function NewsList(){
 
         ()=>{
 
-            loadNews();
+            let active = true;
+
+            void getNews().then(
+                (data) => {
+                    if (active) {
+                        setNews(data);
+                    }
+                }
+            );
+
+            return () => {
+                active = false;
+            };
 
         },
 

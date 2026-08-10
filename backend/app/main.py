@@ -1,6 +1,10 @@
 from app.presentation.api import (
     news,
+    ml,
+    knowledge,
+    feedback,
     rag,
+    sources,
     users,
 )
 from fastapi import FastAPI
@@ -45,6 +49,22 @@ app.include_router(
 
 app.include_router(
     rag.router,
+)
+
+app.include_router(
+    sources.router,
+)
+
+app.include_router(
+    ml.router,
+)
+
+app.include_router(
+    knowledge.router,
+)
+
+app.include_router(
+    feedback.router,
 )
 
 

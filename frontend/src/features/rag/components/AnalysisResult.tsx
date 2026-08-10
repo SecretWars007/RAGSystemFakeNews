@@ -38,6 +38,12 @@ interface AnalysisResultProps {
 
     similarNews?: SimilarNews[];
 
+    label?: string | null;
+    reason?: string | null;
+    decisionSource?: string | null;
+    evidence?: { title: string; source: string; url?: string | null; similarity?: number | null }[];
+    knowledgeRefresh?: "queued" | "already_queued";
+
 
 }
 
@@ -52,6 +58,12 @@ export default function AnalysisResult({
     status,
 
     similarNews = [],
+
+    label,
+    reason,
+    decisionSource,
+    evidence = [],
+    knowledgeRefresh,
 
 }: AnalysisResultProps) {
 
@@ -141,6 +153,12 @@ export default function AnalysisResult({
 
             >
 
+                {label && <p className="mb-3 font-semibold text-[#1B4332]">Veredicto: {label}</p>}
+
+                {reason && <p className="mb-3 text-[#374151]">{reason}</p>}
+
+                {decisionSource && <p className="mb-3 text-sm text-[#5E6C61]">Origen: {decisionSource}</p>}
+
 
 
                 <p
@@ -153,8 +171,9 @@ export default function AnalysisResult({
                 >
 
                     {
-                        analysis ||
-                        "Sin análisis disponible"
+                        reason
+                            ? "El resultado estructurado se muestra arriba con su evidencia."
+                            : analysis || "Sin análisis disponible"
                     }
 
 
@@ -163,6 +182,29 @@ export default function AnalysisResult({
 
 
             </Card>
+
+            {knowledgeRefresh && (
+                <Card title="Actualización de conocimiento">
+                    <p className="text-sm text-[#374151]">
+                        {knowledgeRefresh === "queued"
+                            ? "La consulta fue encolada para buscar evidencia nueva en fuentes confiables."
+                            : "Ya existe una actualización pendiente para esta consulta."}
+                    </p>
+                </Card>
+            )}
+
+            {evidence.length > 0 && (
+                <Card title="Evidencia utilizada">
+                    <ul className="space-y-2 text-sm text-[#374151]">
+                        {evidence.map((item, index) => (
+                            <li key={`${item.title}-${index}`}>
+                                <span className="font-semibold">{item.title}</span> — {item.source}
+                                {item.url && <> · <a className="text-blue-700 underline" href={item.url} target="_blank" rel="noreferrer">Fuente</a></>}
+                            </li>
+                        ))}
+                    </ul>
+                </Card>
+            )}
 
 
 

@@ -30,6 +30,18 @@ export interface RagAnalysisResponse {
 
     }[];
 
+    label?: string | null;
+    reason?: string | null;
+    decision_source?: string | null;
+    evidence?: {
+        title: string;
+        source: string;
+        url?: string | null;
+        similarity?: number | null;
+    }[];
+
+    knowledge_refresh?: "queued" | "already_queued";
+
 
 }
 
@@ -94,4 +106,10 @@ Promise<RagAnalysisResponse> {
     return response.data;
 
 
+}
+
+
+export async function analyzeQuery(query: string): Promise<RagAnalysisResponse> {
+    const response = await api.post("/rag/analyze", { query });
+    return response.data;
 }

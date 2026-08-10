@@ -35,7 +35,7 @@ def analyze_fake_news(
     source = state.get("source")
 
     similar_news = state.get(
-        "similar_news",
+        "relevant_news",
         [],
     )
 
@@ -62,6 +62,9 @@ Contenido:
 
 Fuente:
 {news.source}
+
+Similitud:
+{news.similarity}
 
 ----------------------------------------
 """
@@ -95,7 +98,7 @@ NOTICIAS SIMILARES
 Devuelve únicamente JSON:
 
 {{
-    "label": "REAL o FAKE",
+    "label": "REAL, FAKE, MISLEADING o UNVERIFIED",
     "score": 0.95,
     "reason": "Explicación detallada",
     "evidence": "Evidencias encontradas"
@@ -130,6 +133,11 @@ Devuelve únicamente JSON:
     try:
         data: dict[str, Any] = json.loads(analysis_text)
 
+        data.setdefault("decision_source", "gemini_fallback")
+        data.setdefault("evidence", [])
+        analysis_text = json.dumps(data, ensure_ascii=False)
+        state["analysis"] = analysis_text
+
         score = data.get("score")
 
         if isinstance(
@@ -141,6 +149,6 @@ Devuelve únicamente JSON:
     except json.JSONDecodeError:
         state["score"] = 0.0
 
-    state["status"] = "analysis_completed"
+    state["status"] = "completed"
 
     return state

@@ -4,9 +4,14 @@ from app.infrastructure.agents.analyzer_agent import (
 from app.infrastructure.agents.embedding_agent import (
     generate_embedding,
 )
+from app.infrastructure.agents.evidence_gate_agent import (
+    evaluate_evidence,
+    should_use_gemini,
+)
 from app.infrastructure.agents.news_agent import (
     analyze_news,
 )
+from app.infrastructure.agents.local_model_agent import classify_with_local_model
 from app.infrastructure.agents.retriever_agent import (
     retrieve_similar_news,
 )
@@ -58,10 +63,20 @@ def create_news_rag_graph():
         generate_embedding,
     )
 
+    graph.add_node(
+        "local_model",
+        classify_with_local_model,
+    )
+
     # Nodo 3
     graph.add_node(
         "retriever",
         retrieve_similar_news,
+    )
+
+    graph.add_node(
+        "evidence_gate",
+        evaluate_evidence,
     )
 
     # Nodo 4
@@ -82,6 +97,11 @@ def create_news_rag_graph():
 
     graph.add_edge(
         "analyze_news",
+        "local_model",
+    )
+
+    graph.add_edge(
+        "local_model",
         "embedding",
     )
 
@@ -92,7 +112,16 @@ def create_news_rag_graph():
 
     graph.add_edge(
         "retriever",
-        "analysis",
+        "evidence_gate",
+    )
+
+    graph.add_conditional_edges(
+        "evidence_gate",
+        should_use_gemini,
+        {
+            "analysis": "analysis",
+            "storage": "storage",
+        },
     )
 
     graph.add_edge(

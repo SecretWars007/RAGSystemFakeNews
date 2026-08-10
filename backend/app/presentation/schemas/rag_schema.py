@@ -46,3 +46,12 @@ class RagAnalyzeResponse(BaseModel):
     analysis: str
 
     status: str
+
+
+class RagQueryRequest(BaseModel):
+    query: str = Field(
+        ...,
+        min_length=10,
+        max_length=10_000,
+        description="Afirmación o consulta que se desea verificar",
+    )

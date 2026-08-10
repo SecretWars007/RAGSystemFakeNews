@@ -7,6 +7,7 @@ import {
     LayoutDashboard,
     Newspaper,
     BrainCircuit,
+    Database,
     LogOut,
 } from "lucide-react";
 
@@ -51,6 +52,15 @@ const menu = [
 
     },
 
+
+    {
+        name: "Fuentes",
+
+        path: "/sources",
+
+        icon: Database,
+
+    },
 
 ];
 

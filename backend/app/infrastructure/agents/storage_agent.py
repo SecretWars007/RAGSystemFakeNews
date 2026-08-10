@@ -34,8 +34,8 @@ def save_embedding(
     if vector is None:
         raise ValueError("No existe embedding generado")
 
-    if news_id is None:
-        raise ValueError("news_id es obligatorio")
+    if news_id is None or not state.get("persist_embedding", True):
+        return state
 
     if not provider:
         raise ValueError("provider es obligatorio")
@@ -59,6 +59,9 @@ def save_embedding(
 
     service.save_if_not_exists(embedding)
 
-    state["status"] = "embedding_stored"
+    # Preserve the decision made by the evidence gate or analyzer. Persisting an
+    # embedding is a side effect, not the user-facing result of the analysis.
+    if state.get("status") not in {"insufficient_evidence", "completed"}:
+        state["status"] = "embedding_stored"
 
     return state

@@ -10,6 +10,7 @@ import Register from "../features/auth/pages/Register";
 
 
 import Dashboard from "../features/dashboard/pages/Dashboard";
+import Sources from "../features/dashboard/pages/Sources";
 
 
 import NewsList from "../features/news/pages/NewsList";
@@ -135,6 +136,11 @@ export const router = createBrowserRouter([
                 element: <Dashboard />,
 
 
+            },
+
+            {
+                path: "/sources",
+                element: <Sources />,
             },
 
 

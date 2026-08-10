@@ -35,6 +35,20 @@ class NewsRAGState(TypedDict, total=False):
 
     similar_news: list[Any]
 
+    relevant_news: list[Any]
+
+    should_use_gemini: bool
+
+    local_model_available: bool
+
+    local_label: str
+
+    local_confidence: float
+
+    local_model_uri: str
+
+    persist_embedding: bool
+
     analysis: str
 
     score: float

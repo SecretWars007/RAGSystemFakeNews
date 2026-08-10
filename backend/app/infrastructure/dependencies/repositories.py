@@ -16,6 +16,7 @@ from app.infrastructure.repositories.postgres_retriever_repository import (
 from app.infrastructure.repositories.postgres_user_repository import (
     PostgresUserRepository,
 )
+from app.infrastructure.repositories.postgres_trusted_source_repository import PostgresTrustedSourceRepository
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
@@ -75,3 +76,7 @@ def get_retriever_repository(
     """
 
     return PostgresRetrieverRepository(session)
+
+
+def get_trusted_source_repository(session: Session = Depends(get_database_session)) -> PostgresTrustedSourceRepository:
+    return PostgresTrustedSourceRepository(session)

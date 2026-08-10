@@ -6,10 +6,15 @@ from app.infrastructure.database.base import Base
 from app.infrastructure.models import (
     AuditLogModel,
     EmbeddingModel,
+    FeedbackModel,
+    KnowledgeDocumentEmbeddingModel,
+    KnowledgeDocumentModel,
     NewsModel,
     QueryHistoryModel,
     RAGResponseModel,
+    RefreshRequestModel,
     UserModel,
+    TrustedSourceModel,
 )
 from app.infrastructure.models.embedding_model import EmbeddingModel
 from sqlalchemy import engine_from_config, pool
