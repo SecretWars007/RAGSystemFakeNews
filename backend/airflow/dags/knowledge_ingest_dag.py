@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from airflow import DAG
 from airflow.operators.python import PythonOperator
+from airflow.utils.dates import days_ago
 
-from app.infrastructure.database.session import SessionLocal
 from app.infrastructure.ingestion.worker import run_pending_sources
 
 
@@ -16,8 +16,10 @@ def _run_ingestion() -> list[dict[str, str]]:
 with DAG(
     dag_id="knowledge_ingestion_pipeline",
     description="Scheduled trusted-source ingestion for the RAG knowledge base",
-    start_date=datetime(2024, 1, 1),
-    schedule_interval="@daily",
+    # days_ago(0) evita el uso de datetime literal con timezone naive.
+    start_date=days_ago(1),
+    # `schedule` reemplaza el parámetro `schedule_interval` deprecado en Airflow 2.4+.
+    schedule=timedelta(days=1),
     catchup=False,
     default_args={
         "owner": "data-team",

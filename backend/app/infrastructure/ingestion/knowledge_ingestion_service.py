@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from hashlib import sha256
 from uuid import uuid4
 
@@ -33,7 +33,7 @@ class KnowledgeIngestionService:
             (KnowledgeDocumentModel.canonical_url == canonical_url)
             | (KnowledgeDocumentModel.content_hash == content_hash)
         ).first()
-        source.last_crawled_at = datetime.utcnow()
+        source.last_crawled_at = datetime.now(tz=timezone.utc)
         if existing:
             self.session.commit()
             return {"status": "duplicate", "document_id": str(existing.id)}
