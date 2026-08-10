@@ -1,122 +1,150 @@
-
 # FakeNewsRAGSystem
 
-Sistema para análisis de noticias falsas y verificación de contenido usando Retrieval-Augmented Generation (RAG), embeddings vectoriales y modelos generativos. El proyecto combina una API REST en FastAPI, una base de datos PostgreSQL con pgvector, agentes LangGraph para orquestación del flujo de análisis y una interfaz web en React para interactuar con el sistema.
+Sistema completo para la detección y verificación de noticias falsas mediante IA, recuperación semántica, embeddings vectoriales y modelos de aprendizaje supervisado. El proyecto integra una API REST con FastAPI, una base de datos PostgreSQL con pgvector, una capa de agentes y RAG basada en LangGraph, un frontend moderno en React y una automatización de ingesta con Airflow.
 
 ## Estado actual
 
-- Versión del backend: 1.0.0
-- Fase de desarrollo: Testing y calidad completados, con avance hacia frontend profesional
-- Estado funcional: MVP operativo con autenticación, gestión de noticias, RAG, fuentes confiables, feedback, ML y monitoreo de conocimiento
+- Backend: funcional y modular, con autenticación, noticias, fuentes, feedback, conocimiento y RAG.
+- Frontend: interfaz moderna, responsive y conectada a los principales flujos del sistema.
+- Base de datos: estructura vectorial lista para almacenamiento de embeddings, documentos de conocimiento y solicitudes de refresco.
+- Modelo de aprendizaje: pipeline configurado para entrenamiento supervisado usando TF-IDF + Logistic Regression con MLflow.
+- Airflow: DAG de ingesta programada implementada y lista para ejecutarse a través de Docker con scheduler y webserver.
+- Infraestructura: stack local preparado con PostgreSQL, pgAdmin y servicios de orquestación.
 
 ## Visión general
 
-FakeNewsRAGSystem fue diseñado para evaluar noticias mediante comparación semántica con contenido previamente indexado y análisis contextual con modelos de lenguaje. La idea principal no es solo clasificar una noticia como verdadera o falsa de forma aislada, sino contextualizarla con noticias similares, fuentes confiables y evidencia recuperada antes de producir una conclusión.
+FakeNewsRAGSystem fue concebido para analizar noticias de forma contextual, no solo clasificarlas aisladamente. El sistema combina:
 
-El sistema integra:
+- recuperación de noticias similares por similitud semántica,
+- comparación con fuentes confiables,
+- uso de embeddings para indexar y buscar contenido relevante,
+- generación de explicaciones a partir de evidencia encontrada,
+- entrenamiento y registro de modelos de clasificación para uso posterior,
+- automatización de ingestas de conocimiento con Airflow.
 
-- autenticación y autorización basada en JWT,
-- gestión de noticias con CRUD completo,
-- análisis semántico con embeddings,
-- recuperación vectorial sobre PostgreSQL + pgvector,
-- flujo de RAG orquestado con LangGraph,
-- análisis de claim libre y noticias individuales,
-- endpoints de ML y conocimiento,
-- feedback del usuario y administración de fuentes confiables.
+## Arquitectura del sistema
 
-## Arquitectura
-
-```mermaid
+`mermaid
 flowchart LR
-    A[Usuario] --> B[Frontend React + Vite]
-    B --> C[FastAPI]
-    C --> D[Servicios de aplicación]
-    D --> E[PostgreSQL + pgvector]
-    C --> F[LangGraph / RAG Engine]
-    F --> G[Gemini Embeddings]
-    F --> H[Gemini LLM]
-    E --> I[Noticias, embeddings, fuentes y refresh]
-    H --> J[Resultado con score, label y evidencia]
-    J --> B
-```
+    U[Usuario] --> F[Frontend React + Vite]
+    F --> API[FastAPI API]
+    API --> APP[Servicios de aplicación]
+    APP --> DB[(PostgreSQL + pgvector)]
+    APP --> RAG[LangGraph / RAG Engine]
+    RAG --> EMB[Gemini Embeddings]
+    RAG --> LLM[Gemini LLM]
+    DB --> DOCS[Noticias, embeddings, fuentes, feedback]
+    APP --> ML[Modelo de clasificación + MLflow]
+    ML --> TRAIN[Dataset configurado]
+    APP --> DAG[Airflow DAG de ingesta]
+    DAG --> S[Fuentes confiables]
+    LLM --> RES[Resultado con score, label, evidencia y similar_news]
+    RES --> F
+`
 
 ### Capas principales
 
-- Dominio: entidades, contratos de repositorio y lógica de negocio central.
-- Aplicación: servicios, casos de uso y dependencias.
-- Infraestructura: modelos SQLAlchemy, pgvector, agentes LLM, acceso a datos y proveedores externos.
-- Presentación: routers FastAPI y frontend React.
+- Dominio: entidades, contratos y lógica principal del negocio.
+- Aplicación: servicios, casos de uso y orquestación.
+- Infraestructura: acceso a base de datos, modelos SQLAlchemy, agentes, embeddings y proveedores externos.
+- Presentación: routers REST y frontend React.
 
-## Funcionalidades implementadas
+## Mejoras implementadas en backend
 
-### Autenticación
+### 1. API REST modular
 
-- Registro de usuarios con contraseña segura.
+El backend se organiza por módulos funcionales:
+
+- users para autenticación y perfil del usuario.
+- 
+ews para CRUD de noticias.
+- 
+ag para análisis semántico y recuperación contextual.
+- sources para gestión de fuentes confiables.
+- knowledge para monitoreo del estado del índice documental.
+- eedback para registro de comentarios y valoración del usuario.
+- ml para entrenamiento del modelo configurado.
+
+### 2. Autenticación y seguridad
+
+- Registro de usuarios.
 - Inicio de sesión con JWT.
-- Endpoint /users/me para consultar el usuario autenticado.
-- Seguridad mediante dependencias y validación del token.
+- Dependencias protegidas para rutas privadas.
+- Lógica de autorización y validación de token.
+- CORS habilitado para frontend local y entornos de desarrollo.
 
-### Gestión de noticias
+### 3. Gestión de noticias
 
-- Crear noticias.
-- Listar todas las noticias.
-- Consultar una noticia por ID.
-- Actualizar una noticia.
-- Eliminar una noticia.
+- Creación, listado, detalle, actualización y eliminación de noticias.
+- Soporte de metadatos como fuente, autor, URL, idioma, país y fecha de publicación.
+- Integración directa con el pipeline RAG para análisis de contenido.
 
-### Análisis RAG
+### 4. Motor de RAG y evidencia
 
-- Análisis de una noticia por ID.
-- Análisis de un texto libre como claim o afirmación.
-- Recuperación de noticias similares mediante similitud vectorial.
-- Generación de resultado estructurado con:
-  - status
-  - analysis
-  - score
-  - label
-  - reason
-  - evidence
-  - similar_news
+El endpoint principal POST /rag/analyze analiza un claim libre sin persistirlo como noticia, mientras que POST /rag/analyze/{news_id} analiza una noticia ya registrada.
 
-### Fuentes confiables
+El flujo incluye:
 
-- Registro y listado de fuentes confiables.
-- Actualización de fuentes existentes.
-- Soporte para filtrar solo fuentes activas.
+- extracción de contexto del contenido,
+- búsqueda de noticias similares,
+- recuperación vectorial usando PostgreSQL + pgvector,
+- evaluación con lenguaje generativo,
+- respuesta estructurada con status, score, label, 
+eason, evidence, decision_source y similar_news.
 
-### Knowledge / refresh
+Si la respuesta se marca como UNVERIFIED, el sistema encola una solicitud de refresco del conocimiento para mejorar el índice.
 
-- Estado del índice de conocimiento.
-- Conteo de documentos, embeddings y refrescos pendientes.
-- Registro de consultas no verificadas para cola de actualización.
+### 5. Estado de conocimiento y refresh
 
-### Feedback
+El endpoint /knowledge/status devuelve:
 
-- Captura de feedback del usuario sobre análisis o experiencia.
+- número de documentos indexados,
+- número total de embeddings,
+- solicitudes pendientes de refresco,
+- fecha del último índice generado.
 
-### MLOps
+Esto facilita la supervisión del sistema de ingesta y del estado de la base de conocimiento.
 
-- Endpoint para iniciar entrenamiento de modelo cuando está habilitado.
-- Validación de configuración antes de disparar el entrenamiento.
+### 6. MLOps y entrenamiento
 
-## Stack tecnológico
+Se añadió un servicio de entrenamiento configurado:
 
-### Backend
+- validación del dataset configurado,
+- entrenamiento con TF-IDF + Logistic Regression,
+- medición con F1 macro,
+- registro del modelo en MLflow,
+- generación de una URI candidata para producción.
 
-- Python 3.12
-- FastAPI
-- SQLAlchemy
-- PostgreSQL
-- pgvector
-- Alembic
-- LangChain
-- LangGraph
-- Google Gemini
-- Pydantic / Pydantic Settings
-- JWT / bcrypt / passlib
-- pytest
+El endpoint protegido POST /ml/train inicia el procedimiento solo si ALLOW_MODEL_TRAINING está habilitado.
 
-### Frontend
+### 7. Airflow para automatización de ingesta
+
+La automatización de conocimiento quedó definida mediante una DAG en ackend/airflow/dags/knowledge_ingest_dag.py.
+
+El flujo realiza:
+
+- lectura de fuentes confiables activas,
+- comprobación del intervalo de crawl,
+- ejecución del worker de ingesta actual,
+- actualización del estado de documentos e indexación vectorial,
+- tratamiento de solicitudes pendientes de refresco.
+
+La configuración se extiende en Docker Compose con los servicios irflow-init, irflow-webserver y irflow-scheduler para permitir la ejecución programada y la observación desde la UI de Airflow.
+
+## Mejoras implementadas en frontend
+
+El frontend fue reforzado con una base visual moderna y un flujo de navegación coherente.
+
+### Principales secciones
+
+- Login y registro con experiencia visual consistente.
+- Dashboard principal con resumen operativo y panel de bienvenida.
+- Layout principal con sidebar, header y contenido estructurado.
+- Página de fuentes confiables.
+- Página de noticias y alta de contenido.
+- Analizador RAG con enfoque de verificación de contenido.
+
+### Stack del frontend
 
 - React 19
 - TypeScript
@@ -125,453 +153,117 @@ flowchart LR
 - Axios
 - Zustand
 - Tailwind CSS
+- Lucide Icons
 
-### Infraestructura
+### Rutas principales
 
-- Docker
-- Docker Compose
-- pgAdmin
-- Nginx
+- /login
+- /register
+- /dashboard
+- /news
+- /news/create
+- /sources
+- /rag
 
-## Estructura del repositorio
+## Mejoras en la base de datos y almacenamiento
 
-```text
-RAGSystemFakeNews/
-├── backend/
-│   ├── app/
-│   │   ├── application/
-│   │   ├── core/
-│   │   ├── domain/
-│   │   ├── infrastructure/
-│   │   ├── presentation/
-│   │   └── main.py
-│   ├── migrations/
-│   ├── tests/
-│   ├── requirements.txt
-│   └── pytest.ini
-├── frontend/
-│   ├── src/
-│   ├── package.json
-│   ├── vite.config.ts
-│   └── ...
-├── database/
-│   └── init.sql
-├── docker/
-│   ├── backend/
-│   ├── frontend/
-│   └── docker-compose.yml
-├── nginx/
-├── project-control/
-│   ├── ARCHITECTURE_DECISIONS.md
-│   ├── CHANGELOG.md
-│   ├── DEVELOPMENT_LOG.md
-│   ├── PROJECT_STATUS.md
-│   ├── ROADMAP.md
-│   ├── TASKS.md
-│   └── VERSION.md
-├── README.md
-├── estructura.txt
-└── .env.example (si aplica en tu entorno local)
-```
+La base de datos se prepara para un entorno de analítica y recuperación vectorial.
 
-## Variables de entorno
+### Extensiones y soporte vectorial
 
-Crea un archivo .env en la raíz del proyecto con valores compatibles con tu entorno local y con Docker:
+`sql
+CREATE EXTENSION IF NOT EXISTS vector;
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+`
 
-```env
-GOOGLE_API_KEY=tu_clave_de_gemini
-DATABASE_URL=postgresql+psycopg://postgres:postgres@postgres:5432/fake_news_db
-```
+Esto habilita:
 
-## Inicio rápido con Docker
+- almacenamiento de embeddings vectoriales,
+- búsqueda por similitud semántica,
+- manejo seguro de identificadores y hashes.
 
-### 1. Clonar y entrar al proyecto
+### Modelos clave
 
-```bash
-git clone <url-del-repositorio>
-cd RAGSystemFakeNews
-```
+El sistema incluye modelos para:
 
-### 2. Levantar servicios
+- usuarios,
+- noticias,
+- embeddings,
+- documentos de conocimiento,
+- fuentes confiables,
+- historial de consultas,
+- feedback del usuario,
+- auditoría de eventos,
+- respuestas RAG,
+- solicitudes de refresh.
 
-```bash
+### Migraciones y flujo de datos
+
+Las migraciones cubren:
+
+- modelos base iniciales,
+- tabla de noticias,
+- tablas de conocimiento y embeddings,
+- cola de refresco del conocimiento,
+- modelos de feedback,
+- dimensiones de embedding y ajustes de modelos.
+
+La infraestructura permite mantener una base de conocimiento actualizada y con trazabilidad.
+
+## Modelo de aprendizaje y dataset
+
+### Pipeline de entrenamiento
+
+El servicio ModelTrainingService entrena un modelo supervisado con:
+
+- TfidfVectorizer(ngram_range=(1, 2))
+- LogisticRegression(max_iter=1000, class_weight='balanced')
+- métrica 1_macro
+- registro en MLflow con mlflow.sklearn.log_model
+
+### Requisitos del dataset
+
+Se soportan columnas obligatorias como:
+
+- 	itle
+- 	ext
+- label
+
+y opcionalmente:
+
+- content_hash
+- source
+- published_at
+
+## Ejecución rápida
+
+### Requisitos
+
+- Docker Desktop o Docker Engine
+- Python 3.12
+- PostgreSQL con pgvector
+
+### Arranque local
+
+`ash
 docker compose -f docker/docker-compose.yml up --build
-```
+`
 
-### 3. Verificar servicios
+### Backend y pruebas
 
-```bash
-docker compose -f docker/docker-compose.yml ps
-```
-
-### 4. Acceder a la aplicación
-
-- Frontend: http://localhost:3000
-- Backend: http://localhost:8888
-- pgAdmin: http://localhost:5050
-- PostgreSQL: localhost:4588
-
-## Ejecutar localmente sin Docker
-
-### Backend
-
-```bash
+`ash
 cd backend
-python -m venv .venv
-# Windows
-.venv\Scripts\activate
-# Linux/macOS
-source .venv/bin/activate
-pip install -r requirements.txt
-uvicorn app.main:app --host 0.0.0.0 --port 8888
-```
+pytest
+`
 
-### Frontend
+### Airflow
 
-```bash
-cd frontend
-npm install
-npm run dev
-```
+La UI de Airflow queda disponible en:
 
-## Endpoints principales
-
-### Usuarios
-
-- GET /users/health
-- POST /users/register
-- POST /users/login
-- GET /users/me
-
-### Noticias
-
-- POST /news
-- GET /news
-- GET /news/{news_id}
-- PUT /news/{news_id}
-- DELETE /news/{news_id}
-
-### RAG
-
-- POST /rag/analyze
-- POST /rag/analyze/{news_id}
-
-### Fuentes confiables
-
-- POST /sources
-- GET /sources
-- PUT /sources/{source_id}
-
-### Knowledge
-
-- GET /knowledge/status
-
-### Feedback
-
-- POST /feedback
-
-### MLOps
-
-- POST /ml/train
-
-## Ejemplo de uso
-
-### Registrar usuario
-
-```bash
-curl -X POST http://localhost:8888/users/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "user@example.com",
-    "password": "securepassword"
-  }'
-```
-
-### Iniciar sesión
-
-```bash
-curl -X POST http://localhost:8888/users/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "user@example.com",
-    "password": "securepassword"
-  }'
-```
-
-### Crear noticia
-
-```bash
-curl -X POST http://localhost:8888/news \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer <token>" \
-  -d '{
-    "title": "Ejemplo de noticia",
-    "content": "Texto de la noticia a analizar",
-    "source": "CNN",
-    "author": "Ana",
-    "url": "https://example.com/noticia",
-    "language": "es",
-    "country": "MX",
-    "published_at": "2026-08-09T12:00:00Z",
-    "is_fake": false
-  }'
-```
-
-### Analizar una noticia
-
-```bash
-curl -X POST http://localhost:8888/rag/analyze/<news_id> \
-  -H "Authorization: Bearer <token>"
-```
-
-### Consultar estado de conocimiento
-
-```bash
-curl http://localhost:8888/knowledge/status
-```
+- http://localhost:8080
+- usuario: dmin
+- contraseña: dmin
 
 ## Estado del proyecto
 
-El proyecto se encuentra en una etapa funcional de prototipo/ MVP con un backend estable y un frontend en progreso. La base de la solución ya está implementada y validada a nivel de arquitectura, API y pruebas unitarias/integración.
-
-### Logros relevantes
-
-- Arquitectura modular orientada a capas.
-- API REST con enrutadores dedicados.
-- RAG funcionando con LangGraph y pgvector.
-- Gestión de usuarios y seguridad con JWT.
-- Base de datos vectorial con PostgreSQL + pgvector.
-- Soporte de despliegue con Docker Compose.
-- Infraestructura de pruebas para backend.
-
-### Mejoras futuras
-
-- frontend profesional y experiencia de usuario más completa,
-- dashboard de análisis y métricas,
-- mejora de explicabilidad de resultados,
-- integración de más fuentes de datos,
-- mayor automatización de ingesta de noticias,
-- soporte avanzado de roles y permisos.
-
-## Conclusión
-
-FakeNewsRAGSystem es una propuesta sólida para la verificación automatizada de noticias mediante IA, recuperación semántica y análisis contextual. Su valor reside en combinar un enfoque técnico de arquitectura limpia con una aplicación práctica para detectar contenido engañoso y apoyar la verificación de información.
-
-### 10.1 Requisitos previos
-
-Antes de levantar el proyecto, asegúrate de tener instalado:
-
-- Docker Desktop
-- Docker Compose
-- Git
-- Una clave de API válida de Google Gemini
-
-### 10.2 Clonar el proyecto
-
-Ejecuta los siguientes comandos desde una terminal:
-
-```bash
-git clone <url-del-repositorio>
-cd RAGSystemFakeNews
-```
-
-Si ya tienes el repositorio descargado, entra a la carpeta principal:
-
-```bash
-cd RAGSystemFakeNews
-```
-
-### 10.3 Preparación del entorno
-
-Crea un archivo .env en la raíz del proyecto con contenido similar a:
-
-```env
-GOOGLE_API_KEY=tu_clave_de_gemini
-DATABASE_URL=postgresql+psycopg://postgres:postgres@postgres:5432/fake_news_db
-```
-
-> Si vas a ejecutar el backend fuera de Docker, ajusta el host de la base de datos según tu entorno local.
-
-### 10.4 Levantar el proyecto desde cero con Docker
-
-#### Paso 1: construir y levantar los servicios
-
-```bash
-docker compose -f docker/docker-compose.yml up --build
-```
-
-Este comando realizará lo siguiente:
-
-- descargará las imágenes necesarias,
-- construirá la imagen del backend y del frontend,
-- creará la red interna del proyecto,
-- levantará PostgreSQL, pgAdmin, la API y la interfaz web.
-
-#### Paso 2: verificar que los contenedores estén activos
-
-```bash
-docker compose -f docker/docker-compose.yml ps
-```
-
-Deberías ver los servicios activos de:
-
-- postgres
-- pgadmin
-- backend
-- frontend
-
-#### Paso 3: acceder a la aplicación
-
-Una vez que los contenedores estén corriendo, puedes abrir:
-
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:8888
-- pgAdmin: http://localhost:5050
-- Base de datos PostgreSQL: localhost:4588
-
-### 10.5 Inicialización de la base de datos
-
-El archivo de inicialización en la carpeta database crea la extensión vector y pgcrypto. Si la base de datos se levanta correctamente, el sistema quedará listo para almacenar embeddings y noticias.
-
-### 10.6 Detener y limpiar los servicios
-
-Para detener los contenedores:
-
-```bash
-docker compose -f docker/docker-compose.yml down
-```
-
-Si además deseas eliminar los volúmenes de datos:
-
-```bash
-docker compose -f docker/docker-compose.yml down -v
-```
-
-### 10.7 Ejecutar el backend manualmente (opcional)
-
-```bash
-cd backend
-python -m venv .venv
-source .venv/bin/activate  # Linux/macOS
-# .venv\Scripts\activate  # Windows
-pip install -r requirements.txt
-uvicorn app.main:app --host 0.0.0.0 --port 8888
-```
-
-### 10.6 Ejecutar el frontend manualmente (opcional)
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-## 11. Endpoints principales
-
-### Autenticación
-
-- POST /users/register
-- POST /users/login
-- GET /users/me
-
-### Noticias
-
-- POST /news
-- GET /news
-- GET /news/{news_id}
-- PUT /news/{news_id}
-- DELETE /news/{news_id}
-
-### RAG
-
-- POST /rag/analyze/{news_id}
-
-## 12. Ejemplo de uso del flujo RAG
-
-1. Crear un usuario y autenticarlo.
-2. Crear una noticia mediante el endpoint de noticias.
-3. Ejecutar el análisis RAG para esa noticia.
-4. Revisar la respuesta generada por el sistema.
-5. Consultar el resultado en la interfaz web del frontend.
-
-## 13. Metodología propuesta
-
-El desarrollo del proyecto se enmarca en una metodología orientada a la construcción incremental de un prototipo funcional. La estrategia contempla tres fases principales:
-
-1. modelado del problema y definición de la arquitectura,
-2. implementación de los componentes de almacenamiento, recuperación y generación,
-3. validación del flujo mediante pruebas de integración y evaluación de la experiencia del usuario.
-
-Esta aproximación permite avanzar de forma ordenada desde una solución conceptual hasta una implementación operativa.
-
-## 14. Comparativa técnica de decisiones de diseño
-
-| Componente | Decisión adoptada | Justificación |
-|---|---|---|
-| Backend | FastAPI | API rápida, moderna y compatible con arquitecturas limpias |
-| Base de datos | PostgreSQL + pgvector | Permite almacenamiento relacional y búsqueda semántica |
-| Recuperación | Búsqueda vectorial | Facilita la comparación semántica entre noticias |
-| Orquestación | LangGraph | Permite modelar el flujo como un grafo de agentes |
-| Generación de texto | Gemini LLM | Integra razonamiento contextual con buena capacidad generativa |
-| Frontend | React + Vite | Desarrollo ágil y experiencia moderna de interfaz |
-| Contenedores | Docker Compose | Garantiza reproducibilidad y despliegue consistente |
-
-## 15. Contribución académica y valor del proyecto
-
-FakeNewsRAGSystem aporta una propuesta práctica para abordar el problema de la desinformación mediante inteligencia artificial. Su importancia radica en que combina métodos de recuperación de información y generación de lenguaje para construir una solución más interpretativa que una simple clasificación binaria.
-
-El proyecto puede servir como base para:
-
-- trabajos de investigación en sistemas RAG,
-- estudios sobre análisis automatizado de noticias falsas,
-- desarrollo de prototipos para plataformas de verificación informativa,
-- y exploración de arquitecturas híbridas entre bases de datos relacionales y modelos generativos.
-
-## 16. Ejemplos de preguntas que el agente puede responder
-
-El agente puede responder preguntas orientadas a la evaluación de una noticia, por ejemplo:
-
-- ¿Esta noticia es falsa o real?
-- ¿Qué evidencia respalda esta clasificación?
-- ¿Qué señales de manipulación o sesgo se observan?
-- ¿Qué noticias similares fueron usadas como contexto?
-- ¿Cuál es el nivel de confianza del análisis?
-- ¿Por qué esta noticia parece estar relacionada con otras publicaciones sospechosas?
-
-## 17. Ejemplos de respuestas generadas por el agente
-
-A continuación se muestran ejemplos representativos del tipo de salida que el sistema puede producir:
-
-```text
-Pregunta: ¿Esta noticia es falsa o real?
-Respuesta: FAKE
-Score: 0.93
-Razón: La noticia presenta inconsistencias con fuentes verificables y coincide con patrones de contenido manipulador detectados en noticias similares.
-```
-
-```text
-Pregunta: ¿Qué evidencia respalda esta clasificación?
-Respuesta: Se encontraron coincidencias semánticas con artículos previos que compartían frases clave, contexto engañoso y ausencia de respaldo documental sólido.
-```
-
-```text
-Pregunta: ¿Cuál es el nivel de confianza del análisis?
-Respuesta: Alto, con un puntaje de 0.91, porque el sistema comparó la noticia con múltiples fuentes contextuales similares.
-```
-
-## 19. Estado actual del proyecto
-
-El proyecto se encuentra en una fase de desarrollo funcional con un MVP orientado a demostrar la viabilidad de un sistema RAG para análisis de noticias falsas. Se puede usar como base para investigación, extensión académica y desarrollo posterior.
-
-## 20. Posibles mejoras futuras
-
-- agregar modelos adicionales de embeddings,
-- incorporar evaluación de explicabilidad,
-- mejorar la calidad del prompt y del pipeline,
-- añadir soporte para recolección automática de noticias,
-- implementar dashboards de analítica y métricas,
-- y extender la autenticación con roles y permisos más robustos.
-
-## 21. Conclusión
-
-FakeNewsRAGSystem representa una propuesta integral para combinar recuperación de información, embeddings vectoriales y modelos generativos en un sistema orientado a la verificación de contenido noticioso. Su valor no solo está en la implementación técnica, sino también en la posibilidad de servir como base para proyectos de investigación, desarrollo e innovación en el área de inteligencia artificial aplicada a la desinformación.
+La base del sistema está consolidada y lista para extensión en automatización, observabilidad y despliegue en producción.

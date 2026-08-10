@@ -1,354 +1,134 @@
-services:
-
-
+﻿services:
   postgres:
-
     image: pgvector/pgvector:pg16
-
-
     container_name: fake-news-postgres
-
-
     restart: always
-
-
     environment:
-
       POSTGRES_DB: fake_news_db
-
       POSTGRES_USER: postgres
-
       POSTGRES_PASSWORD: postgres
-
-
-
     ports:
-
       - "4588:5432"
-
-
-
     volumes:
-
       - postgres_data:/var/lib/postgresql/data
-
       - ../database/init.sql:/docker-entrypoint-initdb.d/init.sql
-
-
-
     networks:
-
       - fake-news-network
-
-
-
-
-
 
   pgadmin:
-
-
     image: dpage/pgadmin4
-
-
     container_name: fake-news-pgadmin
-
-
     restart: always
-
-
-
     environment:
-
-
       PGADMIN_DEFAULT_EMAIL: admin@fakenews.com
-
-
       PGADMIN_DEFAULT_PASSWORD: admin
-
-
-
     ports:
-
-
       - "5050:80"
-
-
-
     depends_on:
-
-
       - postgres
-
-
-
     networks:
-
-
       - fake-news-network
-
-
-
-
-
-
-
 
   backend:
-
-
-
     build:
-
-
-
       context: ..
-
-
-
       dockerfile: docker/backend/Dockerfile
-
-
-
-
-
     container_name: fake-news-backend
-
-
-
-
-
     restart: always
-
-
-
-
-
-
     ports:
-
-
-
       - "8888:8888"
-
-
-
-
-
-
     env_file:
-
-
-
       - ../.env
-
-
-
-
-
     depends_on:
-
-
-
       - postgres
-
-
-
-
-
-
     volumes:
-
-
-
       - ../backend:/app
-
-
-
-
-
-
     networks:
-
-
-
       - fake-news-network
 
+  airflow-init:
+    image: apache/airflow:2.10.2-python3.12
+    container_name: fake-news-airflow-init
+    restart: "no"
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      AIRFLOW__CORE__DAGS_FOLDER: /opt/airflow/dags
+      AIRFLOW__CORE__PLUGINS_FOLDER: /opt/airflow/plugins
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg://postgres:postgres@postgres:5432/fake_news_db
+      AIRFLOW__CORE__FERNET_KEY: "D4jZ2FQ4D7Q1nB8G5V_j9Tc_qtJ7WNTiQ2nUIk2Dk7M="
+      AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "True"
+      PYTHONPATH: /opt/airflow
+    depends_on:
+      - postgres
+    volumes:
+      - ../backend:/opt/airflow
+    command: >
+      bash -lc "airflow db migrate && airflow users create --username admin --firstname Airflow --lastname Admin --role Admin --email admin@fakenews.com --password admin"
+    networks:
+      - fake-news-network
 
+  airflow-webserver:
+    image: apache/airflow:2.10.2-python3.12
+    container_name: fake-news-airflow-webserver
+    restart: always
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      AIRFLOW__CORE__DAGS_FOLDER: /opt/airflow/dags
+      AIRFLOW__CORE__PLUGINS_FOLDER: /opt/airflow/plugins
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg://postgres:postgres@postgres:5432/fake_news_db
+      AIRFLOW__CORE__FERNET_KEY: "D4jZ2FQ4D7Q1nB8G5V_j9Tc_qtJ7WNTiQ2nUIk2Dk7M="
+      AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "True"
+      PYTHONPATH: /opt/airflow
+    depends_on:
+      - airflow-init
+      - postgres
+    volumes:
+      - ../backend:/opt/airflow
+    ports:
+      - "8080:8080"
+    command: webserver
+    networks:
+      - fake-news-network
 
-
-
-
-
-
-
-
+  airflow-scheduler:
+    image: apache/airflow:2.10.2-python3.12
+    container_name: fake-news-airflow-scheduler
+    restart: always
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      AIRFLOW__CORE__DAGS_FOLDER: /opt/airflow/dags
+      AIRFLOW__CORE__PLUGINS_FOLDER: /opt/airflow/plugins
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg://postgres:postgres@postgres:5432/fake_news_db
+      AIRFLOW__CORE__FERNET_KEY: "D4jZ2FQ4D7Q1nB8G5V_j9Tc_qtJ7WNTiQ2nUIk2Dk7M="
+      PYTHONPATH: /opt/airflow
+    depends_on:
+      - airflow-init
+      - postgres
+    volumes:
+      - ../backend:/opt/airflow
+    command: scheduler
+    networks:
+      - fake-news-network
 
   frontend:
-
-
-
     build:
-
-
-
       context: ../frontend
-
-
-
       dockerfile: ../docker/frontend/Dockerfile
-
-
-
-
-
-
     container_name: fake-news-frontend
-
-
-
-
-
-
     restart: always
-
-
-
-
-
-
-
     ports:
-
-
-
       - "3000:80"
-
-
-
-
-
-
-
-
     depends_on:
-
-
-
       - backend
-
-
-
-
-
-
-    networks:
-
-
-
-      - fake-news-network
-
-
-
-
-
-
-
-
-
-
-
-
-
-  minio:
-    image: minio/minio
-    container_name: fake-news-minio
-    restart: always
-    command: server /data --console-address ":9001"
-    environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?MINIO_ROOT_USER is required}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?MINIO_ROOT_PASSWORD is required}
-    volumes:
-      - minio_data:/data
     networks:
       - fake-news-network
-
-  minio-init:
-    image: minio/mc
-    depends_on:
-      - minio
-    entrypoint: >
-      /bin/sh -c "until mc alias set local http://minio:9000 $${MINIO_ROOT_USER} $${MINIO_ROOT_PASSWORD}; do sleep 2; done; mc mb --ignore-existing local/mlflow"
-    environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?MINIO_ROOT_USER is required}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?MINIO_ROOT_PASSWORD is required}
-    networks:
-      - fake-news-network
-
-  mlflow:
-    build:
-      context: ..
-      dockerfile: docker/backend/Dockerfile
-    container_name: fake-news-mlflow
-    restart: always
-    command: >
-      mlflow server --host 0.0.0.0 --port 5000 --allowed-hosts mlflow,backend --backend-store-uri sqlite:////mlflow/mlflow.db --artifacts-destination s3://mlflow
-    environment:
-      MLFLOW_S3_ENDPOINT_URL: http://minio:9000
-      AWS_ACCESS_KEY_ID: ${MINIO_ROOT_USER:?MINIO_ROOT_USER is required}
-      AWS_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD:?MINIO_ROOT_PASSWORD is required}
-    volumes:
-      - mlflow_data:/mlflow
-    depends_on:
-      - minio-init
-    networks:
-      - fake-news-network
-
-
-  scraper-worker:
-    build:
-      context: ..
-      dockerfile: docker/backend/Dockerfile
-    container_name: fake-news-scraper-worker
-    restart: always
-    command: >
-      /bin/sh -c 'while true; do python -c "from app.infrastructure.ingestion.worker import run_pending_sources; print(run_pending_sources())"; sleep "$${SCRAPER_INTERVAL_SECONDS}"; done'
-    env_file:
-      - ../.env
-    environment:
-      SCRAPER_INTERVAL_SECONDS: ${SCRAPER_INTERVAL_SECONDS:-3600}
-    depends_on:
-      - postgres
-    networks:
-      - fake-news-network
-
 
 networks:
-
-
-
   fake-news-network:
-
-
-
     driver: bridge
 
-
-
-
-
-
-
-
-
-
-
 volumes:
-
-
-
   postgres_data:
-
-  minio_data:
-
-  mlflow_data:

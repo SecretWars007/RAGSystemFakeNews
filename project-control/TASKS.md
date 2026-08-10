@@ -96,6 +96,18 @@ Version:
 
 ---
 
+## Airflow Automation
+
+[x] DAG de ingesta programada
+
+[x] Configuración de servicios Airflow en Docker Compose
+
+[x] Reutilización del worker de ingesta existente
+
+[x] Validación de estructura y sintaxis de la DAG
+
+---
+
 # Current Tasks
 
 ## FASE 12 - Production Readiness
