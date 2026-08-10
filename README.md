@@ -1,167 +1,105 @@
 
 # FakeNewsRAGSystem
 
-Sistema RAG para detección y análisis inteligente de noticias falsas, desarrollado como una propuesta de arquitectura orientada a inteligencia artificial aplicada al análisis de contenido noticioso. El proyecto combina técnicas de procesamiento de lenguaje natural, embeddings vectoriales, recuperación de información y agentes de orchestration para construir un flujo de análisis semántico sobre noticias reales y potencialmente engañosas.
+Sistema para análisis de noticias falsas y verificación de contenido usando Retrieval-Augmented Generation (RAG), embeddings vectoriales y modelos generativos. El proyecto combina una API REST en FastAPI, una base de datos PostgreSQL con pgvector, agentes LangGraph para orquestación del flujo de análisis y una interfaz web en React para interactuar con el sistema.
 
-## 1. Visión general
+## Estado actual
 
-Este proyecto fue concebido como una solución de referencia para la integración de Retrieval-Augmented Generation (RAG) con un motor de análisis de noticias falsas. Su propósito es demostrar cómo una arquitectura modular, basada en servicios, puede combinar:
+- Versión del backend: 1.0.0
+- Fase de desarrollo: Testing y calidad completados, con avance hacia frontend profesional
+- Estado funcional: MVP operativo con autenticación, gestión de noticias, RAG, fuentes confiables, feedback, ML y monitoreo de conocimiento
 
-- almacenamiento estructural de noticias,
-- generación de embeddings semánticos,
-- búsqueda vectorial sobre un almacén PostgreSQL con pgvector,
-- análisis contextual mediante un modelo de lenguaje,
-- y una interfaz web para interactuar con los resultados.
+## Visión general
 
-La idea central es que el sistema no se limita a clasificar una noticia de forma aislada, sino que compara su contenido con otras noticias similares previamente almacenadas, enriqueciendo la decisión con contexto semántico relevante.
+FakeNewsRAGSystem fue diseñado para evaluar noticias mediante comparación semántica con contenido previamente indexado y análisis contextual con modelos de lenguaje. La idea principal no es solo clasificar una noticia como verdadera o falsa de forma aislada, sino contextualizarla con noticias similares, fuentes confiables y evidencia recuperada antes de producir una conclusión.
 
-## 2. Objetivo del proyecto
+El sistema integra:
 
-El objetivo principal es construir un prototipo funcional de un sistema de análisis de veracidad noticiosa que:
+- autenticación y autorización basada en JWT,
+- gestión de noticias con CRUD completo,
+- análisis semántico con embeddings,
+- recuperación vectorial sobre PostgreSQL + pgvector,
+- flujo de RAG orquestado con LangGraph,
+- análisis de claim libre y noticias individuales,
+- endpoints de ML y conocimiento,
+- feedback del usuario y administración de fuentes confiables.
 
-1. permita registrar noticias en una base de datos,
-2. convierta el contenido textual en representaciones vectoriales,
-3. recupere noticias similares mediante búsqueda semántica,
-4. use un modelo de lenguaje para generar una evaluación contextualizada,
-5. y entregue una salida comprensible para el usuario final.
-
-Este tipo de solución tiene aplicaciones relevantes en:
-
-- investigación en inteligencia artificial,
-- análisis de desinformación,
-- sistemas de apoyo a la verificación de información,
-- y desarrollo de arquitecturas RAG para dominios especializados.
-
-## 3. Casos de uso principales
-
-- Registrar noticias con metadata como fuente, autor, idioma, país y fecha de publicación.
-- Analizar una noticia individual utilizando contexto recuperado de otras noticias.
-- Generar embeddings automáticamente para cada noticia procesada.
-- Almacenar los embeddings en PostgreSQL con soporte vectorial.
-- Consultar el resultado del análisis a través de una interfaz web.
-- Gestionar autenticación de usuarios para acceso controlado al sistema.
-
-## 4. Características principales
-
-### 4.1 Gestión de usuarios
-
-- Registro de usuarios.
-- Inicio de sesión con autenticación JWT.
-- Endpoints protegidos para operaciones sensibles.
-- Hashing seguro de contraseñas mediante bcrypt.
-
-### 4.2 Gestión de noticias
-
-- Creación, consulta, actualización y eliminación de noticias.
-- Almacenamiento estructural con UUID, fecha de publicación y etiquetas de veracidad.
-- API REST para integraciones externas y consumo del frontend.
-
-### 4.3 Motor RAG para análisis de noticias
-
-- Generación de embeddings del contenido de una noticia.
-- Recuperación de noticias similares usando búsqueda vectorial.
-- Uso de un modelo de lenguaje para analizar la noticia con contexto.
-- Producción de un resultado estructurado con etiqueta, puntaje y explicación.
-
-### 4.4 Orquestación de agentes
-
-- El flujo RAG está implementado con LangGraph.
-- Cada etapa del proceso se encapsula como un nodo del grafo.
-- El sistema mantiene un estado compartido entre los agentes para garantizar el flujo de información.
-
-## 5. Arquitectura del proyecto
-
-El proyecto sigue una arquitectura modular inspirada en Clean Architecture, separando claramente las responsabilidades entre capas de dominio, aplicación, infraestructura y presentación.
-
-### 5.1 Arquitectura general
+## Arquitectura
 
 ```mermaid
 flowchart LR
-    A[Usuario] --> B[Frontend React/Vite]
-    B --> C[API REST FastAPI]
-    C --> D[Servicios de Aplicación]
-    D --> E[Repositorios]
-    E --> F[PostgreSQL + pgvector]
-    C --> G[Motor RAG / LangGraph]
-    G --> H[Gemini Embeddings]
-    G --> I[Gemini LLM]
-    H --> F
-    I --> J[Resultado de análisis]
+    A[Usuario] --> B[Frontend React + Vite]
+    B --> C[FastAPI]
+    C --> D[Servicios de aplicación]
+    D --> E[PostgreSQL + pgvector]
+    C --> F[LangGraph / RAG Engine]
+    F --> G[Gemini Embeddings]
+    F --> H[Gemini LLM]
+    E --> I[Noticias, embeddings, fuentes y refresh]
+    H --> J[Resultado con score, label y evidencia]
     J --> B
 ```
 
-### 5.2 Capas de la solución
+### Capas principales
 
-- Capa de dominio
-  - Define entidades como noticia, usuario y embedding.
-  - Establece contratos de repositorio para mantener la lógica de negocio independiente de la infraestructura.
+- Dominio: entidades, contratos de repositorio y lógica de negocio central.
+- Aplicación: servicios, casos de uso y dependencias.
+- Infraestructura: modelos SQLAlchemy, pgvector, agentes LLM, acceso a datos y proveedores externos.
+- Presentación: routers FastAPI y frontend React.
 
-- Capa de aplicación
-  - Contiene los servicios de negocio.
-  - Implementa casos de uso como autenticación, gestión de noticias y lógica de embeddings.
+## Funcionalidades implementadas
 
-- Capa de infraestructura
-  - Integra PostgreSQL, SQLAlchemy, pgvector, agentes LangGraph y clientes de IA.
-  - Maneja la persistencia, el acceso a modelos externos y la orquestación del flujo RAG.
+### Autenticación
 
-- Capa de presentación
-  - Expone la API REST en FastAPI.
-  - Entrega una interfaz web en React para consumo humano.
+- Registro de usuarios con contraseña segura.
+- Inicio de sesión con JWT.
+- Endpoint /users/me para consultar el usuario autenticado.
+- Seguridad mediante dependencias y validación del token.
 
-## 6. Arquitectura ML y flujo RAG
+### Gestión de noticias
 
-La parte más importante del proyecto es el flujo de análisis basado en RAG.
+- Crear noticias.
+- Listar todas las noticias.
+- Consultar una noticia por ID.
+- Actualizar una noticia.
+- Eliminar una noticia.
 
-### 6.1 Diseño conceptual
+### Análisis RAG
 
-El sistema no trabaja con una sola noticia aislada. En cambio:
+- Análisis de una noticia por ID.
+- Análisis de un texto libre como claim o afirmación.
+- Recuperación de noticias similares mediante similitud vectorial.
+- Generación de resultado estructurado con:
+  - status
+  - analysis
+  - score
+  - label
+  - reason
+  - evidence
+  - similar_news
 
-1. recibe una noticia de entrada,
-2. genera un vector semántico representando su contenido,
-3. recupera noticias similares almacenadas previamente,
-4. construye un contexto enriquecido,
-5. y solicita al modelo de lenguaje una evaluación fundamentada en ese contexto.
+### Fuentes confiables
 
-### 6.2 Pipeline de procesamiento
+- Registro y listado de fuentes confiables.
+- Actualización de fuentes existentes.
+- Soporte para filtrar solo fuentes activas.
 
-```mermaid
-flowchart TD
-    A[Entrada: noticia] --> B[Preparación del texto]
-    B --> C[Generación de embedding]
-    C --> D[Búsqueda vectorial en pgvector]
-    D --> E[Construcción de contexto]
-    E --> F[Análisis con Gemini LLM]
-    F --> G[Respuesta: label + score + reason + evidence]
-    F --> H[Persistencia del embedding]
-```
+### Knowledge / refresh
 
-### 6.3 Componentes del flujo RAG
+- Estado del índice de conocimiento.
+- Conteo de documentos, embeddings y refrescos pendientes.
+- Registro de consultas no verificadas para cola de actualización.
 
-- Nodo de análisis inicial
-  - Prepara el texto de entrada para el siguiente paso.
+### Feedback
 
-- Nodo de embedding
-  - Convierte el contenido en un vector semántico utilizando un modelo de embeddings de Gemini.
+- Captura de feedback del usuario sobre análisis o experiencia.
 
-- Nodo de recuperación
-  - Busca noticias similares mediante similitud vectorial en PostgreSQL con pgvector.
+### MLOps
 
-- Nodo de análisis
-  - Utiliza el contexto recuperado para solicitar una evaluación al modelo de lenguaje.
+- Endpoint para iniciar entrenamiento de modelo cuando está habilitado.
+- Validación de configuración antes de disparar el entrenamiento.
 
-- Nodo de persistencia
-  - Guarda el embedding generado para futuras búsquedas.
-
-### 6.4 Justificación técnica
-
-La elección de un diseño RAG aporta varias ventajas:
-
-- mejora la calidad del análisis contextual,
-- permite trabajar con información previa sin reentrenar el modelo,
-- hace que la respuesta sea más interpretable,
-- y facilita la escalabilidad del sistema a nuevos dominios o colecciones de datos.
-
-## 7. Tecnologías utilizadas
+## Stack tecnológico
 
 ### Backend
 
@@ -171,11 +109,12 @@ La elección de un diseño RAG aporta varias ventajas:
 - PostgreSQL
 - pgvector
 - Alembic
-- LangGraph
 - LangChain
+- LangGraph
 - Google Gemini
-- Pydantic
-- JWT / bcrypt
+- Pydantic / Pydantic Settings
+- JWT / bcrypt / passlib
+- pytest
 
 ### Frontend
 
@@ -183,8 +122,8 @@ La elección de un diseño RAG aporta varias ventajas:
 - TypeScript
 - Vite
 - React Router
-- Zustand
 - Axios
+- Zustand
 - Tailwind CSS
 
 ### Infraestructura
@@ -194,59 +133,229 @@ La elección de un diseño RAG aporta varias ventajas:
 - pgAdmin
 - Nginx
 
-## 8. Estructura del repositorio
+## Estructura del repositorio
 
 ```text
-backend/              # API y lógica de negocio
-  app/                 # módulos principales del backend
-    application/       # servicios y casos de uso
-    core/              # configuración y seguridad
-    domain/            # entidades y contratos de repositorio
-    infrastructure/    # integraciones, agentes, base de datos e IA
-    presentation/     # rutas, schemas y controllers
-frontend/             # aplicación React para la interfaz web
-docker/               # configuración de contenedores
-database/             # scripts iniciales de base de datos
-project-control/      # documentación de proyecto, roadmap y decisiones técnicas
+RAGSystemFakeNews/
+├── backend/
+│   ├── app/
+│   │   ├── application/
+│   │   ├── core/
+│   │   ├── domain/
+│   │   ├── infrastructure/
+│   │   ├── presentation/
+│   │   └── main.py
+│   ├── migrations/
+│   ├── tests/
+│   ├── requirements.txt
+│   └── pytest.ini
+├── frontend/
+│   ├── src/
+│   ├── package.json
+│   ├── vite.config.ts
+│   └── ...
+├── database/
+│   └── init.sql
+├── docker/
+│   ├── backend/
+│   ├── frontend/
+│   └── docker-compose.yml
+├── nginx/
+├── project-control/
+│   ├── ARCHITECTURE_DECISIONS.md
+│   ├── CHANGELOG.md
+│   ├── DEVELOPMENT_LOG.md
+│   ├── PROJECT_STATUS.md
+│   ├── ROADMAP.md
+│   ├── TASKS.md
+│   └── VERSION.md
+├── README.md
+├── estructura.txt
+└── .env.example (si aplica en tu entorno local)
 ```
 
-## 9. Funcionalidades del sistema en detalle
+## Variables de entorno
 
-### 9.1 Autenticación y seguridad
+Crea un archivo .env en la raíz del proyecto con valores compatibles con tu entorno local y con Docker:
 
-El sistema implementa un flujo básico de autenticación con JWT. El usuario puede registrarse e iniciar sesión, obteniendo un token que permite acceder a rutas protegidas. La arquitectura separa el manejo de credenciales del resto de la lógica de negocio, facilitando futuras ampliaciones como roles, permisos y auditoría.
+```env
+GOOGLE_API_KEY=tu_clave_de_gemini
+DATABASE_URL=postgresql+psycopg://postgres:postgres@postgres:5432/fake_news_db
+```
 
-### 9.2 Gestión de noticias
+## Inicio rápido con Docker
 
-La API permite crear noticias con información textual y metadata relevante. Estas noticias se almacenan en PostgreSQL y están disponibles para el análisis posterior. El módulo de noticias es la base sobre la cual se construye el flujo RAG.
+### 1. Clonar y entrar al proyecto
 
-### 9.3 Análisis RAG de una noticia
+```bash
+git clone <url-del-repositorio>
+cd RAGSystemFakeNews
+```
 
-Cuando el usuario solicita analizar una noticia, el sistema:
+### 2. Levantar servicios
 
-1. recupera la noticia por ID,
-2. inicia un flujo de LangGraph,
-3. genera un embedding del texto,
-4. localiza noticias similares en el almacen vectorial,
-5. construye un contexto con dichas noticias,
-6. consulta a Gemini para producir una evaluación,
-7. y devuelve un resultado con score, explicación y evidencias.
+```bash
+docker compose -f docker/docker-compose.yml up --build
+```
 
-### 9.4 Almacenamiento vectorial
+### 3. Verificar servicios
 
-El proyecto utiliza PostgreSQL con la extensión pgvector para almacenar embeddings. Esto permite realizar búsquedas semánticas de forma eficiente, algo fundamental para un sistema RAG.
+```bash
+docker compose -f docker/docker-compose.yml ps
+```
 
-### 9.5 Interfaz de usuario
+### 4. Acceder a la aplicación
 
-El frontend ofrece páginas para:
+- Frontend: http://localhost:3000
+- Backend: http://localhost:8888
+- pgAdmin: http://localhost:5050
+- PostgreSQL: localhost:4588
 
-- iniciar sesión,
-- registrarse,
-- listar y crear noticias,
-- ejecutar análisis RAG,
-- y navegar por el flujo del sistema de forma visual.
+## Ejecutar localmente sin Docker
 
-## 10. Flujo de ejecución del sistema
+### Backend
+
+```bash
+cd backend
+python -m venv .venv
+# Windows
+.venv\Scripts\activate
+# Linux/macOS
+source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn app.main:app --host 0.0.0.0 --port 8888
+```
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+## Endpoints principales
+
+### Usuarios
+
+- GET /users/health
+- POST /users/register
+- POST /users/login
+- GET /users/me
+
+### Noticias
+
+- POST /news
+- GET /news
+- GET /news/{news_id}
+- PUT /news/{news_id}
+- DELETE /news/{news_id}
+
+### RAG
+
+- POST /rag/analyze
+- POST /rag/analyze/{news_id}
+
+### Fuentes confiables
+
+- POST /sources
+- GET /sources
+- PUT /sources/{source_id}
+
+### Knowledge
+
+- GET /knowledge/status
+
+### Feedback
+
+- POST /feedback
+
+### MLOps
+
+- POST /ml/train
+
+## Ejemplo de uso
+
+### Registrar usuario
+
+```bash
+curl -X POST http://localhost:8888/users/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "user@example.com",
+    "password": "securepassword"
+  }'
+```
+
+### Iniciar sesión
+
+```bash
+curl -X POST http://localhost:8888/users/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "user@example.com",
+    "password": "securepassword"
+  }'
+```
+
+### Crear noticia
+
+```bash
+curl -X POST http://localhost:8888/news \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <token>" \
+  -d '{
+    "title": "Ejemplo de noticia",
+    "content": "Texto de la noticia a analizar",
+    "source": "CNN",
+    "author": "Ana",
+    "url": "https://example.com/noticia",
+    "language": "es",
+    "country": "MX",
+    "published_at": "2026-08-09T12:00:00Z",
+    "is_fake": false
+  }'
+```
+
+### Analizar una noticia
+
+```bash
+curl -X POST http://localhost:8888/rag/analyze/<news_id> \
+  -H "Authorization: Bearer <token>"
+```
+
+### Consultar estado de conocimiento
+
+```bash
+curl http://localhost:8888/knowledge/status
+```
+
+## Estado del proyecto
+
+El proyecto se encuentra en una etapa funcional de prototipo/ MVP con un backend estable y un frontend en progreso. La base de la solución ya está implementada y validada a nivel de arquitectura, API y pruebas unitarias/integración.
+
+### Logros relevantes
+
+- Arquitectura modular orientada a capas.
+- API REST con enrutadores dedicados.
+- RAG funcionando con LangGraph y pgvector.
+- Gestión de usuarios y seguridad con JWT.
+- Base de datos vectorial con PostgreSQL + pgvector.
+- Soporte de despliegue con Docker Compose.
+- Infraestructura de pruebas para backend.
+
+### Mejoras futuras
+
+- frontend profesional y experiencia de usuario más completa,
+- dashboard de análisis y métricas,
+- mejora de explicabilidad de resultados,
+- integración de más fuentes de datos,
+- mayor automatización de ingesta de noticias,
+- soporte avanzado de roles y permisos.
+
+## Conclusión
+
+FakeNewsRAGSystem es una propuesta sólida para la verificación automatizada de noticias mediante IA, recuperación semántica y análisis contextual. Su valor reside en combinar un enfoque técnico de arquitectura limpia con una aplicación práctica para detectar contenido engañoso y apoyar la verificación de información.
 
 ### 10.1 Requisitos previos
 
