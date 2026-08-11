@@ -2,35 +2,38 @@ import type { BadgeProps } from "./Badge.types";
 
 const styles = {
   success: `
-        bg-green-100
-        text-[#2E7D32]
+        bg-primary-container/20
+        text-primary
+        border border-primary/30
         `,
 
   warning: `
-        bg-yellow-100
-        text-yellow-700
+        bg-yellow-900/30
+        text-yellow-400
+        border border-yellow-500/30
         `,
 
   danger: `
-        bg-red-100
-        text-[#D32F2F]
+        bg-error-container/20
+        text-error
+        border border-error/30
         `,
 
   info: `
-        bg-teal-100
-        text-[#00897B]
+        bg-secondary-container/20
+        text-secondary
+        border border-secondary/30
         `,
 
   default: `
-        bg-gray-100
-        text-gray-700
+        bg-surface-variant
+        text-on-surface-variant
+        border border-outline-variant
         `,
 };
 
 export default function Badge({
-  variant = "default",
-
-  children,
+  variant = "default",children,
 }: BadgeProps) {
   return (
     <span

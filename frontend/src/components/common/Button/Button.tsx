@@ -2,10 +2,10 @@ import type { ButtonProps } from "./Button.types";
 
 const variantStyles = {
   primary:
-    "bg-[#1F7A4E] text-white shadow-[0_10px_20px_rgba(31,122,78,0.22)] hover:bg-[#185F3F]",
-  secondary: "bg-[#2E9C6D] text-white hover:bg-[#237E5A]",
-  outline: "border border-[#D3E8DA] bg-white text-[#123B2D] hover:bg-[#F2FAF4]",
-  danger: "bg-[#D93F3F] text-white hover:bg-[#B93232]",
+    "shimmer-btn bg-primary text-surface-container-lowest shadow-[0_4px_20px_rgba(16,185,129,0.3)] hover:shadow-[0_4px_25px_rgba(16,185,129,0.5)] hover:scale-[1.02]",
+  secondary: "glass-panel text-on-surface hover:bg-surface-container-high hover:border-brand-emerald",
+  outline: "border border-brand-emerald text-brand-emerald hover:bg-brand-emerald/10 hover:shadow-[0_0_15px_rgba(16,185,129,0.2)]",
+  danger: "bg-error text-white hover:bg-error-dim shadow-[0_4px_20px_rgba(239,68,68,0.2)]",
 };
 
 export default function Button({

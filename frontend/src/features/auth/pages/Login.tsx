@@ -175,11 +175,10 @@ export default function Login() {
               </svg>
             </div>
             <h1 className="font-headline text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-6 leading-tight">
-              Inteligencia Artificial contra la{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-emerald to-primary">
-                Desinformación
-              </span>{" "}
-              en Bolivia
+              TIKO <br/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-emerald to-primary text-3xl">
+                Sabueso de las Noticias Falsas
+              </span>
             </h1>
             <p className="text-on-surface-variant text-lg mb-12 font-body max-w-md">
               Analizamos, verificamos y protegemos el ecosistema informativo
@@ -240,11 +239,11 @@ export default function Login() {
             <div className="glass-panel rounded-2xl p-8 md:p-10 shadow-2xl relative z-10">
               {/* Header */}
               <div className="flex flex-col items-center mb-10 text-center">
-                <div className="w-16 h-16 rounded-xl bg-surface-container flex items-center justify-center mb-6 p-2 border border-outline-variant shadow-lg text-4xl">
-                  🧠
+                <div className="w-16 h-16 rounded-xl bg-surface-container flex items-center justify-center mb-6 p-2 border border-brand-emerald/30 shadow-[0_0_15px_rgba(16,185,129,0.3)] text-4xl">
+                  🐶
                 </div>
                 <h2 className="font-headline text-3xl font-bold text-white mb-2">
-                  FakeNewsRAG System
+                  TIKO AI
                 </h2>
                 <p className="font-body text-on-surface-variant text-sm">
                   Verificación inteligente de noticias

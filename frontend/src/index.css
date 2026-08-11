@@ -3,61 +3,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700;800;900&family=Geist:wght@400;500;600&display=swap');
 
 @theme {
-  --color-inverse-surface: #e6fff4;
-  --color-secondary-dim: #b3dec6;
-  --color-tertiary: #e8ffef;
-  --color-on-tertiary-fixed-variant: #136e4c;
-  --color-inverse-on-surface: #285e4f;
-  --color-tertiary-fixed: #a9fdd0;
-  --color-inverse-primary: #006d48;
-  --color-error-container: #9f0519;
-  --color-surface-container-highest: #002c22;
-  --color-error: #ff716c;
-  --color-on-primary-fixed: #004b31;
-  --color-on-secondary-fixed-variant: #3c6351;
-  --color-on-primary-fixed-variant: #006b47;
-  --color-surface-bright: #003328;
-  --color-outline: #4a7f6f;
-  --color-primary-fixed-dim: #86ebb8;
-  --color-tertiary-fixed-dim: #9beec3;
-  --color-on-secondary: #325947;
-  --color-error-dim: #d7383b;
-  --color-tertiary-dim: #9beec3;
-  --color-surface-container: #001e16;
-  --color-secondary-fixed-dim: #b3dec6;
-  --color-on-tertiary-container: #006443;
-  --color-on-surface-variant: #7fb6a4;
-  --color-on-error-container: #ffa8a3;
-  --color-primary-container: #4db384;
-  --color-surface-variant: #002c22;
-  --color-outline-variant: #185142;
-  --color-on-error: #490006;
-  --color-surface-container-lowest: #000000;
-  --color-on-tertiary: #0f6c4a;
-  --color-secondary-fixed: #c1ecd4;
-  --color-surface-container-low: #001711;
-  --color-primary-fixed: #94fac6;
-  --color-secondary: #c1ecd4;
-  --color-on-secondary-fixed: #1f4735;
-  --color-on-primary: #00603f;
-  --color-on-tertiary-fixed: #004f34;
-  --color-on-background: #c4fde8;
-  --color-tertiary-container: #a9fdd0;
-  --color-primary: #94fac6;
-  --color-on-surface: #c4fde8;
-  --color-primary-dim: #86ebb8;
-  --color-secondary-container: #274e3d;
-  --color-surface-tint: #94fac6;
-  --color-on-secondary-container: #afdac2;
-  --color-surface-container-high: #00251c;
-  --color-on-primary-container: #002919;
-  --color-surface: #00110c;
-  --color-surface-dim: #00110c;
-  --color-background: #00110c;
-  --color-brand-dark: #0D1B2A;
-  --color-brand-surface: #111827;
-  --color-brand-emerald: #52B788;
-
+  --color-background: #000a06;
+  --color-surface: #02120b;
+  --color-surface-container: #031c11;
+  --color-surface-container-high: #05291a;
+  --color-surface-container-highest: #073824;
+  
+  --color-brand-emerald: #10b981;
+  --color-brand-dark: #000a06;
+  --color-brand-surface: #02120b;
+  --color-primary: #10b981;
+  --color-primary-dim: #059669;
+  --color-primary-container: #064e3b;
+  --color-on-primary-container: #d1fae5;
+  
+  --color-on-surface: #ecfdf5;
+  --color-on-surface-variant: #6ee7b7;
+  
+  --color-error: #ef4444;
+  --color-error-dim: #dc2626;
+  --color-error-container: #7f1d1d;
+  
+  --color-outline: #047857;
+  --color-outline-variant: #064e3b;
+  
+  /* Fonts */
   --font-headline: "Space Grotesk", sans-serif;
   --font-display: "Space Grotesk", sans-serif;
   --font-body: "Inter", sans-serif;

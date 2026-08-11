@@ -2,62 +2,30 @@ import type { TableProps } from "./Table.types";
 
 export default function Table<T>({
   columns,
-
   data,
-
   emptyMessage = "No existen registros",
 }: TableProps<T>) {
   return (
-    <div
-      className="
-            overflow-x-auto
-            rounded-xl
-            border
-            border-[#D8E8D8]
-            "
-    >
-      <table
-        className="
-                min-w-full
-                bg-white
-                "
-      >
+    <div className="overflow-x-auto rounded-xl border border-outline-variant/30 glass-panel">
+      <table className="min-w-full text-left border-collapse">
         <thead>
-          <tr
-            className="
-                        bg-[#F4F8F5]
-                        "
-          >
+          <tr className="bg-surface-container-high border-b border-outline-variant/30">
             {columns.map((column) => (
               <th
                 key={String(column.key)}
-
-                className="
-                                        px-5
-                                        py-3
-                                        text-left
-                                        text-sm
-                                        font-semibold
-                                        text-[#1B4332]
-                                        "
+                className="px-5 py-4 text-sm font-label font-semibold text-on-surface-variant uppercase tracking-wider"
               >
                 {column.header}
               </th>
             ))}
           </tr>
         </thead>
-
-        <tbody>
+        <tbody className="divide-y divide-outline-variant/20">
           {data.length === 0 ? (
             <tr>
               <td
                 colSpan={columns.length}
-
-                className="
-                                    text-center
-                                    py-8
-                                    text-[#5E6C61]
-                                    "
+                className="text-center py-8 text-on-surface-variant font-body"
               >
                 {emptyMessage}
               </td>
@@ -66,30 +34,15 @@ export default function Table<T>({
             data.map((row, index) => (
               <tr
                 key={index}
-
-                className="
-                                    border-t
-                                    border-[#D8E8D8]
-                                    hover:bg-[#F4F8F5]
-                                    "
+                className="hover:bg-surface-container-highest transition-colors group"
               >
                 {columns.map((column) => (
                   <td
                     key={String(column.key)}
-
-                    className="
-                                                    px-5
-                                                    py-3
-                                                    text-sm
-                                                    text-[#5E6C61]
-                                                    "
+                    className="px-5 py-4 text-sm font-body text-on-surface group-hover:text-primary transition-colors"
                   >
                     {column.render
-                      ? column.render(
-                          row[column.key],
-
-                          row,
-                        )
+                      ? column.render(row[column.key], row)
                       : String(row[column.key])}
                   </td>
                 ))}

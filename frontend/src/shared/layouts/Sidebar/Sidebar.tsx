@@ -15,12 +15,16 @@ export default function Sidebar() {
   return (
     <aside className="w-[260px] bg-surface-container-high border-r border-outline-variant flex-col hidden md:flex shrink-0 h-screen sticky top-0">
       {/* Logo Area */}
-      <div className="h-20 flex items-center px-6 border-b border-outline-variant/30">
-        <div className="flex items-center gap-3">
-          <span className="font-headline font-black text-primary text-xl tracking-tight leading-none">
-            FakeNews
+      <div className="h-20 flex items-center px-6 border-b border-brand-emerald/20 bg-surface-container-highest relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-emerald/10 to-transparent opacity-50"></div>
+        <div className="flex items-center gap-3 relative z-10">
+          <span className="material-symbols-outlined text-brand-emerald text-3xl drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]">
+            troubleshoot
+          </span>
+          <span className="font-headline font-black text-on-surface text-xl tracking-tight leading-none">
+            TIKO
             <br />
-            <span className="text-on-surface">RAG</span>
+            <span className="text-brand-emerald text-xs tracking-widest uppercase">Sabueso AI</span>
           </span>
         </div>
       </div>

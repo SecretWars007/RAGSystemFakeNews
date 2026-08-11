@@ -73,7 +73,7 @@ export default function AnalysisResult({
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div
-          className={`lg:col-span-2 ${bgClass} rounded-2xl p-8 relative overflow-hidden flex flex-col justify-center shadow-xl border`}
+          className={`lg:col-span-2 ${bgClass} glass-panel rounded-2xl p-8 relative overflow-hidden flex flex-col justify-center shadow-xl border`}
         >
           <div className="absolute top-0 right-0 p-8 opacity-10">
             <span className="material-symbols-outlined text-9xl text-white">
@@ -130,7 +130,7 @@ export default function AnalysisResult({
           </div>
         </div>
 
-        <div className="bg-surface-container rounded-2xl border border-surface-container-highest p-6 flex flex-col shadow-lg">
+        <div className="bg-surface-container glass-panel rounded-2xl border border-surface-container-highest p-6 flex flex-col shadow-lg">
           <h4 className="text-sm font-label text-on-surface-variant mb-4 uppercase tracking-wider">
             Confianza del Análisis
           </h4>
@@ -177,7 +177,7 @@ export default function AnalysisResult({
         </div>
 
         {evidence.length > 0 && (
-          <div className="lg:col-span-3 bg-surface-container rounded-2xl border border-surface-container-highest p-6 shadow-lg">
+          <div className="lg:col-span-3 bg-surface-container glass-panel rounded-2xl border border-surface-container-highest p-6 shadow-lg">
             <h4 className="text-lg font-headline font-semibold text-on-surface mb-6 flex items-center gap-2">
               <span className="material-symbols-outlined text-primary-dim text-xl">
                 source
