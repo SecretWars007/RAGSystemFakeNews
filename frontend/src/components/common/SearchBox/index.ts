@@ -1,8 +1,3 @@
-export {
-    default,
-} from "./SearchBox";
+export { default } from "./SearchBox";
 
-
-export type {
-    SearchBoxProps,
-} from "./SearchBox.types";
+export type { SearchBoxProps } from "./SearchBox.types";

@@ -1,14 +1,7 @@
-export default function Footer(){
-
-
-
-    return (
-
-
-        <footer
-
-
-            className="
+export default function Footer() {
+  return (
+    <footer
+      className="
 
             h-14
 
@@ -31,33 +24,11 @@ export default function Footer(){
             text-[#5E6C61]
 
             "
+    >
+      <span>© 2026 FakeNewsRAGSystem</span>
 
-
-        >
-
-
-
-
-
-            <span>
-
-
-                © 2026 FakeNewsRAGSystem
-
-
-
-            </span>
-
-
-
-
-
-
-
-            <span
-
-
-                className="
+      <span
+        className="
 
                 flex
 
@@ -66,17 +37,9 @@ export default function Footer(){
                 gap-2
 
                 "
-
-
-            >
-
-
-
-
-                <span
-
-
-                    className="
+      >
+        <span
+          className="
 
                     w-2
 
@@ -87,44 +50,11 @@ export default function Footer(){
                     bg-[#40916C]
 
                     "
+        />
+        Sistema operativo
+      </span>
 
-
-                />
-
-
-
-                Sistema operativo
-
-
-
-
-
-            </span>
-
-
-
-
-
-
-
-            <span>
-
-
-                Version 1.0.0
-
-
-
-            </span>
-
-
-
-
-
-
-        </footer>
-
-
-
-    );
-
+      <span>Version 1.0.0</span>
+    </footer>
+  );
 }

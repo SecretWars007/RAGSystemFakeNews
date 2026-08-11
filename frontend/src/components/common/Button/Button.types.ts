@@ -1,16 +1,9 @@
-export type ButtonVariant =
-    | "primary"
-    | "secondary"
-    | "outline"
-    | "danger";
+export type ButtonVariant = "primary" | "secondary" | "outline" | "danger";
 
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: ButtonVariant;
 
-export interface ButtonProps
-    extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  loading?: boolean;
 
-    variant?: ButtonVariant;
-
-    loading?: boolean;
-
-    children: React.ReactNode;
+  children: React.ReactNode;
 }

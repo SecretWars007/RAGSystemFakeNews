@@ -1,42 +1,33 @@
 export const typography = {
+  fontFamily: {
+    primary: "Inter, system-ui, sans-serif",
+  },
 
-    fontFamily: {
-        primary:
-            "Inter, system-ui, sans-serif",
-    },
+  sizes: {
+    xs: "0.75rem",
 
+    sm: "0.875rem",
 
-    sizes: {
+    md: "1rem",
 
-        xs: "0.75rem",
+    lg: "1.125rem",
 
-        sm: "0.875rem",
+    xl: "1.25rem",
 
-        md: "1rem",
+    "2xl": "1.5rem",
 
-        lg: "1.125rem",
+    "3xl": "1.875rem",
 
-        xl: "1.25rem",
+    "4xl": "2.25rem",
+  },
 
-        "2xl": "1.5rem",
+  weights: {
+    normal: 400,
 
-        "3xl": "1.875rem",
+    medium: 500,
 
-        "4xl": "2.25rem",
+    semibold: 600,
 
-    },
-
-
-    weights: {
-
-        normal: 400,
-
-        medium: 500,
-
-        semibold: 600,
-
-        bold: 700,
-
-    },
-
+    bold: 700,
+  },
 };

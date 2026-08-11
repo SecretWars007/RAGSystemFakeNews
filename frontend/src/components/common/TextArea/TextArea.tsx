@@ -1,63 +1,36 @@
-import type {
-    TextAreaProps,
-} from "./TextArea.types";
-
+import type { TextAreaProps } from "./TextArea.types";
 
 export default function TextArea({
+  label,
 
-    label,
+  error,
 
-    error,
+  className = "",
 
-    className = "",
-
-    ...props
-
+  ...props
 }: TextAreaProps) {
-
-
-
-    return (
-
-        <div
-
-            className="
+  return (
+    <div
+      className="
             flex
             flex-col
             gap-2
             "
-
-        >
-
-
-            {
-                label && (
-
-                    <label
-
-                        className="
+    >
+      {label && (
+        <label
+          className="
                         text-sm
                         font-medium
                         text-[#1B4332]
                         "
+        >
+          {label}
+        </label>
+      )}
 
-                    >
-
-                        {label}
-
-                    </label>
-
-                )
-            }
-
-
-
-            <textarea
-
-
-                className={
-
-                    `
+      <textarea
+        className={`
                     w-full
 
                     min-h-[120px]
@@ -94,41 +67,21 @@ export default function TextArea({
 
                     ${className}
 
-                    `
+                    `}
 
-                }
+        {...props}
+      />
 
-
-                {...props}
-
-
-            />
-
-
-
-            {
-                error && (
-
-                    <span
-
-                        className="
+      {error && (
+        <span
+          className="
                         text-sm
                         text-[#D32F2F]
                         "
-
-                    >
-
-                        {error}
-
-                    </span>
-
-                )
-            }
-
-
-
-        </div>
-
-    );
-
+        >
+          {error}
+        </span>
+      )}
+    </div>
+  );
 }

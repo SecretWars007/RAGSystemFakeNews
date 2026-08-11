@@ -1,100 +1,40 @@
 import api from "../../../api/axios";
 
-
-
 export interface LoginRequest {
+  email: string;
 
-
-    email: string;
-
-
-    password: string;
-
-
+  password: string;
 }
-
-
 
 export interface LoginResponse {
+  access_token: string;
 
-
-    access_token: string;
-
-
-    token_type: string;
-
-
+  token_type: string;
 }
-
-
 
 export interface RegisterRequest {
+  email: string;
 
-
-    email: string;
-
-
-    password: string;
-
-
+  password: string;
 }
 
+export async function loginUser(data: LoginRequest): Promise<LoginResponse> {
+  const response = await api.post(
+    "/users/login",
 
+    data,
+  );
 
-
-
-export async function loginUser(
-
-    data: LoginRequest
-
-):
-
-Promise<LoginResponse> {
-
-
-    const response = await api.post(
-
-        "/users/login",
-
-        data
-
-    );
-
-
-    return response.data;
-
-
+  return response.data;
 }
 
+export async function registerUser(data: RegisterRequest): Promise<void> {
+  await api.post(
+    "/users/register",
 
-
-
-
-
-export async function registerUser(
-
-    data: RegisterRequest
-
-):
-
-Promise<void> {
-
-
-
-    await api.post(
-
-        "/users/register",
-
-        data
-
-    );
-
-
+    data,
+  );
 }
-
-
-
-
 
 /*
     Alias de compatibilidad.

@@ -1,60 +1,35 @@
-import {
-    Search,
-} from "lucide-react";
+import { Search } from "lucide-react";
 
-
-import type {
-    SearchBoxProps,
-} from "./SearchBox.types";
-
-
+import type { SearchBoxProps } from "./SearchBox.types";
 
 export default function SearchBox({
+  placeholder = "Buscar...",
 
-    placeholder = "Buscar...",
+  className = "",
 
-    className = "",
-
-    ...props
-
+  ...props
 }: SearchBoxProps) {
-
-
-
-    return (
-
-        <div
-
-            className="
+  return (
+    <div
+      className="
             relative
             w-full
             "
+    >
+      <Search
+        size={20}
 
-        >
-
-
-            <Search
-
-                size={20}
-
-                className="
+        className="
                 absolute
                 left-3
                 top-1/2
                 -translate-y-1/2
                 text-[#5E6C61]
                 "
+      />
 
-            />
-
-
-
-            <input
-
-
-                className={
-
-                    `
+      <input
+        className={`
                     w-full
 
                     pl-10
@@ -88,23 +63,12 @@ export default function SearchBox({
 
                     ${className}
 
-                    `
+                    `}
 
-                }
+        placeholder={placeholder}
 
-
-                placeholder={placeholder}
-
-
-                {...props}
-
-
-            />
-
-
-
-        </div>
-
-    );
-
+        {...props}
+      />
+    </div>
+  );
 }

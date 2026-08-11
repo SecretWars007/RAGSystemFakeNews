@@ -1,11 +1,9 @@
 export interface CardProps {
+  title?: string;
 
-    title?: string;
+  description?: string;
 
-    description?: string;
+  children: React.ReactNode;
 
-    children: React.ReactNode;
-
-    className?: string;
-
+  className?: string;
 }

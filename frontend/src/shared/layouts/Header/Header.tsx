@@ -1,43 +1,43 @@
-import { Bell } from "lucide-react";
-
-import { useAuthStore } from "../../../features/auth/store/authStore";
-
 export default function Header() {
-    const token = useAuthStore((state) => state.token);
-
-    return (
-        <header className="flex h-20 items-center justify-between border-b border-[#D8F3DC] bg-white/90 px-4 sm:px-6 lg:px-8 backdrop-blur-sm">
-            <div>
-                <h2 className="text-lg font-semibold text-[#123B2D] sm:text-xl">
-                    Verificación inteligente de noticias
-                </h2>
-                <p className="text-xs text-[#5C6F66] sm:text-sm">
-                    RAG + IA generativa + análisis contextual
-                </p>
-            </div>
-
-            <div className="flex items-center gap-4 sm:gap-5">
-                <button
-                    type="button"
-                    className="flex h-10 w-10 items-center justify-center rounded-full border border-[#D8F3DC] bg-[#F5FBF7] text-[#1F7A4E] transition hover:bg-[#EAF7F0]"
-                    aria-label="Notificaciones"
-                >
-                    <Bell size={18} />
-                </button>
-
-                <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#1F7A4E] text-sm font-bold text-white">
-                        U
-                    </div>
-
-                    <div className="hidden sm:block">
-                        <p className="text-sm font-semibold text-[#123B2D]">Usuario</p>
-                        <span className="text-xs text-[#5C6F66]">
-                            {token ? "Conectado" : "Invitado"}
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </header>
-    );
+  return (
+    <header className="bg-surface border-b border-outline-variant/30 flex justify-between items-center px-6 py-4 w-full z-40 sticky top-0 md:h-20 h-16">
+      <div className="flex items-center gap-4">
+        <button className="md:hidden text-on-surface-variant hover:text-primary transition-colors">
+          <span className="material-symbols-outlined">menu</span>
+        </button>
+        <div className="hidden md:flex flex-col">
+          <div className="flex items-center gap-2 text-sm text-on-surface-variant font-label">
+            <span className="hover:text-primary cursor-pointer transition-colors">
+              Sistema
+            </span>
+            <span className="material-symbols-outlined text-[16px]">
+              chevron_right
+            </span>
+            <span className="text-primary font-medium">FakeNewsRAG</span>
+          </div>
+        </div>
+      </div>
+      <div className="flex items-center gap-4">
+        <div className="hidden sm:flex items-center gap-2 text-on-surface-variant text-sm bg-surface-container py-1.5 px-3 rounded-full border border-outline-variant/50">
+          <span className="material-symbols-outlined text-[16px]">
+            calendar_today
+          </span>
+          <span>
+            {new Date().toLocaleDateString("es-ES", {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+            })}
+          </span>
+        </div>
+        <button className="text-on-surface-variant hover:text-primary transition-colors relative">
+          <span className="material-symbols-outlined">notifications</span>
+          <span className="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
+        </button>
+        <button className="text-on-surface-variant hover:text-primary transition-colors">
+          <span className="material-symbols-outlined">settings</span>
+        </button>
+      </div>
+    </header>
+  );
 }

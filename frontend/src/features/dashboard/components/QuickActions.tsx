@@ -1,52 +1,52 @@
-import { ArrowRight, FileText, Newspaper, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 
-import Card from "../../../components/common/Card";
-
 const actions = [
-    {
-        title: "Crear noticia",
-        description: "Registrar una nueva fuente o pieza editorial para revisión.",
-        href: "/news/create",
-        icon: FileText,
-    },
-    {
-        title: "Ver noticias",
-        description: "Consultar el catálogo histórico y su estado actual.",
-        href: "/news",
-        icon: Newspaper,
-    },
-    {
-        title: "Analizar Fake News",
-        description: "Validar una afirmación con la base de conocimiento y el motor RAG.",
-        href: "/rag",
-        icon: ShieldCheck,
-    },
+  {
+    title: "Verificar Noticia",
+    description: "Ingresar URL o texto para analizar",
+    href: "/rag",
+    icon: "fact_check",
+  },
+  {
+    title: "Ver Noticias Recientes",
+    description: "Revisar el historial de análisis",
+    href: "/news",
+    icon: "history",
+  },
+  {
+    title: "Gestionar Fuentes",
+    description: "Añadir o editar fuentes confiables RAG",
+    href: "/sources",
+    icon: "source",
+  },
 ];
 
 export default function QuickActions() {
-    return (
-        <Card title="Acciones rápidas" description="Tareas frecuentes del flujo operativo">
-            <div className="space-y-3">
-                {actions.map(({ title, description, href, icon: Icon }) => (
-                    <Link
-                        key={title}
-                        to={href}
-                        className="group flex items-center gap-3 rounded-2xl border border-[#E3EFE5] bg-[#F8FBF9] p-4 transition hover:border-[#BFE0C8] hover:bg-[#F1FAF4]"
-                    >
-                        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#EAF7F0] text-[#1F7A4E]">
-                            <Icon className="h-5 w-5" />
-                        </div>
-
-                        <div className="flex-1">
-                            <p className="font-semibold text-[#123B2D]">{title}</p>
-                            <p className="mt-1 text-sm text-[#5E6C61]">{description}</p>
-                        </div>
-
-                        <ArrowRight className="h-4 w-4 text-[#1F7A4E] transition group-hover:translate-x-0.5" />
-                    </Link>
-                ))}
+  return (
+    <div className="glass-panel rounded-2xl p-6 md:p-8 flex flex-col">
+      <h2 className="text-xl font-headline font-bold text-on-surface mb-6 flex items-center gap-2">
+        <span className="material-symbols-outlined text-primary">bolt</span>
+        Acciones Rápidas
+      </h2>
+      <div className="flex flex-col gap-4 flex-1">
+        {actions.map(({ title, description, href, icon }) => (
+          <Link
+            key={title}
+            to={href}
+            className="flex items-center gap-4 p-4 rounded-xl bg-surface-variant border border-outline-variant/30 hover:border-primary/50 hover:bg-surface-container-high transition-all group w-full text-left"
+          >
+            <div className="w-10 h-10 rounded-lg bg-surface flex items-center justify-center text-on-surface-variant group-hover:text-primary transition-colors shadow-sm">
+              <span className="material-symbols-outlined">{icon}</span>
             </div>
-        </Card>
-    );
+            <div>
+              <h4 className="font-semibold text-on-surface group-hover:text-primary transition-colors">
+                {title}
+              </h4>
+              <p className="text-sm text-on-surface-variant">{description}</p>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
 }

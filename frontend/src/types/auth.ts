@@ -1,40 +1,29 @@
 export interface User {
+  id: string;
 
-    id: string;
+  username: string;
 
-    username: string;
+  email: string;
 
-    email: string;
-
-    role?: string;
-
+  role?: string;
 }
-
 
 export interface LoginRequest {
+  username: string;
 
-    username: string;
-
-    password: string;
-
+  password: string;
 }
-
 
 export interface RegisterRequest {
+  username: string;
 
-    username: string;
+  email: string;
 
-    email: string;
-
-    password: string;
-
+  password: string;
 }
 
-
 export interface AuthResponse {
+  access_token: string;
 
-    access_token: string;
-
-    token_type: string;
-
+  token_type: string;
 }

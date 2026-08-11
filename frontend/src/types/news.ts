@@ -1,23 +1,21 @@
 export interface News {
+  id: string;
 
-    id: string;
+  title: string;
 
-    title: string;
+  content: string;
 
-    content: string;
+  source: string;
 
-    source: string;
+  author?: string;
 
-    author?: string;
+  url?: string;
 
-    url?: string;
+  language?: string;
 
-    language?: string;
+  country?: string;
 
-    country?: string;
+  published_at?: string;
 
-    published_at?: string;
-
-    is_fake?: boolean;
-
+  is_fake?: boolean;
 }

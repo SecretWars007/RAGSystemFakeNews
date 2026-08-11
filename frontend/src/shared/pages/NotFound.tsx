@@ -1,22 +1,9 @@
-import {
-    Link,
-} from "react-router-dom";
+import { Link } from "react-router-dom";
 
-
-
-
-export default function NotFound(){
-
-
-
-    return (
-
-
-
-        <div
-
-
-            className="
+export default function NotFound() {
+  return (
+    <div
+      className="
 
             min-h-screen
 
@@ -31,61 +18,28 @@ export default function NotFound(){
             px-4
 
             "
-
-        >
-
-
-
-
-
-
-            <div
-
-
-                className="
+    >
+      <div
+        className="
 
                 text-center
 
                 "
-
-            >
-
-
-
-
-
-
-                <div
-
-
-                    className="
+      >
+        <div
+          className="
 
                     text-8xl
 
                     mb-6
 
                     "
+        >
+          🐶
+        </div>
 
-                >
-
-
-
-                    🐶
-
-
-
-                </div>
-
-
-
-
-
-
-
-                <h1
-
-
-                    className="
+        <h1
+          className="
 
                     text-6xl
 
@@ -94,27 +48,12 @@ export default function NotFound(){
                     text-[#1B4332]
 
                     "
+        >
+          404
+        </h1>
 
-                >
-
-
-
-                    404
-
-
-
-                </h1>
-
-
-
-
-
-
-
-                <h2
-
-
-                    className="
+        <h2
+          className="
 
                     mt-4
 
@@ -125,58 +64,26 @@ export default function NotFound(){
                     text-[#2D6A4F]
 
                     "
+        >
+          Página no encontrada
+        </h2>
 
-                >
-
-
-
-                    Página no encontrada
-
-
-
-                </h2>
-
-
-
-
-
-
-
-                <p
-
-
-                    className="
+        <p
+          className="
 
                     mt-3
 
                     text-[#5E6C61]
 
                     "
+        >
+          Tiko no encontró esta ruta en el sistema.
+        </p>
 
-                >
+        <Link
+          to="/dashboard"
 
-
-
-                    Tiko no encontró esta ruta en el sistema.
-
-
-
-                </p>
-
-
-
-
-
-
-
-                <Link
-
-
-                    to="/dashboard"
-
-
-
-                    className="
+          className="
 
                     inline-flex
 
@@ -199,33 +106,10 @@ export default function NotFound(){
                     transition
 
                     "
-
-                >
-
-
-
-                    Volver al Dashboard
-
-
-
-                </Link>
-
-
-
-
-
-
-
-            </div>
-
-
-
-
-
-        </div>
-
-
-
-    );
-
+        >
+          Volver al Dashboard
+        </Link>
+      </div>
+    </div>
+  );
 }

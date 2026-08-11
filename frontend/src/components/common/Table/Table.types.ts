@@ -1,35 +1,17 @@
-import type {
-    ReactNode,
-} from "react";
-
+import type { ReactNode } from "react";
 
 export interface TableColumn<T> {
+  key: keyof T;
 
+  header: string;
 
-    key: keyof T;
-
-
-    header: string;
-
-
-    render?: (
-        value: T[keyof T],
-        row: T,
-    ) => ReactNode;
-
+  render?: (value: T[keyof T], row: T) => ReactNode;
 }
 
-
-
 export interface TableProps<T> {
+  columns: TableColumn<T>[];
 
+  data: T[];
 
-    columns: TableColumn<T>[];
-
-
-    data: T[];
-
-
-    emptyMessage?: string;
-
+  emptyMessage?: string;
 }

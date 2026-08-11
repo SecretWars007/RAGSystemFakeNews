@@ -1,13 +1,6 @@
-import {
-    useState,
-} from "react";
+import { useState } from "react";
 
-
-import {
-    Link,
-    useNavigate,
-} from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 
 import Card from "../../../components/common/Card";
 
@@ -17,143 +10,44 @@ import Button from "../../../components/common/Button";
 
 import Loader from "../../../components/common/Loader";
 
+import { register } from "../services/authService";
 
-import {
-    register,
-} from "../services/authService";
+export default function Register() {
+  const navigate = useNavigate();
 
+  const [email, setEmail] = useState("");
 
+  const [password, setPassword] = useState("");
 
+  const [error, setError] = useState("");
 
-export default function Register(){
+  const [loading, setLoading] = useState(false);
 
+  async function handleSubmit(event: React.FormEvent) {
+    event.preventDefault();
 
+    setError("");
 
-    const navigate = useNavigate();
+    setLoading(true);
 
+    try {
+      await register({
+        email,
 
+        password,
+      });
 
-
-    const [email,setEmail] =
-
-        useState("");
-
-
-
-    const [password,setPassword] =
-
-        useState("");
-
-
-
-    const [error,setError] =
-
-        useState("");
-
-
-
-    const [loading,setLoading] =
-
-        useState(false);
-
-
-
-
-
-
-
-
-    async function handleSubmit(
-
-        event: React.FormEvent
-
-    ){
-
-
-
-        event.preventDefault();
-
-
-
-        setError("");
-
-        setLoading(true);
-
-
-
-
-        try {
-
-
-
-            await register({
-
-
-                email,
-
-
-                password,
-
-
-
-            });
-
-
-
-
-            navigate(
-
-                "/login"
-
-            );
-
-
-
-        }
-
-        catch {
-
-
-
-            setError(
-
-                "No se pudo registrar el usuario"
-
-            );
-
-
-
-        }
-
-        finally {
-
-
-
-            setLoading(false);
-
-
-
-        }
-
-
-
+      navigate("/login");
+    } catch {
+      setError("No se pudo registrar el usuario");
+    } finally {
+      setLoading(false);
     }
+  }
 
-
-
-
-
-
-
-
-    return (
-
-
-
-        <div
-
-
-            className="
+  return (
+    <div
+      className="
 
             min-h-screen
 
@@ -168,86 +62,40 @@ export default function Register(){
             px-4
 
             "
-
-
-        >
-
-
-
-
-
-            <Card>
-
-
-
-
-                <div
-
-
-                    className="
+    >
+      <Card>
+        <div
+          className="
 
                     w-full
 
                     max-w-md
 
                     "
-
-
-                >
-
-
-
-
-
-
-                    <div
-
-
-                        className="
+        >
+          <div
+            className="
 
                         text-center
 
                         mb-8
 
                         "
-
-
-                    >
-
-
-
-
-                        <div
-
-
-                            className="
+          >
+            <div
+              className="
 
                             text-6xl
 
                             mb-4
 
                             "
+            >
+              🐶
+            </div>
 
-
-                        >
-
-
-                            🐶
-
-
-
-                        </div>
-
-
-
-
-
-
-
-                        <h1
-
-
-                            className="
+            <h1
+              className="
 
                             text-2xl
 
@@ -256,382 +104,118 @@ export default function Register(){
                             text-[#1B4332]
 
                             "
+            >
+              Crear cuenta
+            </h1>
 
-
-                        >
-
-
-                            Crear cuenta
-
-
-
-                        </h1>
-
-
-
-
-
-
-
-                        <p
-
-
-                            className="
+            <p
+              className="
 
                             text-[#5E6C61]
 
                             mt-2
 
                             "
+            >
+              FakeNewsRAGSystem
+            </p>
+          </div>
 
+          <form
+            onSubmit={handleSubmit}
 
-                        >
-
-
-
-                            FakeNewsRAGSystem
-
-
-
-                        </p>
-
-
-
-
-                    </div>
-
-
-
-
-
-
-
-
-
-                    <form
-
-
-
-                        onSubmit={handleSubmit}
-
-
-
-                        className="
+            className="
 
                         space-y-5
 
                         "
+          >
+            <Input
+              label="Email"
 
+              type="email"
 
+              value={email}
 
-                    >
-
-
-
-
-
-
-
-                        <Input
-
-
-                            label="Email"
-
-
-                            type="email"
-
-
-                            value={email}
-
-
-
-                            placeholder="
+              placeholder="
 
                             usuario@email.com
 
                             "
 
+              onChange={(e) => setEmail(e.target.value)}
+            />
 
+            <Input
+              label="Password"
 
-                            onChange={
+              type="password"
 
+              value={password}
 
-                                e =>
-
-                                setEmail(
-
-                                    e.target.value
-
-                                )
-
-
-                            }
-
-
-
-                        />
-
-
-
-
-
-
-
-
-                        <Input
-
-
-
-                            label="Password"
-
-
-
-                            type="password"
-
-
-
-                            value={password}
-
-
-
-                            placeholder="
+              placeholder="
 
                             ********
 
                             "
 
+              onChange={(e) => setPassword(e.target.value)}
+            />
 
-
-                            onChange={
-
-
-                                e =>
-
-                                setPassword(
-
-                                    e.target.value
-
-                                )
-
-
-                            }
-
-
-
-                        />
-
-
-
-
-
-
-
-
-
-                        {
-
-
-                            error && (
-
-
-
-                                <p
-
-
-                                    className="
+            {error && (
+              <p
+                className="
 
                                     text-red-600
 
                                     text-sm
 
                                     "
-
-
-                                >
-
-
-
-                                    {error}
-
-
-
-
-                                </p>
-
-
-
-                            )
-
-
-                        }
-
-
-
-
-
-
-
-
-
-                        {
-
-
-                            loading && (
-
-
-
-                                <Loader
-
-
-                                    size="small"
-
-
-                                    text="Creando usuario..."
-
-
-
-                                />
-
-
-                            )
-
-
-
-                        }
-
-
-
-
-
-
-
-
-
-                        <Button
-
-
-
-                            type="submit"
-
-
-
-                            disabled={loading}
-
-
-
-                        >
-
-
-
-
-
-                            {
-
-
-                                loading
-
-
-
-                                ?
-
-
-
-                                "Procesando..."
-
-
-
-                                :
-
-
-
-                                "Registrarse"
-
-
-
-
-                            }
-
-
-
-
-
-                        </Button>
-
-
-
-
-
-
-                    </form>
-
-
-
-
-
-
-
-
-
-                    <div
-
-
-
-                        className="
+              >
+                {error}
+              </p>
+            )}
+
+            {loading && (
+              <Loader
+                size="small"
+
+                text="Creando usuario..."
+              />
+            )}
+
+            <Button
+              type="submit"
+
+              disabled={loading}
+            >
+              {loading ? "Procesando..." : "Registrarse"}
+            </Button>
+          </form>
+
+          <div
+            className="
 
                         text-center
 
                         mt-6
 
                         "
-
-
-
-                    >
-
-
-
-
-
-
-                        <span
-
-
-
-                            className="
+          >
+            <span
+              className="
 
                             text-[#5E6C61]
 
                             "
+            >
+              ¿Ya tienes cuenta?
+            </span>
 
+            <Link
+              to="/login"
 
-
-                        >
-
-
-
-                            ¿Ya tienes cuenta?
-
-
-
-                        </span>
-
-
-
-
-
-
-
-
-
-                        <Link
-
-
-
-                            to="/login"
-
-
-
-                            className="
+              className="
 
                             ml-2
 
@@ -640,48 +224,12 @@ export default function Register(){
                             font-semibold
 
                             "
-
-
-
-                        >
-
-
-
-                            Ingresar
-
-
-
-
-                        </Link>
-
-
-
-
-
-
-
-                    </div>
-
-
-
-
-
-                </div>
-
-
-
-
-
-            </Card>
-
-
-
-
-
+            >
+              Ingresar
+            </Link>
+          </div>
         </div>
-
-
-
-    );
-
+      </Card>
+    </div>
+  );
 }

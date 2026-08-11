@@ -51,26 +51,20 @@ services:
   # repetición. Todos los servicios Airflow comparten estas variables.
   # ---------------------------------------------------------------------------
   x-airflow-common: &airflow-common
-    build:
-      context: ..
-      dockerfile: docker/airflow/Dockerfile
+    image: apache/airflow:2.10.2-python3.11
     env_file:
       - ../.env
-    environment: &airflow-common-env
+    environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__CORE__LOAD_EXAMPLES: "False"
       AIRFLOW__CORE__DAGS_FOLDER: /opt/airflow/dags
       AIRFLOW__CORE__PLUGINS_FOLDER: /opt/airflow/plugins
       # La conexión usa la misma DB que el backend (schema compartido).
-      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg://postgres:postgres@postgres:5432/fake_news_db
-      # La Fernet Key se lee del .env — nunca hardcodeada en este archivo.
-      AIRFLOW__CORE__FERNET_KEY: ${AIRFLOW_FERNET_KEY}
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql://postgres:postgres@postgres:5432/airflow_db
       # No exponer la config en producción (se puede habilitar solo en dev).
       AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "False"
       # PYTHONPATH apunta a la raíz del backend para que "from app.*" funcione.
       PYTHONPATH: /opt/airflow
-      # DATABASE_URL que usa settings.py del backend dentro del DAG.
-      DATABASE_URL: ${DATABASE_URL}
     volumes:
       - ../backend:/opt/airflow
       - airflow_logs:/opt/airflow/logs

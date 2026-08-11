@@ -1,21 +1,11 @@
-import type {
-    ReactNode,
-} from "react";
-
+import type { ReactNode } from "react";
 
 export interface EmptyStateProps {
+  title: string;
 
+  description?: string;
 
-    title: string;
+  icon?: ReactNode;
 
-
-    description?: string;
-
-
-    icon?: ReactNode;
-
-
-    action?: ReactNode;
-
-
+  action?: ReactNode;
 }

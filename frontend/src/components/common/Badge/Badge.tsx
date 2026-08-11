@@ -1,72 +1,40 @@
-import type {
-    BadgeProps,
-} from "./Badge.types";
-
-
+import type { BadgeProps } from "./Badge.types";
 
 const styles = {
-
-
-    success:
-
-        `
+  success: `
         bg-green-100
         text-[#2E7D32]
         `,
 
-
-    warning:
-
-        `
+  warning: `
         bg-yellow-100
         text-yellow-700
         `,
 
-
-    danger:
-
-        `
+  danger: `
         bg-red-100
         text-[#D32F2F]
         `,
 
-
-    info:
-
-        `
+  info: `
         bg-teal-100
         text-[#00897B]
         `,
 
-
-    default:
-
-        `
+  default: `
         bg-gray-100
         text-gray-700
         `,
-
 };
 
-
-
 export default function Badge({
+  variant = "default",
 
-    variant = "default",
-
-    children,
-
+  children,
 }: BadgeProps) {
-
-
-
-    return (
-
-        <span
-
-            className={
-
-                `
+  return (
+    <span
+      className={`
                 inline-flex
 
                 items-center
@@ -83,17 +51,9 @@ export default function Badge({
 
                 ${styles[variant]}
 
-                `
-
-            }
-
-        >
-
-            {children}
-
-
-        </span>
-
-    );
-
+                `}
+    >
+      {children}
+    </span>
+  );
 }

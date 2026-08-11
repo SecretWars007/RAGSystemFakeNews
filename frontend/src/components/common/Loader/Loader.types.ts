@@ -1,7 +1,5 @@
 export interface LoaderProps {
+  size?: "small" | "medium" | "large";
 
-    size?: "small" | "medium" | "large";
-
-    text?: string;
-
+  text?: string;
 }

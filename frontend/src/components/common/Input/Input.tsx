@@ -1,24 +1,19 @@
-import type {
-    InputProps,
-} from "./Input.types";
+import type { InputProps } from "./Input.types";
 
 export default function Input({
-    label,
-    error,
-    className = "",
-    ...props
+  label,
+  error,
+  className = "",
+  ...props
 }: InputProps) {
-    return (
-        <div className="flex flex-col gap-2">
-            {label && (
-                <label className="text-sm font-medium text-[#123B2D]">
-                    {label}
-                </label>
-            )}
+  return (
+    <div className="flex flex-col gap-2">
+      {label && (
+        <label className="text-sm font-medium text-[#123B2D]">{label}</label>
+      )}
 
-            <input
-                className={
-                    `
+      <input
+        className={`
                     w-full
                     px-4
                     py-3
@@ -35,12 +30,11 @@ export default function Input({
                     focus:ring-4
                     focus:ring-[#DDEFE8]
                     ${className}
-                    `
-                }
-                {...props}
-            />
+                    `}
+        {...props}
+      />
 
-            {error && <span className="text-sm text-[#D93F3F]">{error}</span>}
-        </div>
-    );
+      {error && <span className="text-sm text-[#D93F3F]">{error}</span>}
+    </div>
+  );
 }

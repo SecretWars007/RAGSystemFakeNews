@@ -1,24 +1,13 @@
-import type {
-    ReactNode,
-} from "react";
-
+import type { ReactNode } from "react";
 
 export interface ModalProps {
+  open: boolean;
 
+  title: string;
 
-    open: boolean;
+  children: ReactNode;
 
+  onClose: () => void;
 
-    title: string;
-
-
-    children: ReactNode;
-
-
-    onClose: () => void;
-
-
-    footer?: ReactNode;
-
-
+  footer?: ReactNode;
 }

@@ -1,18 +1,14 @@
-import type {
-    CardProps,
-} from "./Card.types";
-
+import type { CardProps } from "./Card.types";
 
 export default function Card({
-    title,
-    description,
-    children,
-    className = "",
+  title,
+  description,
+  children,
+  className = "",
 }: CardProps) {
-    return (
-        <section
-            className={
-                `
+  return (
+    <section
+      className={`
                 bg-white/90
                 rounded-3xl
                 border
@@ -21,20 +17,17 @@ export default function Card({
                 p-6
                 backdrop-blur-sm
                 ${className}
-                `
-            }
-        >
-            {title && (
-                <h2 className="mb-2 text-lg font-semibold text-[#123B2D]">
-                    {title}
-                </h2>
-            )}
+                `}
+    >
+      {title && (
+        <h2 className="mb-2 text-lg font-semibold text-[#123B2D]">{title}</h2>
+      )}
 
-            {description && (
-                <p className="mb-4 text-sm text-[#5C6F66]">{description}</p>
-            )}
+      {description && (
+        <p className="mb-4 text-sm text-[#5C6F66]">{description}</p>
+      )}
 
-            <div>{children}</div>
-        </section>
-    );
+      <div>{children}</div>
+    </section>
+  );
 }

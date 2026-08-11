@@ -1,46 +1,15 @@
-import {
-    Navigate,
-} from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
-
-import {
-    isAuthenticated,
-} from "./authGuard";
-
-
+import { isAuthenticated } from "./authGuard";
 
 interface Props {
-
-    children: React.ReactNode;
-
+  children: React.ReactNode;
 }
 
+export default function ProtectedRoute({ children }: Props) {
+  if (!isAuthenticated()) {
+    return <Navigate to="/login" replace />;
+  }
 
-
-export default function ProtectedRoute(
-    {
-        children,
-    }: Props
-){
-
-
-    if(
-        !isAuthenticated()
-    ){
-
-        return (
-
-            <Navigate
-                to="/login"
-                replace
-            />
-
-        );
-
-    }
-
-
-
-    return children;
-
+  return children;
 }

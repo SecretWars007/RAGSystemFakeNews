@@ -29,3 +29,12 @@ def knowledge_status(session: Session = Depends(get_db)):
         "pending_refreshes": pending_refreshes,
         "last_indexed_at": last_indexed_at,
     }
+
+
+@router.post("/ingest")
+def trigger_ingestion():
+    from app.infrastructure.ingestion.worker import run_pending_sources
+    
+    results = run_pending_sources()
+    return {"results": results}
+

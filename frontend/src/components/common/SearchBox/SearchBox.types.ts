@@ -1,13 +1,5 @@
-import type {
-    InputHTMLAttributes,
-} from "react";
+import type { InputHTMLAttributes } from "react";
 
-
-export interface SearchBoxProps
-    extends InputHTMLAttributes<HTMLInputElement> {
-
-
-    placeholder?: string;
-
-
+export interface SearchBoxProps extends InputHTMLAttributes<HTMLInputElement> {
+  placeholder?: string;
 }

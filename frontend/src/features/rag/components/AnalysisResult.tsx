@@ -1,353 +1,248 @@
-import Card from "../../../components/common/Card";
-
-
-import Badge from "../../../components/common/Badge";
-
-
-import ConfidenceScore from "./ConfidenceScore";
-
-
-
 interface SimilarNews {
+  id: string;
 
+  title: string;
 
-    id: string;
-
-
-    title: string;
-
-
-    source: string;
-
-
+  source: string;
 }
-
-
 
 interface AnalysisResultProps {
+  analysis: string;
 
+  score: number;
 
-    analysis: string;
+  status: string;
 
+  similarNews?: SimilarNews[];
 
-    score: number;
+  label?: string | null;
 
+  reason?: string | null;
 
-    status: string;
+  decisionSource?: string | null;
 
+  evidence?: {
+    title: string;
+    source: string;
+    url?: string | null;
+    similarity?: number | null;
+  }[];
 
-    similarNews?: SimilarNews[];
-
-    label?: string | null;
-    reason?: string | null;
-    decisionSource?: string | null;
-    evidence?: { title: string; source: string; url?: string | null; similarity?: number | null }[];
-    knowledgeRefresh?: "queued" | "already_queued";
-
-
+  knowledgeRefresh?: "queued" | "already_queued";
 }
 
-
-
 export default function AnalysisResult({
+  analysis,
 
-    analysis,
+  score,
 
-    score,
+  label,
 
-    status,
+  reason,
 
-    similarNews = [],
+  decisionSource,
 
-    label,
-    reason,
-    decisionSource,
-    evidence = [],
-    knowledgeRefresh,
+  evidence = [],
 
+  knowledgeRefresh,
 }: AnalysisResultProps) {
+  const isFalse = label === "FALSO";
 
+  const bgClass = isFalse
+    ? "bg-error-dim border-error/20"
+    : "bg-primary-container/20 border-primary/20";
 
+  const iconClass = isFalse
+    ? "dangerous text-white"
+    : "check_circle text-primary";
 
-    return (
+  const titleClass = isFalse ? "text-white" : "text-primary";
 
+  const textClass = isFalse ? "text-white/90" : "text-on-surface-variant";
 
+  const watermarkIcon = isFalse ? "gpp_bad" : "gpp_good";
+
+  return (
+    <div className="mt-8">
+      <h3 className="text-xl font-headline font-semibold text-on-surface mb-6 flex items-center gap-2">
+        <span className="material-symbols-outlined text-primary">
+          analytics
+        </span>{" "}
+        Resultados del Análisis
+      </h3>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div
-
-            className="
-            space-y-6
-            "
-
+          className={`lg:col-span-2 ${bgClass} rounded-2xl p-8 relative overflow-hidden flex flex-col justify-center shadow-xl border`}
         >
+          <div className="absolute top-0 right-0 p-8 opacity-10">
+            <span className="material-symbols-outlined text-9xl text-white">
+              {watermarkIcon}
+            </span>
+          </div>
 
-
-
-            <Card>
-
-
-                <div
-
-                    className="
-                    flex
-                    justify-between
-                    items-center
-                    "
-
+          <div className="relative z-10 space-y-4">
+            {label ? (
+              <div className="flex items-center gap-3">
+                <span
+                  className={`material-symbols-outlined text-3xl ${iconClass}`}
                 >
+                  {iconClass.split(" ")[0]}
+                </span>
 
+                <h4
+                  className={`${titleClass} text-5xl font-display font-black tracking-widest uppercase`}
+                >
+                  {label}
+                </h4>
+              </div>
+            ) : (
+              <h4 className={`${titleClass} text-3xl font-display font-bold`}>
+                Análisis Generado
+              </h4>
+            )}
 
-                    <h2
+            <div className="inline-block bg-black/30 backdrop-blur-sm px-4 py-1 rounded-full border border-white/10">
+              <span className="text-white text-sm font-semibold">
+                Confianza: {Math.round(score * 100)}%
+              </span>
+            </div>
 
-                        className="
-                        text-xl
-                        font-bold
-                        text-[#1B4332]
-                        "
-
-                    >
-
-                        Resultado del análisis RAG
-
-
-                    </h2>
-
-
-
-                    <Badge
-
-                        variant={
-                            status === "completed"
-                            ?
-                            "success"
-                            :
-                            "warning"
-                        }
-
-                    >
-
-                        {status}
-
-
-                    </Badge>
-
-
-
-                </div>
-
-
-
-
-            </Card>
-
-
-
-
-
-            <Card
-
-                title="Análisis generado por IA"
-
-                description="
-                Resultado producido por Gemini mediante RAG
-                "
-
+            <p
+              className={`${textClass} text-lg leading-relaxed max-w-xl font-medium mt-4`}
             >
+              {reason ? reason : analysis || "Sin análisis disponible"}
+            </p>
 
-                {label && <p className="mb-3 font-semibold text-[#1B4332]">Veredicto: {label}</p>}
-
-                {reason && <p className="mb-3 text-[#374151]">{reason}</p>}
-
-                {decisionSource && <p className="mb-3 text-sm text-[#5E6C61]">Origen: {decisionSource}</p>}
-
-
-
-                <p
-
-                    className="
-                    text-[#374151]
-                    leading-relaxed
-                    "
-
-                >
-
-                    {
-                        reason
-                            ? "El resultado estructurado se muestra arriba con su evidencia."
-                            : analysis || "Sin análisis disponible"
-                    }
-
-
-                </p>
-
-
-
-            </Card>
+            {decisionSource && (
+              <p className="text-sm font-label text-white/70">
+                Origen: {decisionSource}
+              </p>
+            )}
 
             {knowledgeRefresh && (
-                <Card title="Actualización de conocimiento">
-                    <p className="text-sm text-[#374151]">
-                        {knowledgeRefresh === "queued"
-                            ? "La consulta fue encolada para buscar evidencia nueva en fuentes confiables."
-                            : "Ya existe una actualización pendiente para esta consulta."}
-                    </p>
-                </Card>
+              <p className="text-sm font-label text-white/70 mt-2">
+                {knowledgeRefresh === "queued"
+                  ? "Actualización de conocimiento encolada."
+                  : "Actualización de conocimiento ya en progreso."}
+              </p>
             )}
-
-            {evidence.length > 0 && (
-                <Card title="Evidencia utilizada">
-                    <ul className="space-y-2 text-sm text-[#374151]">
-                        {evidence.map((item, index) => (
-                            <li key={`${item.title}-${index}`}>
-                                <span className="font-semibold">{item.title}</span> — {item.source}
-                                {item.url && <> · <a className="text-blue-700 underline" href={item.url} target="_blank" rel="noreferrer">Fuente</a></>}
-                            </li>
-                        ))}
-                    </ul>
-                </Card>
-            )}
-
-
-
-
-
-            <Card
-
-                title="Confianza"
-
-            >
-
-
-
-                <ConfidenceScore
-
-                    score={score}
-
-                />
-
-
-
-            </Card>
-
-
-
-
-
-
-            {
-
-                similarNews.length > 0 && (
-
-
-                    <Card
-
-                        title="Noticias relacionadas"
-
-                        description="
-                        Documentos recuperados mediante pgvector
-                        "
-
-                    >
-
-
-
-                        <div
-
-                            className="
-                            space-y-3
-                            "
-
-                        >
-
-
-
-                            {
-                                similarNews.map(
-
-                                    item => (
-
-
-                                        <div
-
-                                            key={
-                                                item.id
-                                            }
-
-                                            className="
-                                            p-4
-                                            rounded-lg
-                                            bg-[#F4F8F5]
-                                            "
-
-                                        >
-
-
-                                            <h3
-
-                                                className="
-                                                font-semibold
-                                                text-[#1B4332]
-                                                "
-
-                                            >
-
-                                                {
-                                                    item.title
-                                                }
-
-
-                                            </h3>
-
-
-
-                                            <p
-
-                                                className="
-                                                text-sm
-                                                text-[#5E6C61]
-                                                "
-
-                                            >
-
-                                                Fuente:
-
-                                                {" "}
-
-                                                {
-                                                    item.source
-                                                }
-
-
-                                            </p>
-
-
-
-                                        </div>
-
-
-                                    )
-
-                                )
-
-                            }
-
-
-                        </div>
-
-
-
-                    </Card>
-
-
-                )
-
-
-            }
-
-
-
+          </div>
         </div>
 
+        <div className="bg-surface-container rounded-2xl border border-surface-container-highest p-6 flex flex-col shadow-lg">
+          <h4 className="text-sm font-label text-on-surface-variant mb-4 uppercase tracking-wider">
+            Confianza del Análisis
+          </h4>
 
-    );
+          <div className="flex-1 flex items-center justify-center relative w-full h-48">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-5xl font-display font-black text-primary">
+                {Math.round(score * 100)}%
+              </span>
+            </div>
 
+            <svg
+              viewBox="0 0 100 100"
+              className="w-full h-full transform -rotate-90"
+            >
+              <circle
+                cx="50"
+                cy="50"
+                r="45"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="8"
+                className="text-surface-container-highest"
+              />
+
+              <circle
+                cx="50"
+                cy="50"
+                r="45"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="8"
+                className="text-primary"
+                strokeDasharray={`${Math.round(score * 283)} 283`}
+              />
+            </svg>
+          </div>
+
+          <div className="text-center mt-2">
+            <p className="text-xs text-on-surface-variant">
+              Basado en la relevancia semántica de los documentos recuperados.
+            </p>
+          </div>
+        </div>
+
+        {evidence.length > 0 && (
+          <div className="lg:col-span-3 bg-surface-container rounded-2xl border border-surface-container-highest p-6 shadow-lg">
+            <h4 className="text-lg font-headline font-semibold text-on-surface mb-6 flex items-center gap-2">
+              <span className="material-symbols-outlined text-primary-dim text-xl">
+                source
+              </span>{" "}
+              Evidencia Utilizada (Top K)
+            </h4>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {evidence.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="bg-surface-container-high rounded-xl p-5 border border-outline-variant/30 hover:border-primary/50 transition-colors group"
+                >
+                  <div className="flex justify-between items-start mb-3">
+                    <h5 className="text-on-surface font-semibold text-base group-hover:text-primary transition-colors">
+                      {item.title}
+                    </h5>
+
+                    {item.url && (
+                      <a
+                        className="text-on-surface-variant hover:text-primary"
+                        href={item.url}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <span className="material-symbols-outlined text-sm">
+                          open_in_new
+                        </span>
+                      </a>
+                    )}
+                  </div>
+
+                  <p className="text-sm text-on-surface-variant mb-4 line-clamp-2">
+                    {item.source}
+                  </p>
+
+                  {item.similarity !== undefined &&
+                    item.similarity !== null && (
+                      <div className="space-y-1">
+                        <div className="flex justify-between text-xs font-label">
+                          <span className="text-on-surface-variant">
+                            Similitud Coseno
+                          </span>
+
+                          <span className="text-primary font-mono">
+                            {item.similarity.toFixed(2)}
+                          </span>
+                        </div>
+
+                        <div className="w-full bg-surface-container-highest rounded-full h-1.5">
+                          <div
+                            className="bg-primary h-1.5 rounded-full"
+                            style={{
+                              width: `${Math.round(item.similarity * 100)}%`,
+                            }}
+                          ></div>
+                        </div>
+                      </div>
+                    )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }

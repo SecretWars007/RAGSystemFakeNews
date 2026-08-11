@@ -1,45 +1,23 @@
-import {
-    Link,
-} from "react-router-dom";
-
+import { Link } from "react-router-dom";
 
 import SearchBox from "../../../components/common/SearchBox";
 
-
 import Button from "../../../components/common/Button";
 
-
-
 interface NewsFiltersProps {
+  search: string;
 
-
-    search: string;
-
-
-    setSearch: (
-        value:string
-    ) => void;
-
-
+  setSearch: (value: string) => void;
 }
 
-
-
 export default function NewsFilters({
+  search,
 
-    search,
-
-    setSearch,
-
-}: NewsFiltersProps){
-
-
-
-    return (
-
-        <div
-
-            className="
+  setSearch,
+}: NewsFiltersProps) {
+  return (
+    <div
+      className="
             flex
             flex-col
             md:flex-row
@@ -47,59 +25,26 @@ export default function NewsFilters({
             justify-between
             items-center
             "
-
-        >
-
-
-            <div
-
-                className="
+    >
+      <div
+        className="
                 flex-1
                 "
-
-            >
-
-                <SearchBox
-
-                    placeholder="
+      >
+        <SearchBox
+          placeholder="
                     Buscar noticias...
                     "
 
-                    value={search}
+          value={search}
 
-                    onChange={
-                        e =>
-                        setSearch(
-                            e.target.value
-                        )
-                    }
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
 
-                />
-
-            </div>
-
-
-
-
-            <Link
-
-                to="/news/create"
-
-            >
-
-                <Button>
-
-                    + Crear noticia
-
-                </Button>
-
-
-            </Link>
-
-
-
-        </div>
-
-    );
-
+      <Link to="/news/create">
+        <Button>+ Crear noticia</Button>
+      </Link>
+    </div>
+  );
 }

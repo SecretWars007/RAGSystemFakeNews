@@ -1,27 +1,10 @@
-import type {
-    ReactNode,
-} from "react";
-
+import type { ReactNode } from "react";
 
 export type BadgeVariant =
-
-    | "success"
-
-    | "warning"
-
-    | "danger"
-
-    | "info"
-
-    | "default";
-
-
+  "success" | "warning" | "danger" | "info" | "default";
 
 export interface BadgeProps {
+  variant?: BadgeVariant;
 
-    variant?: BadgeVariant;
-
-
-    children: ReactNode;
-
+  children: ReactNode;
 }

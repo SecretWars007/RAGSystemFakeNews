@@ -1,55 +1,21 @@
-import type {
-    LoaderProps,
-} from "./Loader.types";
-
-
+import type { LoaderProps } from "./Loader.types";
 
 const sizes = {
+  small: "text-xl",
 
+  medium: "text-3xl",
 
-    small:
-
-        "text-xl",
-
-
-
-    medium:
-
-        "text-3xl",
-
-
-
-    large:
-
-        "text-5xl",
-
-
-
+  large: "text-5xl",
 };
 
-
-
-
-
 export default function Loader({
+  size = "medium",
 
-    size = "medium",
-
-    text = "Procesando información..."
-
+  text = "Procesando información...",
 }: LoaderProps) {
-
-
-
-
-
-    return (
-
-
-        <div
-
-
-            className="
+  return (
+    <div
+      className="
 
             flex
 
@@ -62,20 +28,9 @@ export default function Loader({
             gap-3
 
             "
-
-        >
-
-
-
-
-
-            <div
-
-
-                className={
-
-
-                    `
+    >
+      <div
+        className={`
 
                     animate-bounce
 
@@ -83,55 +38,22 @@ export default function Loader({
 
                     drop-shadow-md
 
-                    `
-
-
-                }
-
-
-            >
-
-
-
-                <span
-
-                    className="
+                    `}
+      >
+        <span
+          className="
 
                     text-[#40916C]
 
                     "
+        >
+          🐾
+        </span>
+      </div>
 
-                >
-
-
-                    🐾
-
-
-
-                </span>
-
-
-
-
-
-            </div>
-
-
-
-
-
-
-
-            {
-
-
-                text && (
-
-
-                    <span
-
-
-                        className="
+      {text && (
+        <span
+          className="
 
                         text-sm
 
@@ -140,32 +62,10 @@ export default function Loader({
                         text-[#5E6C61]
 
                         "
-
-                    >
-
-
-
-                        {text}
-
-
-
-                    </span>
-
-
-
-                )
-
-
-            }
-
-
-
-
-
-        </div>
-
-
-    );
-
-
+        >
+          {text}
+        </span>
+      )}
+    </div>
+  );
 }

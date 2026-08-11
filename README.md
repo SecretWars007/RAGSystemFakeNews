@@ -1,249 +1,267 @@
-
 # FakeNewsRAGSystem
 
-Sistema completo para la detección y verificación de noticias falsas mediante IA, recuperación semántica, embeddings vectoriales y modelos de aprendizaje supervisado. El proyecto integra una API REST con FastAPI, una base de datos PostgreSQL con pgvector, una capa de agentes y RAG basada en LangGraph, un frontend moderno en React y una automatización de ingesta con Airflow.
+Sistema completo para la detección y verificación de noticias falsas mediante Inteligencia Artificial. Este sistema va más allá de la clasificación tradicional, integrando una arquitectura RAG (Retrieval-Augmented Generation) para recuperar evidencia contextual, bases de datos vectoriales para búsquedas semánticas, y un pipeline completo de orquestación y machine learning.
 
-## Estado actual
+---
 
-- Backend: funcional y modular, con autenticación, noticias, fuentes, feedback, conocimiento y RAG.
-- Frontend: interfaz moderna, responsive y conectada a los principales flujos del sistema.
-- Base de datos: estructura vectorial lista para almacenamiento de embeddings, documentos de conocimiento y solicitudes de refresco.
-- Modelo de aprendizaje: pipeline configurado para entrenamiento supervisado usando TF-IDF + Logistic Regression con MLflow.
-- Airflow: DAG de ingesta programada implementada y lista para ejecutarse a través de Docker con scheduler y webserver.
-- Infraestructura: stack local preparado con PostgreSQL, pgAdmin y servicios de orquestación.
+## 💻 Arquitectura Tecnológica y Stack
 
-## Visión general
+El proyecto adopta una arquitectura modular de microservicios orientada al dominio (DDD), separando responsabilidades clave.
 
-FakeNewsRAGSystem fue concebido para analizar noticias de forma contextual, no solo clasificarlas aisladamente. El sistema combina:
+### 1. Frontend (Capa de Presentación Web)
 
-- recuperación de noticias similares por similitud semántica,
-- comparación con fuentes confiables,
-- uso de embeddings para indexar y buscar contenido relevante,
-- generación de explicaciones a partir de evidencia encontrada,
-- entrenamiento y registro de modelos de clasificación para uso posterior,
-- automatización de ingestas de conocimiento con Airflow.
+El panel administrativo y portal de verificación está construido para la máxima reactividad y diseño visual.
 
-## Arquitectura del sistema
+- **Framework Core:** **React 19** y **TypeScript**, empaquetados con **Vite** para HMR ultra-rápido.
+- **Gestión de Estado:** **Zustand** para manejar la sesión del usuario y variables globales de forma ligera.
+- **Estilización:** **Tailwind CSS v4** integrado con tokens de diseño Premium (basado en exportaciones de herramientas como Stitch), incluyendo variables de modo oscuro (`dark mode`) y variables CSS en el `index.css`.
+- **Rutas:** React Router para navegación SPA (Single Page Application) protegida.
+- **Iconografía:** Lucide Icons.
 
-`mermaid flowchart LR     U[Usuario] --> F[Frontend React + Vite]     F --> API[FastAPI API]     API --> APP[Servicios de aplicación]     APP --> DB[(PostgreSQL + pgvector)]     APP --> RAG[LangGraph / RAG Engine]     RAG --> EMB[Gemini Embeddings]     RAG --> LLM[Gemini LLM]     DB --> DOCS[Noticias, embeddings, fuentes, feedback]     APP --> ML[Modelo de clasificación + MLflow]     ML --> TRAIN[Dataset configurado]     APP --> DAG[Airflow DAG de ingesta]     DAG --> S[Fuentes confiables]     LLM --> RES[Resultado con score, label, evidencia y similar_news]     RES --> F `
+### 2. Backend (Capa de API y Lógica de Negocio)
 
-### Capas principales
+El núcleo transaccional sigue una estructura inspirada en DDD (Domain-Driven Design).
+
+- **Framework Core:** **FastAPI** (Python 3.12) para endpoints asíncronos rápidos y autogeneración de OpenAPI (Swagger).
+- **Estructura de Carpetas:**
+  - `app/domain`: Entidades puras y contratos.
+  - `app/application`: Casos de uso (ej. `NewsService`, `AuthService`).
+  - `app/infrastructure`: Implementaciones técnicas (SQLAlchemy, `pgvector`, Conexión Gemini API, Agentes de LangGraph).
+  - `app/presentation`: Endpoints (`routers`) expuestos.
+- **Seguridad:** Autenticación por **JWT** (JSON Web Tokens) con dependencias protegidas y contraseñas hasheadas.
+
+### 3. MLOps (Operaciones de Machine Learning)
+
+Para garantizar la mejora continua y el versionado seguro del modelo, se implementa una suite de MLOps:
+
+- **Pipeline Automatizado:** Airflow llama al script `train_classifier.py` periódicamente.
+- **Versionado de Experimentos:** Todo el entrenamiento está traceado por **MLflow** local. Guarda métricas como el `F1-Score`, hiperparámetros del `TfidfVectorizer` y el propio archivo binario del modelo.
+- **Registro del Modelo (Registry):** Los modelos exitosos se etiquetan con el alias `champion` (campeón) y las APIs del backend de clasificación local leen de esta etiqueta en caliente sin necesidad de reiniciar la API.
+
+---
+
+## 🧠 Entrenamiento del Modelo de Machine Learning
+
+Para la clasificación automática (predicción base), el sistema implementa un modelo de **Aprendizaje Supervisado** entrenado con el dataset `dataset/bolivia_fakenews_dataset.csv`.
+
+### Algoritmo Utilizado
+
+El algoritmo principal seleccionado es **Regresión Logística (Logistic Regression)**.
+
+- **Pre-procesamiento:** Se emplea `TfidfVectorizer` (Term Frequency-Inverse Document Frequency) con hasta 10,000 _features_ para convertir el texto plano en vectores de características numéricas.
+- **Clasificador:** Se configura la `LogisticRegression` con pesos balanceados (`class_weight='balanced'`) para prevenir sesgos en caso de que el dataset original tenga un desbalance entre noticias FAKE y REAL.
+- **Métrica Principal:** Dado que se busca equilibrar el impacto tanto de falsos positivos como de falsos negativos, se utiliza **F1-Score (weighted)** como métrica de evaluación prioritaria.
 
-- Dominio: entidades, contratos y lógica principal del negocio.
-- Aplicación: servicios, casos de uso y orquestación.
-- Infraestructura: acceso a base de datos, modelos SQLAlchemy, agentes, embeddings y proveedores externos.
-- Presentación: routers REST y frontend React.
+### Integración y Pipeline con MLflow
 
-## Mejoras implementadas en backend
+El entrenamiento y versionado se realiza con **MLflow**, siguiendo este pipeline automatizado:
 
-### 1. API REST modular
+```mermaid
+flowchart LR
+    A[(dataset.csv)] --> B[TfidfVectorizer]
+    B -->|Features| C(Logistic Regression)
+    C -->|Entrenamiento| D{Evaluación}
+    D -->|F1-Score| E[MLflow Registry]
+    E -->|Alias: champion| F[API Backend]
+```
 
-El backend se organiza por módulos funcionales:
+1. Un DAG de Airflow (`train_fake_news_model`) ejecuta el script `backend/scripts/train_classifier.py`.
+2. El script lee el CSV, entrena el pipeline y evalúa el F1-Score.
+3. Se registra el modelo, parámetros e hiperparámetros en el servidor de MLflow, etiquetando el modelo bajo el alias `champion`.
+
+---
+
+## 🗄️ Arquitectura de Base de Datos
+
+### Diagrama Entidad-Relación (ER)
+
+```mermaid
+erDiagram
+    Users {
+        uuid id PK
+        string email
+        string hashed_password
+        string role
+        boolean is_active
+        datetime created_at
+    }
+
+    News {
+        uuid id PK
+        string title
+        text content
+        string source
+        boolean is_fake
+        datetime published_at
+    }
+
+    TrustedSources {
+        uuid id PK
+        string name
+        string base_url
+        boolean is_active
+        integer crawl_interval_minutes
+        datetime last_crawled_at
+    }
+
+    KnowledgeDocuments {
+        uuid id PK
+        uuid source_id FK
+        string title
+        text content
+        string canonical_url
+        string content_hash
+        string validation_status
+        datetime fetched_at
+    }
+
+    KnowledgeDocumentEmbeddings {
+        uuid id PK
+        uuid document_id FK
+        string provider
+        string model
+        integer dimensions
+        vector vector
+    }
 
-- users para autenticación y perfil del usuario.
-- 
+    RefreshRequests {
+        uuid id PK
+        string reason
+        string status
+        datetime requested_at
+    }
 
-ews para CRUD de noticias.
---------------------------
+    TrustedSources ||--o{ KnowledgeDocuments : "provee"
+    KnowledgeDocuments ||--o| KnowledgeDocumentEmbeddings : "tiene"
+```
+
+### Base de Datos Vectorial (pgvector)
+
+El sistema utiliza la extensión **`pgvector`** de PostgreSQL.
+A diferencia de las bases de datos tradicionales que solo hacen coincidencias por palabras clave (keyword search), `pgvector` permite almacenar los **embeddings** (vectores numéricos de 3072 dimensiones generados por Gemini Embeddings) de cada noticia y documento.
+Cuando se consulta la veracidad de una noticia, el sistema:
 
-ag para análisis semántico y recuperación contextual.
+1. Convierte la consulta a un vector.
+2. Ejecuta una búsqueda por "Distancia Coseno" o "Producto Punto" dentro de Postgres.
+3. Devuelve los N documentos con mayor similitud semántica.
+   Esto permite que el sistema detecte "fake news" que usan palabras distintas pero mantienen el mismo significado o contexto engañoso.
 
-- sources para gestión de fuentes confiables.
-- knowledge para monitoreo del estado del índice documental.
-- eedback para registro de comentarios y valoración del usuario.
-- ml para entrenamiento del modelo configurado.
+---
 
-### 2. Autenticación y seguridad
+## 🏗️ Diagrama de Despliegue (Docker)
 
-- Registro de usuarios.
-- Inicio de sesión con JWT.
-- Dependencias protegidas para rutas privadas.
-- Lógica de autorización y validación de token.
-- CORS habilitado para frontend local y entornos de desarrollo.
+El ecosistema corre de forma modularizada y contenerizada mediante `docker-compose`.
 
-### 3. Gestión de noticias
+```mermaid
+flowchart TD
+    subgraph Host Network
+        User([Usuario / Navegador])
+    end
 
-- Creación, listado, detalle, actualización y eliminación de noticias.
-- Soporte de metadatos como fuente, autor, URL, idioma, país y fecha de publicación.
-- Integración directa con el pipeline RAG para análisis de contenido.
+    subgraph Docker Network [fake-news-network]
+        Frontend[Frontend React\nPort: 3000]
+        Backend[Backend FastAPI\nPort: 8888]
+        Postgres[(PostgreSQL + pgvector\nPort: 4588)]
+        PGAdmin[pgAdmin\nPort: 5050]
 
-### 4. Motor de RAG y evidencia
+        subgraph Airflow Cluster
+            Init[airflow-init]
+            Scheduler[airflow-scheduler]
+            WebServer[airflow-webserver\nPort: 8080]
+        end
+    end
 
-El endpoint principal POST /rag/analyze analiza un claim libre sin persistirlo como noticia, mientras que POST /rag/analyze/{news_id} analiza una noticia ya registrada.
+    User -->|HTTP 3000| Frontend
+    User -->|HTTP 8888| Backend
+    User -->|HTTP 5050| PGAdmin
+    User -->|HTTP 8080| WebServer
 
-El flujo incluye:
+    Frontend -->|API REST| Backend
+    Backend -->|Lectura/Escritura| Postgres
+    PGAdmin -->|Gestión| Postgres
+    Scheduler -->|DAGs / Metadata| Postgres
+    WebServer -->|Metadata| Postgres
+    Init -.->|Migraciones| Postgres
+```
 
-- extracción de contexto del contenido,
-- búsqueda de noticias similares,
-- recuperación vectorial usando PostgreSQL + pgvector,
-- evaluación con lenguaje generativo,
-- respuesta estructurada con status, score, label,
-  eason, evidence, decision_source y similar_news.
+> [!NOTE]
+> Para evitar conflictos de migraciones de `alembic` (dado que FastAPI y Airflow usan SQLAlchemy), Airflow guarda su metadata en una base de datos propia `airflow_db` dentro del mismo contenedor de PostgreSQL, mientras que el Backend utiliza `fake_news_db`.
 
-Si la respuesta se marca como UNVERIFIED, el sistema encola una solicitud de refresco del conocimiento para mejorar el índice.
+---
 
-### 5. Estado de conocimiento y refresh
+## 🕷️ Ingesta de Datos y Web Scraping
 
-El endpoint /knowledge/status devuelve:
+El sistema no requiere alimentar noticias de manera manual una por una. Integra un motor de extracción (Web Scraping) controlado.
 
-- número de documentos indexados,
-- número total de embeddings,
-- solicitudes pendientes de refresco,
-- fecha del último índice generado.
+### ¿Cómo se alimenta?
 
-Esto facilita la supervisión del sistema de ingesta y del estado de la base de conocimiento.
+1. **Fuentes Confiables (TrustedSources):** El sistema mantiene un listado de URLs verificadas configurables por los administradores.
+2. **Scraping con HTTpx + HTML Extractor:** Un proceso en el worker realiza peticiones asíncronas (`httpx.get`) a las URLs. Utilizando utilidades BeautifulSoup se limpia el HTML, eliminando menús y scripts para extraer la noticia real y el título.
+3. **Deduplicación por Hash:** Para cada noticia extraída, se genera un hash `SHA-256` del contenido textual puro (`content_hash`). Si el hash ya existe en la base de datos (o la misma `canonical_url`), el sistema ignora la ingesta de ese documento, ahorrando tokens de API y evitando redundancias en la base vectorial.
+4. **Vectorización:** Si el texto es nuevo, se envía al API de Google (Gemini Embedding) para generar su vector y se almacena en PostgreSQL con estado `ingested`.
 
-### 6. MLOps y entrenamiento
+---
 
-Se añadió un servicio de entrenamiento configurado:
+## ⏱️ Orquestación con Apache Airflow
 
-- validación del dataset configurado,
-- entrenamiento con TF-IDF + Logistic Regression,
-- medición con F1 macro,
-- registro del modelo en MLflow,
-- generación de una URI candidata para producción.
+Para mantener el sistema actualizado, todo el pipeline de ingesta y aprendizaje continuo está orquestado mediante **Apache Airflow**.
 
-El endpoint protegido POST /ml/train inicia el procedimiento solo si ALLOW_MODEL_TRAINING está habilitado.
+### Explicación al detalle de DAGs
 
-### 7. Airflow para automatización de ingesta
+El DAG principal `knowledge_ingestion_pipeline` tiene el objetivo de ingerir nuevo conocimiento en la DB y posteriormente re-entrenar el modelo con los nuevos datasets verificados.
 
-La automatización de conocimiento quedó definida mediante una DAG en ackend/airflow/dags/knowledge_ingest_dag.py.
+- **Frecuencia (Schedule):** Está configurado para correr con `timedelta(days=1)` (Una vez al día).
+- **Tarea 1: `run_pending_sources` (PythonOperator)**
+  Realiza una petición al endpoint del backend `/knowledge/ingest`. Esto fuerza al Backend a buscar cuáles `TrustedSources` han vencido su `crawl_interval_minutes` y realizar el ciclo de Web Scraping mencionado en la sección anterior. También actualiza el estatus de las peticiones (`RefreshRequests`) a `processed` para informar al sistema que el vacío de conocimiento fue resuelto.
+- **Tarea 2: `train_fake_news_model` (BashOperator)**
+  Tras finalizar la recolección, esta tarea ejecuta directamente el script de entrenamiento de Machine Learning en Python (`train_classifier.py`), asegurando que siempre se evalúen y logueen las últimas versiones del dataset contra el modelo Logístico en MLflow.
+- **Dependencias:** Ambas tareas corren de forma secuencial `ingest_knowledge >> train_model`.
 
-El flujo realiza:
+---
 
-- lectura de fuentes confiables activas,
-- comprobación del intervalo de crawl,
-- ejecución del worker de ingesta actual,
-- actualización del estado de documentos e indexación vectorial,
-- tratamiento de solicitudes pendientes de refresco.
+## 🤖 El Sistema como Agente Inteligente (LangGraph + RAG)
 
-La configuración se extiende en Docker Compose con los servicios irflow-init, irflow-webserver y irflow-scheduler para permitir la ejecución programada y la observación desde la UI de Airflow.
+El corazón de FakeNewsRAGSystem no es solo un modelo de clasificación estático, sino un **Agente Inteligente Orquestado** basado en grafos de estado utilizando la librería **LangGraph**. Esto le otorga al sistema capacidades de razonamiento, toma de decisiones condicional y contexto extendido.
 
-## Mejoras implementadas en frontend
+### Flujo del Agente (StateGraph)
 
-El frontend fue reforzado con una base visual moderna y un flujo de navegación coherente.
+Cada vez que se solicita el análisis de una noticia, la petición entra en un flujo de nodos (agentes especializados) que comparten un estado global (`NewsRAGState`):
 
-### Principales secciones
+1. **Agente de Preparación (`analyze_news`):** Limpia el texto de entrada y prepara el estado.
+2. **Clasificador Local (`local_model`):** Ejecuta el modelo supervisado (Regresión Logística entrenado con MLflow) para obtener un _baseline_ de probabilidad local de que la noticia sea falsa, de forma ultra-rápida y a bajo coste computacional.
+3. **Agente de Embedding (`embedding`):** Si la noticia requiere más contexto, este nodo se conecta a la API de **Gemini** para vectorizar la semántica del texto en 3072 dimensiones.
+4. **Agente Recuperador (`retriever`):** Realiza una búsqueda vectorial en la base de datos `pgvector` para encontrar documentos históricos, artículos o evidencias (provenientes de TrustedSources) relacionados semánticamente.
+5. **Agente Compuerta Lógica (`evidence_gate`):** Un nodo de control que evalúa si la evidencia recuperada es lo suficientemente sólida o si el caso amerita una generación de respuesta avanzada.
+   - _Ruta A:_ Si no hay evidencia, aborta el uso de LLM para ahorrar costos y devuelve un fallo por falta de contexto (`UNVERIFIED`), encolando un trabajo de Airflow.
+   - _Ruta B:_ Si hay evidencia, dirige el grafo hacia el agente de análisis generativo.
+6. **Agente de Análisis Generativo (`analysis`):** Utiliza un **LLM de Gemini** pasándole como prompt el reclamo original del usuario, el veredicto del modelo local, y toda la evidencia real extraída de la base vectorial. El LLM actúa como juez, emitiendo un veredicto estructurado (Razón, Confianza, Etiqueta) y citando las fuentes utilizadas.
+7. **Persistencia (`storage`):** Finalmente, guarda los resultados, métricas de confianza y los vectores generados para que las próximas interacciones del agente sean aún más rápidas.
 
-- Login y registro con experiencia visual consistente.
-- Dashboard principal con resumen operativo y panel de bienvenida.
-- Layout principal con sidebar, header y contenido estructurado.
-- Página de fuentes confiables.
-- Página de noticias y alta de contenido.
-- Analizador RAG con enfoque de verificación de contenido.
+Esta arquitectura de agentes multi-etapa garantiza que el sistema no sufra de "alucinaciones" (pues el LLM está limitado estrictamente a la evidencia recuperada por el retriever) y permite delegar tareas repetitivas al modelo local (Regresión Logística) mientras se reserva el razonamiento profundo para el LLM.
 
-### Stack del frontend
+---
 
-- React 19
-- TypeScript
-- Vite
-- React Router
-- Axios
-- Zustand
-- Tailwind CSS
-- Lucide Icons
+## 💡 Ejemplos de Uso (Flujo Real al Detalle)
 
-### Rutas principales
+### 1. El Análisis RAG (Usuario)
 
-- /login
-- /register
-- /dashboard
-- /news
-- /news/create
-- /sources
-- /rag
+El usuario entra a la interfaz Frontend (Dashboard) e ingresa una premisa dudosa en el "Analizador de Noticias": _"El gobierno aprueba nueva ley de impuestos al oxígeno"_.
 
-## Mejoras en la base de datos y almacenamiento
+- **Paso 1:** El Frontend envía el claim a la API `POST /rag/analyze`.
+- **Paso 2:** El Backend vectoriza la frase del usuario.
+- **Paso 3:** Realiza un vector search contra la tabla `KnowledgeDocumentEmbeddings` (pgvector).
+- **Paso 4:** Se recuperan las top-3 noticias similares del índice de conocimiento (Evidencia).
+- **Paso 5:** El LLM Generativo (Gemini) recibe el texto original + la evidencia, procesando un prompt que le pide dictaminar una decisión final (`REAL`, `FAKE`, `UNVERIFIED`).
+- **Paso 6:** El Frontend recibe la evaluación y pinta un Panel Circular de Confianza (p.ej. 85%) mostrando la razón detallada y links a los artículos originales encontrados en el proceso.
+- **Paso 7 (Fallo):** Si el LLM dictamina `UNVERIFIED` porque las evidencias no servían, el Backend crea un ticket automático en la tabla `RefreshRequests` marcando que se necesita nueva información sobre ese tema.
 
-La base de datos se prepara para un entorno de analítica y recuperación vectorial.
+### 2. Panel de Administrador y Re-Entrenamiento
 
-### Extensiones y soporte vectorial
+Los administradores pueden revisar desde su UI el estado del conocimiento (noticias procesadas, documentos vectorizados).
+Si detectan muchos "UNVERIFIED" (peticiones de refresco pendientes), el administrador abre **Airflow (`localhost:8080`)** y presiona **"Trigger DAG"** en `knowledge_ingestion_pipeline`.
+En cuestión de minutos:
 
-`sql CREATE EXTENSION IF NOT EXISTS vector; CREATE EXTENSION IF NOT EXISTS pgcrypto; `
-
-Esto habilita:
-
-- almacenamiento de embeddings vectoriales,
-- búsqueda por similitud semántica,
-- manejo seguro de identificadores y hashes.
-
-### Modelos clave
-
-El sistema incluye modelos para:
-
-- usuarios,
-- noticias,
-- embeddings,
-- documentos de conocimiento,
-- fuentes confiables,
-- historial de consultas,
-- feedback del usuario,
-- auditoría de eventos,
-- respuestas RAG,
-- solicitudes de refresh.
-
-### Migraciones y flujo de datos
-
-Las migraciones cubren:
-
-- modelos base iniciales,
-- tabla de noticias,
-- tablas de conocimiento y embeddings,
-- cola de refresco del conocimiento,
-- modelos de feedback,
-- dimensiones de embedding y ajustes de modelos.
-
-La infraestructura permite mantener una base de conocimiento actualizada y con trazabilidad.
-
-## Modelo de aprendizaje y dataset
-
-### Pipeline de entrenamiento
-
-El servicio ModelTrainingService entrena un modelo supervisado con:
-
-- TfidfVectorizer(ngram_range=(1, 2))
-- LogisticRegression(max_iter=1000, class_weight='balanced')
-- métrica 1_macro
-- registro en MLflow con mlflow.sklearn.log_model
-
-### Requisitos del dataset
-
-Se soportan columnas obligatorias como:
-
-- itle
-- ext
-- label
-
-y opcionalmente:
-
-- content_hash
-- source
-- published_at
-
-## Ejecución rápida
-
-### Requisitos
-
-- Docker Desktop o Docker Engine
-- Python 3.12
-- PostgreSQL con pgvector
-
-### Arranque local
-
-`ash docker compose -f docker/docker-compose.yml up --build `
-
-### Backend y pruebas
-
-`ash cd backend pytest `
-
-### Airflow
-
-La UI de Airflow queda disponible en:
-
-- http://localhost:8080
-- usuario: dmin
-- contraseña: dmin
-
-## Estado del proyecto
-
-La base del sistema está consolidada y lista para extensión en automatización, observabilidad y despliegue en producción.
+1. El sistema raspa los portales de noticias confiables dados de alta.
+2. Deduplica, y vectoriza los artículos de hoy.
+3. Se re-entrena el modelo base local de Machine Learning y MLflow genera la nueva versión de predicción de texto.
+4. Las estadísticas del Frontend se actualizan para mostrar que los tickets pendientes (`Pending Refreshes`) vuelven a estar en 0. lista para extensión en automatización, observabilidad y despliegue en producción.
