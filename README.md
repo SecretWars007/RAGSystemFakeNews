@@ -1,4 +1,8 @@
-# TIKO: Sistema Inteligente RAG para la Detección y Verificación de Noticias Falsas
+<div align="center">
+  <img src="images/tiko_cartoon.png" alt="Tiko Logo" width="200" />
+</div>
+
+# TIKO - SABUESO DE LAS NOTICIAS FALSAS
 
 **Documento de Presentación - Proyecto de Maestría**
 

@@ -1,56 +1,118 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700;800;900&family=Geist:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800;900&family=Geist:wght@300;400;500;600;700;800&display=swap');
 
+/* ============================================================
+   TIKO AI — Design System Tokens (TailwindCSS v4 @theme)
+   ============================================================ */
 @theme {
-  --color-background: #000a06;
-  --color-surface: #02120b;
-  --color-surface-container: #031c11;
-  --color-surface-container-high: #05291a;
-  --color-surface-container-highest: #073824;
-  
-  --color-brand-emerald: #10b981;
-  --color-brand-dark: #000a06;
-  --color-brand-surface: #02120b;
-  --color-primary: #10b981;
-  --color-primary-dim: #059669;
-  --color-primary-container: #064e3b;
-  --color-on-primary-container: #d1fae5;
-  
-  --color-on-surface: #ecfdf5;
-  --color-on-surface-variant: #6ee7b7;
-  
-  --color-error: #ef4444;
-  --color-error-dim: #dc2626;
-  --color-error-container: #7f1d1d;
-  
-  --color-outline: #047857;
-  --color-outline-variant: #064e3b;
-  
-  /* Fonts */
+  /* === Superficies === */
+  --color-background:                #071611;
+  --color-surface:                   #071611;
+  --color-surface-dim:               #071611;
+  --color-surface-bright:            #2d3c36;
+  --color-surface-container-lowest:  #03110c;
+  --color-surface-container-low:     #0f1e19;
+  --color-surface-container:         #13231d;
+  --color-surface-container-high:    #1e2d27;
+  --color-surface-container-highest: #283832;
+  --color-surface-variant:           #283832;
+
+  /* === On-surface === */
+  --color-on-surface:         #d5e7de;
+  --color-on-surface-variant: #bbcabf;
+
+  /* === Brand / Primary === */
+  --color-brand-emerald:       #10b981;
+  --color-brand-dark:          #071611;
+  --color-brand-surface:       #13231d;
+
+  --color-primary:             #4edea3;
+  --color-primary-dim:         #10b981;
+  --color-primary-container:   #10b981;
+  --color-on-primary:          #003824;
+  --color-on-primary-container:#00422b;
+
+  /* === Secondary === */
+  --color-secondary:              #95d3ba;
+  --color-secondary-container:    #0b513d;
+  --color-on-secondary:           #003829;
+  --color-on-secondary-container: #83c2a9;
+
+  /* === Tertiary (amber-red) === */
+  --color-tertiary:              #ffb3af;
+  --color-tertiary-dim:          #ff8a80;
+  --color-tertiary-container:    #fc7c78;
+  --color-on-tertiary:           #650911;
+  --color-on-tertiary-container: #711419;
+
+  /* === Error === */
+  --color-error:              #ffb4ab;
+  --color-error-dim:          #ff6b6b;
+  --color-error-container:    #93000a;
+  --color-on-error:           #690005;
+  --color-on-error-container: #ffdad6;
+
+  /* === Outline === */
+  --color-outline:         #86948a;
+  --color-outline-variant: #3c4a42;
+
+  /* === Fonts === */
   --font-headline: "Space Grotesk", sans-serif;
-  --font-display: "Space Grotesk", sans-serif;
-  --font-body: "Inter", sans-serif;
-  --font-label: "Geist", sans-serif;
+  --font-display:  "Space Grotesk", sans-serif;
+  --font-body:     "Inter", sans-serif;
+  --font-label:    "Geist", sans-serif;
+  --font-mono:     "Geist Mono", monospace;
 }
 
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
 @layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-background text-on-surface font-body selection:bg-brand-emerald selection:text-surface;
+    @apply bg-background text-on-surface font-body;
     margin: 0;
     min-width: 320px;
     min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: #10b981;
+    color: #071611;
   }
 }
 
+/* ============================================================
+   UTILIDADES GLOBALES
+   ============================================================ */
 @layer utilities {
+
+  /* --- Glassmorphism --- */
   .glass-panel {
-    background: rgba(17, 24, 39, 0.7);
+    background: rgba(19, 35, 29, 0.75);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(82, 183, 136, 0.1);
+    border: 1px solid rgba(78, 222, 163, 0.08);
   }
 
+  .glass-panel-md {
+    background: rgba(30, 45, 39, 0.85);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(78, 222, 163, 0.12);
+  }
+
+  /* --- Shimmer Button --- */
   .shimmer-btn {
     position: relative;
     overflow: hidden;
@@ -59,44 +121,168 @@
     content: '';
     position: absolute;
     top: 0;
-    left: -100%;
-    width: 50%;
+    left: -120%;
+    width: 60%;
     height: 100%;
-    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
-    transform: skewX(-25deg);
-    animation: shimmer 3s infinite;
+    background: linear-gradient(
+      to right,
+      rgba(255,255,255,0) 0%,
+      rgba(255,255,255,0.18) 50%,
+      rgba(255,255,255,0) 100%
+    );
+    transform: skewX(-20deg);
+    animation: shimmer 2.8s infinite;
   }
   @keyframes shimmer {
-    0% { left: -100%; }
+    0%   { left: -120%; }
     100% { left: 200%; }
   }
 
+  /* --- Float Animation (login stat cards) --- */
   .floating-card {
     animation: float 6s ease-in-out infinite;
   }
-  .floating-card:nth-child(2) {
-    animation-delay: 1s;
-  }
-  .floating-card:nth-child(3) {
-    animation-delay: 2s;
-  }
+  .floating-card:nth-child(2) { animation-delay: 1s; }
+  .floating-card:nth-child(3) { animation-delay: 2s; }
   @keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0px); }
+    0%, 100% { transform: translateY(0px); }
+    50%       { transform: translateY(-8px); }
+  }
+
+  /* --- Glow Hover (stat cards) --- */
+  .glow-hover {
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+  }
+  .glow-hover:hover {
+    box-shadow: 0 0 30px rgba(78, 222, 163, 0.12), 0 8px 32px rgba(0,0,0,0.4);
+    transform: translateY(-2px);
+  }
+
+  /* --- Ping Status Dot --- */
+  .status-dot-active {
+    position: relative;
+    display: inline-flex;
+    width: 10px;
+    height: 10px;
+  }
+  .status-dot-active::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    background: #4edea3;
+    animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+    opacity: 0.6;
+  }
+  .status-dot-active::after {
+    content: '';
+    position: relative;
+    display: inline-flex;
+    width: 10px;
+    height: 10px;
+    border-radius: 9999px;
+    background: #4edea3;
+  }
+  @keyframes ping {
+    75%, 100% { transform: scale(2); opacity: 0; }
+  }
+
+  /* --- Scan-line (AI processing indicator) --- */
+  .scan-line {
+    position: relative;
+    overflow: hidden;
+  }
+  .scan-line::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(to right, transparent, #10b981, transparent);
+    animation: scan 2s linear infinite;
+  }
+  @keyframes scan {
+    0%   { top: -2px; opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { top: 100%; opacity: 0; }
+  }
+
+  /* --- Skeleton Loader --- */
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      #1e2d27 25%,
+      #283832 50%,
+      #1e2d27 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-wave 1.5s ease-in-out infinite;
+    border-radius: 6px;
+  }
+  @keyframes skeleton-wave {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* --- Fade In / Slide Up --- */
+  .animate-fade-in {
+    animation: fadeIn 0.35s ease-out forwards;
+  }
+  .animate-slide-up {
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* --- Toast slide-in --- */
+  .toast-enter {
+    animation: toastIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .toast-exit {
+    animation: toastOut 0.25s ease-in forwards;
+  }
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateX(100%); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes toastOut {
+    from { opacity: 1; transform: translateX(0); }
+    to   { opacity: 0; transform: translateX(100%); }
+  }
+
+  /* --- Count-up pulse --- */
+  .count-up {
+    animation: countPulse 0.5s ease-out;
+  }
+  @keyframes countPulse {
+    0%   { transform: scale(0.8); opacity: 0.5; }
+    60%  { transform: scale(1.05); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  /* --- Emerald ambient glow (modal overlay) --- */
+  .emerald-glow {
+    box-shadow:
+      0 0 60px rgba(16, 185, 129, 0.08),
+      0 25px 60px rgba(0, 0, 0, 0.6);
   }
 }
 
-::-webkit-scrollbar {
-  width: 10px;
-}
-::-webkit-scrollbar-track {
-  background: #00110c;
-}
+/* ============================================================
+   CUSTOM SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #071611; }
 ::-webkit-scrollbar-thumb {
-  background: #185142;
+  background: #3c4a42;
   border-radius: 9999px;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: #285e4f;
-}
+::-webkit-scrollbar-thumb:hover { background: #4edea3; }
