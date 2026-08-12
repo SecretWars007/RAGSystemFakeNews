@@ -11,7 +11,7 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  async function handleSubmit(event: React.FormEvent) {
+  async function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
     setLoading(true);
@@ -19,8 +19,13 @@ export default function Register() {
     try {
       await register({ email, password });
       navigate("/login");
-    } catch {
-      setError("No se pudo registrar el usuario");
+    } catch (err) {
+      const axiosErr = err as { response?: { data?: { detail?: string } } };
+      if (axiosErr.response?.data?.detail) {
+        setError(axiosErr.response.data.detail);
+      } else {
+        setError("No se pudo registrar el usuario");
+      }
     } finally {
       setLoading(false);
     }

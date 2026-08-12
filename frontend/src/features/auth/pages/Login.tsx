@@ -104,14 +104,18 @@ export default function Login() {
                 </g>
                 {/* Nodes */}
                 <g>
-                  <circle cx="400" cy="300" fill="url(#nodeGradient)" r="10">
+                  {/* Central glowing background for Tiko */}
+                  <circle cx="400" cy="300" fill="url(#nodeGradient)" r="60">
                     <animate
                       attributeName="r"
                       dur="3s"
                       repeatCount="indefinite"
-                      values="8;12;8"
+                      values="55;65;55"
                     ></animate>
                   </circle>
+                  {/* Tiko Logo */}
+                  <image href="/images/tiko_cartoon.png" x="340" y="240" width="120" height="120" />
+
                   <circle cx="200" cy="150" fill="#52B788" r="6">
                     <animate
                       attributeName="cy"
@@ -239,8 +243,8 @@ export default function Login() {
             <div className="glass-panel rounded-2xl p-8 md:p-10 shadow-2xl relative z-10">
               {/* Header */}
               <div className="flex flex-col items-center mb-10 text-center">
-                <div className="w-16 h-16 rounded-xl bg-surface-container flex items-center justify-center mb-6 p-2 border border-brand-emerald/30 shadow-[0_0_15px_rgba(16,185,129,0.3)] text-4xl">
-                  🐶
+                <div className="w-20 h-20 rounded-xl bg-surface-container flex items-center justify-center mb-6 p-2 border border-brand-emerald/30 shadow-[0_0_15px_rgba(16,185,129,0.3)] overflow-hidden">
+                  <img src="/images/tiko_cartoon.png" alt="Tiko" className="w-full h-full object-cover" />
                 </div>
                 <h2 className="font-headline text-3xl font-bold text-white mb-2">
                   TIKO AI

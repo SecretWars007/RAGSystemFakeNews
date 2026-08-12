@@ -31,6 +31,8 @@ class AuthService:
         """
         Registra un nuevo usuario.
         """
+        if self.repository.get_by_email(email):
+            raise ValueError("El correo ya está registrado")
 
         user = User(
             id=uuid4(),

@@ -1,3 +1,4 @@
+from typing import Annotated
 from uuid import UUID, uuid4
 
 from app.application.dependencies import get_news_service
@@ -14,6 +15,8 @@ router = APIRouter(
     tags=["News"],
 )
 
+NEWS_NOT_FOUND = "News not found"
+
 
 @router.post(
     "",
@@ -22,7 +25,7 @@ router = APIRouter(
 )
 def create_news(
     data: NewsCreateSchema,
-    service: NewsService = Depends(get_news_service),
+    service: Annotated[NewsService, Depends(get_news_service)],
 ):
 
     news = News(
@@ -46,10 +49,12 @@ def create_news(
     response_model=list[NewsResponseSchema],
 )
 def get_all_news(
-    service: NewsService = Depends(get_news_service),
+    service: Annotated[NewsService, Depends(get_news_service)],
+    skip: int = 0,
+    limit: int = 1000,
 ):
 
-    return service.get_all()
+    return service.get_all(skip=skip, limit=limit)
 
 
 @router.get(
@@ -58,7 +63,7 @@ def get_all_news(
 )
 def get_news_by_id(
     news_id: UUID,
-    service: NewsService = Depends(get_news_service),
+    service: Annotated[NewsService, Depends(get_news_service)],
 ):
 
     news = service.get_by_id(news_id)
@@ -66,7 +71,7 @@ def get_news_by_id(
     if news is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="News not found",
+            detail=NEWS_NOT_FOUND,
         )
 
     return news
@@ -79,7 +84,7 @@ def get_news_by_id(
 def update_news(
     news_id: UUID,
     data: NewsCreateSchema,
-    service: NewsService = Depends(get_news_service),
+    service: Annotated[NewsService, Depends(get_news_service)],
 ):
 
     existing_news = service.get_by_id(news_id)
@@ -87,7 +92,7 @@ def update_news(
     if existing_news is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="News not found",
+            detail=NEWS_NOT_FOUND,
         )
 
     news = News(
@@ -114,7 +119,7 @@ def update_news(
 )
 def delete_news(
     news_id: UUID,
-    service: NewsService = Depends(get_news_service),
+    service: Annotated[NewsService, Depends(get_news_service)],
 ):
 
     existing_news = service.get_by_id(news_id)
@@ -122,7 +127,7 @@ def delete_news(
     if existing_news is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="News not found",
+            detail=NEWS_NOT_FOUND,
         )
 
     service.delete(news_id)

@@ -69,7 +69,7 @@ def upgrade() -> None:
     op.create_index("ix_knowledge_documents_source_status", "knowledge_documents", ["source_id", "validation_status"])
     op.execute(
         "CREATE INDEX ix_knowledge_document_embeddings_vector "
-        "ON knowledge_document_embeddings USING hnsw (vector vector_cosine_ops)"
+        "ON knowledge_document_embeddings USING hnsw ((vector::halfvec(3072)) halfvec_cosine_ops)"
     )
 
 

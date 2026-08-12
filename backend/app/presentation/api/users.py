@@ -1,3 +1,4 @@
+from typing import Annotated
 from app.application.dependencies import get_auth_service
 from app.application.services.auth_service import AuthService
 from app.core.security.auth import get_current_user
@@ -15,16 +16,17 @@ def health():
     return {"module": "users", "status": "running"}
 
 
-@router.post("/register")
-def register(data: UserCreateSchema, service: AuthService = Depends(get_auth_service)):
+@router.post("/register", responses={400: {"description": "Bad Request"}})
+def register(data: UserCreateSchema, service: Annotated[AuthService, Depends(get_auth_service)]):
+    try:
+        user = service.register(data.email, data.password)
+        return {"id": str(user.id), "email": user.email}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
-    user = service.register(data.email, data.password)
 
-    return {"id": str(user.id), "email": user.email}
-
-
-@router.post("/login", response_model=TokenSchema)
-def login(data: LoginSchema, service: AuthService = Depends(get_auth_service)):
+@router.post("/login", response_model=TokenSchema, responses={401: {"description": "Unauthorized"}})
+def login(data: LoginSchema, service: Annotated[AuthService, Depends(get_auth_service)]):
 
     token = service.login(data.email, data.password)
 
@@ -35,7 +37,7 @@ def login(data: LoginSchema, service: AuthService = Depends(get_auth_service)):
 
 
 @router.get("/me")
-def get_me(user: UserModel = Depends(get_current_user)):
+def get_me(user: Annotated[UserModel, Depends(get_current_user)]):
     return {
         "id": str(user.id),
         "email": user.email,

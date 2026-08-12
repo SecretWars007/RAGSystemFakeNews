@@ -4,6 +4,7 @@ import type { News } from "../../../types/news";
 import { getNews, deleteNews } from "../services/newsService";
 import { useToast } from "../../../components/common/Toast/Toast";
 import ConfirmModal from "../../../components/common/Modal/ConfirmModal";
+import NewsDetailModal from "../components/NewsDetailModal";
 import { SkeletonRow } from "../../../components/common/Skeleton/Skeleton";
 
 type FilterLabel = "all" | "fake" | "real" | "pending";
@@ -19,6 +20,7 @@ export default function NewsList() {
   const [filter, setFilter] = useState<FilterLabel>("all");
   const [page, setPage] = useState(1);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [viewingNews, setViewingNews] = useState<News | null>(null);
 
   async function loadNews() {
     setLoading(true);
@@ -44,7 +46,10 @@ export default function NewsList() {
   }
 
   useEffect(() => {
-    void loadNews();
+    getNews()
+      .then((data) => setNews(data))
+      .catch((err) => console.error("Error loading news:", err))
+      .finally(() => setLoading(false));
   }, []);
 
   // Filter + search
@@ -56,11 +61,10 @@ export default function NewsList() {
       item.source.toLowerCase().includes(q) ||
       item.id.toLowerCase().includes(q);
 
-    const matchFilter =
-      filter === "all" ? true
-      : filter === "fake"    ? item.is_fake === true
-      : filter === "real"    ? item.is_fake === false
-      : /* pending */         item.is_fake == null;
+    let matchFilter = true;
+    if (filter === "fake") matchFilter = item.is_fake === true;
+    else if (filter === "real") matchFilter = item.is_fake === false;
+    else if (filter === "pending") matchFilter = item.is_fake == null;
 
     return matchSearch && matchFilter;
   });
@@ -96,6 +100,11 @@ export default function NewsList() {
         onCancel={() => setDeleteTarget(null)}
       />
 
+      <NewsDetailModal 
+        news={viewingNews} 
+        onClose={() => setViewingNews(null)} 
+      />
+
       <div className="flex flex-col gap-6 animate-fade-in">
         {/* Page header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -112,7 +121,7 @@ export default function NewsList() {
             className="shimmer-btn flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-emerald to-primary text-on-primary font-label font-semibold text-sm shadow-lg hover:opacity-90 transition-opacity shrink-0"
           >
             <span className="material-symbols-outlined text-[18px]">add</span>
-            Nueva noticia
+            {" "}Nueva noticia
           </Link>
         </div>
 
@@ -152,6 +161,7 @@ export default function NewsList() {
             />
             {search && (
               <button
+                type="button"
                 onClick={() => setSearch("")}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface transition-colors"
               >
@@ -164,6 +174,7 @@ export default function NewsList() {
           <div className="flex gap-1.5 bg-surface-container-high rounded-xl p-1 border border-outline-variant/20 shrink-0">
             {filterButtons.map(({ label, value, count, color }) => (
               <button
+                type="button"
                 key={value}
                 onClick={() => { setFilter(value); setPage(1); }}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-label font-semibold transition-all
@@ -207,7 +218,8 @@ export default function NewsList() {
                   : paginated.map((item) => (
                       <tr
                         key={item.id}
-                        className="hover:bg-surface-container-high/60 transition-colors group"
+                        onClick={() => setViewingNews(item)}
+                        className="hover:bg-surface-container-high/60 transition-colors group cursor-pointer"
                       >
                         <td className="hidden md:table-cell px-4 md:px-6 py-3.5 text-xs text-on-surface-variant font-mono">
                           #{item.id.substring(0, 8)}
@@ -227,34 +239,50 @@ export default function NewsList() {
                           {item.is_fake === true && (
                             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-label font-semibold bg-error-container/40 text-error border border-error/20 uppercase tracking-wide">
                               <span className="w-1.5 h-1.5 rounded-full bg-error" />
-                              Fake
+                              {" "}Fake
                             </span>
                           )}
                           {item.is_fake === false && (
                             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-label font-semibold bg-primary/10 text-primary border border-primary/20 uppercase tracking-wide">
                               <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-                              Real
+                              {" "}Real
                             </span>
                           )}
                           {item.is_fake == null && (
                             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-label font-semibold bg-surface-variant text-on-surface-variant border border-outline-variant/30 uppercase tracking-wide">
                               <span className="w-1.5 h-1.5 rounded-full bg-on-surface-variant" />
-                              Pendiente
+                              {" "}Pendiente
                             </span>
                           )}
                         </td>
                         <td className="px-4 md:px-6 py-3.5">
-                          <div className="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <div className="flex justify-end gap-1">
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setViewingNews(item);
+                              }}
+                              aria-label="Ver noticia"
+                              className="p-1.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-primary/10 transition-all"
+                            >
+                              <span className="material-symbols-outlined text-[18px]">visibility</span>
+                            </button>
                             <Link
                               to="/rag"
                               state={{ query: item.title }}
                               aria-label="Analizar en RAG"
+                              onClick={(e) => e.stopPropagation()}
                               className="p-1.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-primary/10 transition-all"
                             >
                               <span className="material-symbols-outlined text-[18px]">neurology</span>
                             </Link>
                             <button
-                              onClick={() => setDeleteTarget(item.id)}
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setDeleteTarget(item.id);
+                              }}
                               aria-label="Eliminar noticia"
                               className="p-1.5 rounded-lg text-on-surface-variant hover:text-error hover:bg-error-container/20 transition-all"
                             >
@@ -295,6 +323,7 @@ export default function NewsList() {
               </p>
               <div className="flex gap-1">
                 <button
+                  type="button"
                   onClick={() => setPage(p => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
                   className="px-3 py-1.5 text-xs rounded-lg font-label text-on-surface-variant hover:text-on-surface hover:bg-surface-variant disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
@@ -305,6 +334,7 @@ export default function NewsList() {
                   const p = i + 1;
                   return (
                     <button
+                      type="button"
                       key={p}
                       onClick={() => setPage(p)}
                       className={`px-3 py-1.5 text-xs rounded-lg font-label font-semibold transition-colors
@@ -318,6 +348,7 @@ export default function NewsList() {
                   );
                 })}
                 <button
+                  type="button"
                   onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                   disabled={currentPage === totalPages}
                   className="px-3 py-1.5 text-xs rounded-lg font-label text-on-surface-variant hover:text-on-surface hover:bg-surface-variant disabled:opacity-30 disabled:cursor-not-allowed transition-colors"

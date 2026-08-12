@@ -58,7 +58,7 @@ class NewsService:
     def get_all(
         self,
         skip: int = 0,
-        limit: int = 100,
+        limit: int = 1000,
     ) -> list[News]:
         """
         Obtiene noticias paginadas.
@@ -68,10 +68,7 @@ class NewsService:
             skip = 0
 
         if limit <= 0:
-            limit = 100
-
-        if limit > 100:
-            limit = 100
+            limit = 1000
 
         return self.repository.get_all(
             skip=skip,
